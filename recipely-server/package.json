@@ -1,0 +1,32 @@
+{
+  "name": "recipely",
+  "version": "1.0.0",
+  "description": "App for finding and saving recipes based on your ingredients!",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mschlesk/recipely.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mschlesk/recipely/issues"
+  },
+  "homepage": "https://github.com/mschlesk/recipely#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mysql": "^2.13.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "morgan": "^1.8.1",
+    "nodemon": "^1.11.0"
+  }
+}
