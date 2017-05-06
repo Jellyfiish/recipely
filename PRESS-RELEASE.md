@@ -20,7 +20,7 @@ Once the project moves into development, the press release can be used as a touc
   <!-- > Name the product in a way the reader (i.e. your target customers) will understand. -->
 
 ## Market ##
-  Love to cook but don't know what to make? Jellyfiish is for you!
+  Love to cook but don't know what to make? Recipely is for you!
   <!-- > Describe who the market for the product is and what benefit they get. One sentence only underneath the title. -->
 
 ## Summary ##
@@ -28,15 +28,15 @@ Once the project moves into development, the press release can be used as a touc
   <!-- > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good. -->
 
 ## Problem ##
-  We all have leftover ingredients. Jellyfiish is here to ensure those ingredients don't go to waste.
+  We all have leftover ingredients. Recipely is here to ensure those ingredients don't go to waste.
   <!-- > Describe the problem your product solves. -->
 
 ## Solution ##
-  Jellyfiish takes whatever ingredients you have on hand and suggests recipes.
+  Recipely takes whatever ingredients you have on hand and suggests recipes.
   <!-- > Describe how your product elegantly solves the problem. -->
 
 ## Meet the Team! ##
-  > "That was delicious!" -Jellyfiish Team Member #1
+  > "That was delicious!" -Recipely Team Member #1
   <!-- > A quote from a spokesperson in your company. -->
 
 ## How to Get Started ##
@@ -44,9 +44,9 @@ Once the project moves into development, the press release can be used as a touc
   <!-- > Describe how easy it is to get started. -->
 
 ## Our customer loves us! ##
-  > "Finally, a way to use up those all of those sardines!" -Robin Kim
+  > "Finally, a way to use up all of those sardines!" -Robin Kim
   <!-- > Provide a quote from a hypothetical customer that describes how they experienced the benefit. -->
 
 ## That's it! ##
-  Let Jellyfiish tell you what to eat today!
+  Let Recipely tell you what to eat today!
   <!-- > Wrap it up and give pointers where the reader should go next. -->
