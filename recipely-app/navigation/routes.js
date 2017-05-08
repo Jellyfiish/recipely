@@ -24,6 +24,9 @@ import SideDrawer from '../components/SideDrawer.js';
 const RecipeStack = StackNavigator({
   Recipes: {
     screen: RecipeScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Saved Recipes',
+    }),
   },
   Details: {
     screen: RecipeDetailScreen,
