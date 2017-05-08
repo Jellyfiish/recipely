@@ -1,24 +1,32 @@
 import Expo from 'expo';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import DrawerNav from './navigation/routes';
 
-class App extends React.Component {
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      recipes: [],
+    };
+  }
+
+  onRecipesChange = (recipes) => {
+    this.setState({recipes});
+  };
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up main.js to start working on your app!</Text>
-      </View>
+      <DrawerNav
+        screenProps={
+          {
+            recipes: this.state.recipes,
+            onRecipesChange: this.onRecipesChange,
+          }
+        }
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 Expo.registerRootComponent(App);
