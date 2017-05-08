@@ -15,14 +15,23 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 8080;
 
 
-app.post('/api/recipes', (req, res) => {
-  var query = req.body.ingredients;
-  axios.get(`http://food2fork.com/api/search?key=${key}&q=${query}`)
+app.get('/api/recipes', (req, res) => {
+  var query = req.query.q || '';
+  var url = `http://food2fork.com/api/search?key=${key}&q=${query}`
+  axios.get(url)
     .then(response => {
-      res.json(response.data.recipes);
+      res.status(200).json(response.data);
     })
     .catch(err => console.error(err));
-  });
+});
+
+app.get('/api/recipes/:id', (req, res) => {
+  axios.get(`http://food2fork.com/api/get?key=${key}&rId=${req.params.id}`)
+    .then(response => {
+      res.status(200).json(response.data);
+    })
+    .catch(err => console.error(err));
+});
 
 
 app.listen(port, function() {
