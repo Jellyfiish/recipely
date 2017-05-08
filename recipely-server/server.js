@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var axios = require('axios');
 
-var key = require('./config/config');
+var key = process.env.F2F_API_KEY || require('./config/config');
 
 var morgan = require('morgan');
 
