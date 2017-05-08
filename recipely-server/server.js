@@ -17,8 +17,8 @@ var port = process.env.PORT || 8080;
 
 
 app.post('/api/recipes', (req, res) => {
-  var ingredients = req.body.ingredients;
-  axios.get(`http://food2fork.com/api/search?key=${key}&q=${ingredients}`)
+  var query = req.body.ingredients;
+  axios.get(`http://food2fork.com/api/search?key=${key}&q=${query}`)
     .then(response => {
       res.json(response.data.recipes);
     })
