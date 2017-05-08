@@ -19,9 +19,11 @@
   },
   "homepage": "https://github.com/mschlesk/recipely#readme",
   "dependencies": {
+    "axios": "^0.16.1",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "mysql": "^2.13.0",
     "morgan": "^1.8.1",
     "mysql": "^2.13.0"
   },
