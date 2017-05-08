@@ -1,10 +1,10 @@
 {
   "name": "recipely",
   "version": "1.0.0",
-  "description": "App for finding and saving recipes based on your ingredients!",
-  "main": "index.js",
+  "description": "Backend for recipely mobile app.",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,14 +23,12 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "fetch": "^1.1.0",
-    "jquery": "^3.2.1",
     "mysql": "^2.13.0",
-    "whatwg-fetch": "^2.0.3"
+    "morgan": "^1.8.1",
+    "mysql": "^2.13.0"
   },
   "devDependencies": {
     "eslint": "^3.19.0",
-    "morgan": "^1.8.1",
     "nodemon": "^1.11.0"
   }
 }

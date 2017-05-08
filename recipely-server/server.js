@@ -20,8 +20,11 @@ app.post('/api/recipes', (req, res) => {
     .catch(e => console.error(e));
   });
 
+// the following line is needed because heroku assigns a port dynamically
+// default to 8080 for development
+var port = process.env.PORT || 8080;
 
-app.listen(8080, function() {
-  console.log('Server is now listening on port 8080');
+app.listen(port, function() {
+  console.log('Server is now listening on port', port);
 });
 
