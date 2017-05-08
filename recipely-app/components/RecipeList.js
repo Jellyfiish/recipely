@@ -7,6 +7,7 @@ import {
   Button,
   Image
 } from 'react-native';
+import { Card } from 'react-native-elements';
 
 const RecipeList = ({ navigation, recipes }) => {
   onLearnMore = (recipe) => {
@@ -15,24 +16,22 @@ const RecipeList = ({ navigation, recipes }) => {
 
   return (
     <ScrollView>
-      <View>
-        { recipes.map(recipe => {
-            return (
-              <View key={recipe.recipe_id}>
-                <Text>{recipe.title}</Text>
-                <Image
-                  source={{ uri: recipe.image_url }}
-                  style={{ width: 100, height: 100 }}
-                />
-                <Button
-                  onPress={() => this.onLearnMore(recipe)}
-                  title="More details"
-                />
-              </View>
-            );
-          })
-        }
-      </View>
+      { recipes.map(recipe => {
+          return (
+            <Card
+              key={recipe.recipe_id}
+              title={recipe.title}
+              image={{ uri: recipe.image_url }}
+            >
+              <Text style={{marginBottom: 10}}>{recipe.publisher}</Text>
+              <Button
+                title='Details'
+                onPress={() => this.onLearnMore(recipe)}
+              />
+            </Card>
+          );
+        })
+      }
     </ScrollView>
   );
 };
