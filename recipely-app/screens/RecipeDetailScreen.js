@@ -23,7 +23,7 @@ class RecipeDetailScreen extends Component {
 
   componentDidMount() {
     const { recipe_id } = this.props.navigation.state.params;
-    fetch(`http://food2fork.com/api/get?key=295ed39bbf2754f3f2fb1cf50295878d&rId=${recipe_id}`)
+    fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${recipe_id}`)
       .then(res => res.json())
       .then(result => this.setState({ ingredients: result.recipe.ingredients }));
   }

@@ -13,7 +13,7 @@ class RecipeScreen extends Component {
   }
 
   componentDidMount() {
-    fetch('http://food2fork.com/api/search?key=295ed39bbf2754f3f2fb1cf50295878d')
+    fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
       .then(res => res.json())
       .then(results => this.props.screenProps.onRecipesChange(results.recipes));
   }
