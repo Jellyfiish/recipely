@@ -1,1 +1,1 @@
-module.exports = 'API_KEY';
+module.exports = 'F2F_API_KEY';
