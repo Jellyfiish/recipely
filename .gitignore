@@ -1,1 +1,4 @@
 recipely-server/node_modules
+
+# API Keys
+recipely-server/config/config.js
