@@ -8,6 +8,7 @@ import {
   Image
 } from 'react-native';
 import { Card } from 'react-native-elements';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const RecipeList = ({ navigation, recipes }) => {
   onLearnMore = (recipe) => {
@@ -24,10 +25,13 @@ const RecipeList = ({ navigation, recipes }) => {
               image={{ uri: recipe.image_url }}
             >
               <Text style={{marginBottom: 10}}>{recipe.publisher}</Text>
-              <Button
-                title='Details'
-                onPress={() => this.onLearnMore(recipe)}
-              />
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Button
+                  title='Details'
+                  onPress={() => this.onLearnMore(recipe)}
+                />
+                <MaterialIcons name="close" size={28} color="#aaa" />
+              </View>
             </Card>
           );
         })
