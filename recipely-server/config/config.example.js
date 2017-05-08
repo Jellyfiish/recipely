@@ -1,0 +1,1 @@
+module.exports = 'F2F_API_KEY';
