@@ -11,8 +11,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 app.post('/api/recipes', (req, res) => {
-  var ingredients = req.body.ingredients;
-  axios.get(`http://food2fork.com/api/search?key=${key}&q=${ingredients}`)
+  var query = req.body.ingredients;
+  axios.get(`http://food2fork.com/api/search?key=${key}&q=${query}`)
     .then(response => {
       console.log('Success!', response.data.recipes);
       res.json(response.data.recipes);
