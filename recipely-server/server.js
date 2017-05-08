@@ -31,7 +31,7 @@ app.get('/api/recipes/:id', (req, res) => {
       res.status(200).json(response.data);
     })
     .catch(err => console.error(err));
-})
+});
 
 
 app.listen(port, function() {
