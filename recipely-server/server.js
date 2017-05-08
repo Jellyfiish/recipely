@@ -21,7 +21,7 @@ app.post('/api/recipes', (req, res) => {
     .then(response => {
       res.json(response.data.recipes);
     })
-    .catch(e => console.error(e));
+    .catch(err => console.error(err));
   });
 
 
