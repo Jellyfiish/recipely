@@ -1,6 +1,7 @@
 import Expo, { WebBrowser } from 'expo';
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   ScrollView,
@@ -44,7 +45,10 @@ class RecipeDetailScreen extends Component {
         />
         { this.state.ingredients
           ? <IngredientList ingredients={this.state.ingredients} />
-          : <Text>Loading ingredients...</Text>
+          : <View>
+              <Text>Loading ingredients</Text>
+              <ActivityIndicator size="large" />
+            </View>
         }
         <Button
           title="Directions"
