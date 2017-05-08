@@ -1,3 +1,4 @@
+import { Constants } from 'expo';
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -34,6 +35,10 @@ const RecipeStack = StackNavigator({
       title: `${navigation.state.params.title}`,
     }),
   },
+}, {
+  cardStyle: {
+    paddingTop: Constants.statusBarHeight,
+  }
 });
 
 const DrawerNav = DrawerNavigator({

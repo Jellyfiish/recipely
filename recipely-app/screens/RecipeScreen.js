@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
-  View
+  View,
 } from 'react-native';
 import RecipeList from '../components/RecipeList';
 
@@ -22,13 +23,15 @@ class RecipeScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>Saved recipes</Text>
         { screenProps.recipes.length !== 0
           ? <RecipeList
               navigation={navigation}
               recipes={screenProps.recipes}
             />
-          : <Text>Loading recipes...</Text>
+          : <View>
+              <Text>Loading recipes</Text>
+              <ActivityIndicator size="large" />
+            </View>
         }
       </View>
     );
