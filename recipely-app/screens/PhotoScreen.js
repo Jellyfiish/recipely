@@ -45,7 +45,34 @@ class PhotoScreen extends Component {
   getPredictions = () => {
     const { image } = this.props.screenProps;
     ImageStore.getBase64ForTag(image.uri, (encoded) => {
-      console.log(encoded);
+      fetch('https://api.clarifai.com/v2/token', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + auth
+        }
+      }).then(res => res.json())
+        .then(res => {
+          return fetch('https://api.clarifai.com/v2/models/bd367be194cf45149e75f01d59f77ba7/outputs', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + res.access_token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              inputs: [
+                {
+                  data: {
+                    image: {
+                      base64: encoded
+                    }
+                  }
+                }
+              ]
+            })
+          });
+        })
+        .then(res => res.json())
+        .then(res => console.log(res));
     }, (err) => {
       console.log(err);
     });
