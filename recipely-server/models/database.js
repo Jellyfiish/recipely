@@ -44,4 +44,5 @@ tableQueries.forEach(function(query) {
   });
 });
 
+
 module.exports = client;
