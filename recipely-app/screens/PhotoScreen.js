@@ -22,7 +22,7 @@ class PhotoScreen extends Component {
     console.log(result);
 
     if (!result.cancelled) {
-      this.props.screenProps.onImageChange(result.uri);
+      this.props.screenProps.onImageChange(result);
     }
   };
 
@@ -34,12 +34,12 @@ class PhotoScreen extends Component {
     console.log(result);
 
     if (!result.cancelled) {
-      this.props.screenProps.onImageChange(result.uri);
+      this.props.screenProps.onImageChange(result);
     }
   };
 
   render() {
-    let { imageURI } = this.props.screenProps;
+    let { image } = this.props.screenProps;
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -51,11 +51,19 @@ class PhotoScreen extends Component {
           title="Pick an image from camera roll"
           onPress={this.pickImage}
         />
-        { imageURI &&
-          <Image source={{ uri: imageURI }} style={{ width: 200, height: 200 }} />}
+      { image &&
+          <Image source={{ uri: image.uri }} style={styles.image} />}
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  image: {
+    width: 300,
+    height: 300,
+    resizeMode: 'contain'
+  },
+});
 
 export default PhotoScreen;
