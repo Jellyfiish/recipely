@@ -122,6 +122,7 @@ class PhotoScreen extends Component {
             />
             <Text>Use album</Text>
           </View>
+
           { image && !this.state.isGettingPrediction &&
             <View style={styles.buttonLabel}>
               <Icon
@@ -133,11 +134,13 @@ class PhotoScreen extends Component {
               <Text>Done</Text>
             </View>
           }
+
           { this.state.isGettingPrediction &&
             <View style={[styles.buttonLabel, {marginBottom: 36}]}>
               <ActivityIndicator size="large" />
             </View>
           }
+          
           <View style={styles.buttonLabel}>
             <Icon
               name="photo-camera"
