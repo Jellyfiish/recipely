@@ -42,7 +42,7 @@ class PhotoScreen extends Component {
     let { image } = this.props.screenProps;
 
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.container}>
         <Button
           title="Take a picture with your camera"
           onPress={this.takeImage}
@@ -59,6 +59,11 @@ class PhotoScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   image: {
     width: 300,
     height: 300,
