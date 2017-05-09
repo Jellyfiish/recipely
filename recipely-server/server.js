@@ -87,6 +87,7 @@ app.get('/api/users/:id', (req, res) => {
     .catch(err => console.error(err));
 });
 
+
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
 });
