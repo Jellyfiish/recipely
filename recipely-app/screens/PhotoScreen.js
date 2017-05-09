@@ -10,6 +10,8 @@ import {
   ImageStore
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+// Used to get access token from Clarifai
+import auth from '../config/config';
 
 class PhotoScreen extends Component {
   constructor(props) {
