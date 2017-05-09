@@ -8,7 +8,7 @@ import {
   Button,
   Image
 } from 'react-native';
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
 
 class PhotoScreen extends Component {
   constructor(props) {
@@ -64,6 +64,7 @@ class PhotoScreen extends Component {
             />
             <Text>Use album</Text>
           </View>
+
           <View style={styles.buttonLabel}>
             <Icon
               name="photo-camera"
@@ -71,7 +72,7 @@ class PhotoScreen extends Component {
               raised
               onPress={this.takeImage}
             />
-          <Text>Use camera</Text>
+            <Text>Use camera</Text>
           </View>
         </View>
       </View>
