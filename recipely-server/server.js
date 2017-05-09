@@ -2,12 +2,26 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var axios = require('axios');
 //var db = require('./models/database');
-
+var jwtAuth = require('./models/jwtAuth');
+var bcrypt = require('./models/bcrypt')
 var app = express();
-
 var key = process.env.F2F_API_KEY || require('./config/config').F2F_API_KEY;
 
 var morgan = require('morgan');
+
+// to be moved to util models directory after adding the check it the user exists in the DB funciton
+var isAuthenticated = (req, res, next) => {
+  if(!(req.header && req.header.token)) {
+    res.status(400).end('please log in!')
+  }
+  const token = req.header.token.split(' ')[1];
+  jwtAuth.decodeToken(req.header.token, (err, payload) => {
+    if(err) res.status(400).end(err);
+    // check if user still exits in the db
+      // yes next();
+      // no return 400
+  });
+}
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -35,7 +49,27 @@ app.get('/api/recipes/:id', (req, res) => {
     .catch(err => console.error(err));
 });
 
+app.post('/api/login', (req, res) => {
+  const body = req.body;
+  // waiting until writing a function that retrieves users from DB
+  // db
+  //   .getUser(body.username)
+  //   .bcrypt.comparePassword(body.password, user.password)
+    jwtAuth.encodeToken(body.username, (err, token) => {
+      if(err) res.status(400).end('invalid password or username');
+      res.status(200)
+        .json(token);
+    });
+});
 
+app.post('/api/signup', (req, res) => {
+  const body = req.body;
+  // TODO: add the user to the data base with the salted password after checking that there's no duplicate username in the DB
+  jwtAuth.encodeToken(body.username, (err, token) => {
+    if(err) res.status(400).end(err);
+    if(token) res.status(200).end(token);
+  })
+});
 
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
