@@ -5,11 +5,11 @@ import {
   View
 } from 'react-native';
 
-class NoteScreen extends Component {
+class SearchResultScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Show notes</Text>
+        <Text>Results from searching by ingredients</Text>
       </View>
     );
   }
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NoteScreen;
+export default SearchResultScreen;

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
 
 class SearchScreen extends Component {
@@ -10,6 +11,10 @@ class SearchScreen extends Component {
     return (
       <View style={styles.container}>
         <Text>Search recipes</Text>
+        <Button
+          title="Find recipes"
+          onPress={() => this.props.navigation.navigate('SearchResults')}
+        />
       </View>
     );
   }
@@ -18,7 +23,6 @@ class SearchScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },

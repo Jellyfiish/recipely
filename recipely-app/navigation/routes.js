@@ -19,7 +19,9 @@ import PhotoScreen from '../screens/PhotoScreen';
 import PhotoResultScreen from '../screens/PhotoResultScreen';
 import RecipeScreen from '../screens/RecipeScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
+import PopularScreen from '../screens/PopularScreen';
 import SearchScreen from '../screens/SearchScreen';
+import SearchResultScreen from '../screens/SearchResultScreen';
 import NoteScreen from '../screens/NoteScreen';
 import SideDrawer from '../components/SideDrawer.js';
 
@@ -61,6 +63,37 @@ const RecipeStack = StackNavigator({
   }
 });
 
+const SearchTab = TabNavigator({
+  Popular: {
+    screen: PopularScreen,
+  },
+  Search: {
+    screen: SearchScreen,
+  },
+});
+
+SearchTab.navigationOptions = ({ navigation }) => {
+  return {
+    title: 'Find recipes',
+  }
+};
+
+const SearchStack = StackNavigator({
+  Home: {
+    screen: SearchTab,
+  },
+  SearchResults: {
+    screen: SearchResultScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Search results',
+    }),
+  },
+}, {
+  cardStyle: {
+    paddingTop: Constants.statusBarHeight,
+  }
+});
+
 const DrawerNav = DrawerNavigator({
   Photo: {
     screen: PhotoStack,
@@ -80,10 +113,10 @@ const DrawerNav = DrawerNavigator({
       ),
     }),
   },
-  Search: {
-    screen: SearchScreen,
+  Find: {
+    screen: SearchStack,
     navigationOptions: ({navigation}) => ({
-      drawerLabel: 'Search recipes',
+      drawerLabel: 'Find recipes',
       drawerIcon: () => (
         <MaterialIcons name="search" size={24} />
       ),
