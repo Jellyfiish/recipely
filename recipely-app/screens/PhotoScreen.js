@@ -44,6 +44,9 @@ class PhotoScreen extends Component {
 
     return (
       <View style={{flex: 1}}>
+        <View style={styles.headingContainer}>
+          <Text style={styles.heading}>Find recipes by taking a photo!</Text>
+        </View>
 
         <View style={styles.imageContainer}>
           { image &&
@@ -81,6 +84,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  headingContainer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heading: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   imageContainer: {
     flex: 4,
