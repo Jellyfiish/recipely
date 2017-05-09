@@ -41,13 +41,13 @@ class RecipeDetailScreen extends Component {
       <ScrollView>
         <Card
           title={title}
-          titleStyle={{fontSize: 16}}
+          titleStyle={styles.titleStyle}
           image={{ uri: image_url }}
         >
-          <Text style={{fontSize: 16, marginBottom: 10}}>{publisher}</Text>
+          <Text style={styles.publisherText}>{publisher}</Text>
           { this.state.ingredients
             ? <View>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Ingredients</Text>
+                <Text style={styles.ingredientText}>Ingredients</Text>
                 <IngredientList ingredients={this.state.ingredients}
                 />
               </View>
@@ -65,5 +65,19 @@ class RecipeDetailScreen extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  titleStyle: {
+    fontSize: 16,
+  },
+  publisherText: {
+    fontSize: 16,
+    marginBottom: 10
+  },
+  ingredientText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 
 export default RecipeDetailScreen;
