@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Expo, { ImagePicker } from 'expo';
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   ScrollView,
@@ -16,6 +17,10 @@ import auth from '../config/config';
 class PhotoScreen extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isGettingPrediction: false
+    };
   }
 
   takeImage = async() => {
@@ -43,6 +48,7 @@ class PhotoScreen extends Component {
   };
 
   getPredictions = () => {
+    this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
     const { image } = this.props.screenProps;
     ImageStore.getBase64ForTag(image.uri, (encoded) => {
       fetch('https://api.clarifai.com/v2/token', {
@@ -72,7 +78,10 @@ class PhotoScreen extends Component {
           });
         })
         .then(res => res.json())
-        .then(res => console.log(res));
+        .then(res => {
+          this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
+          console.log(res)
+        });
     }, (err) => {
       console.log(err);
     });
@@ -103,7 +112,7 @@ class PhotoScreen extends Component {
             />
             <Text>Use album</Text>
           </View>
-          { image &&
+          { image && !this.state.isGettingPrediction &&
             <View style={styles.buttonLabel}>
               <Icon
                 name="done"
@@ -111,7 +120,12 @@ class PhotoScreen extends Component {
                 raised
                 onPress={this.getPredictions}
               />
-            <Text>Done</Text>
+              <Text>Done</Text>
+            </View>
+          }
+          { this.state.isGettingPrediction &&
+            <View style={[styles.buttonLabel, {marginBottom: 36}]}>
+              <ActivityIndicator size="large" />
             </View>
           }
           <View style={styles.buttonLabel}>
