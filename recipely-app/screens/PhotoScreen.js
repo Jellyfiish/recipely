@@ -6,7 +6,8 @@ import {
   ScrollView,
   View,
   Button,
-  Image
+  Image,
+  ImageStore
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 
@@ -39,6 +40,15 @@ class PhotoScreen extends Component {
     }
   };
 
+  getPredictions = () => {
+    const { image } = this.props.screenProps;
+    ImageStore.getBase64ForTag(image.uri, (encoded) => {
+      console.log(encoded);
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
   render() {
     let { image } = this.props.screenProps;
 
@@ -64,7 +74,17 @@ class PhotoScreen extends Component {
             />
             <Text>Use album</Text>
           </View>
-
+          { image &&
+            <View style={styles.buttonLabel}>
+              <Icon
+                name="done"
+                size={30}
+                raised
+                onPress={this.getPredictions}
+              />
+            <Text>Done</Text>
+            </View>
+          }
           <View style={styles.buttonLabel}>
             <Icon
               name="photo-camera"
