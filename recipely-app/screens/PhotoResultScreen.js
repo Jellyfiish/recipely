@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
+  ScrollView,
   Text,
   View
 } from 'react-native';
@@ -15,8 +16,17 @@ class PhotoResultScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>Result from searching ingredients by photo</Text>
-        <Text>{JSON.stringify(predictions)}</Text>
+        <ScrollView>
+          { predictions.map(prediction => {
+              return (
+                <View key={prediction.id}>
+                  <Text>{prediction.name}</Text>
+                  <Text>{String(prediction.value)}</Text>
+                </View>
+              );
+            })
+          }
+        </ScrollView>
       </View>
     );
   }
@@ -25,9 +35,9 @@ class PhotoResultScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
 });
 
