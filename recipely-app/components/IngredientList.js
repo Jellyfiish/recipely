@@ -10,7 +10,7 @@ const IngredientList = ({ ingredients }) => {
     <View>
       { ingredients.map((ingredient, i) => {
           return (
-            <Text key={i}>{ingredient}</Text>
+            <Text key={i}>{`\u2022 ${ingredient}`}</Text>
           );
         })
       }

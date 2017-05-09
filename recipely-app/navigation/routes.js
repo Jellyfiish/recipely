@@ -1,3 +1,4 @@
+import { Constants } from 'expo';
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -24,6 +25,9 @@ import SideDrawer from '../components/SideDrawer.js';
 const RecipeStack = StackNavigator({
   Recipes: {
     screen: RecipeScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Saved Recipes',
+    }),
   },
   Details: {
     screen: RecipeDetailScreen,
@@ -31,6 +35,10 @@ const RecipeStack = StackNavigator({
       title: `${navigation.state.params.title}`,
     }),
   },
+}, {
+  cardStyle: {
+    paddingTop: Constants.statusBarHeight,
+  }
 });
 
 const DrawerNav = DrawerNavigator({

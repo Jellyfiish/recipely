@@ -7,6 +7,8 @@ import {
   Button,
   Image
 } from 'react-native';
+import { Card } from 'react-native-elements';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const RecipeList = ({ navigation, recipes }) => {
   onLearnMore = (recipe) => {
@@ -15,24 +17,25 @@ const RecipeList = ({ navigation, recipes }) => {
 
   return (
     <ScrollView>
-      <View>
-        { recipes.map(recipe => {
-            return (
-              <View key={recipe.recipe_id}>
-                <Text>{recipe.title}</Text>
-                <Image
-                  source={{ uri: recipe.image_url }}
-                  style={{ width: 100, height: 100 }}
-                />
+      { recipes.map(recipe => {
+          return (
+            <Card
+              key={recipe.recipe_id}
+              title={recipe.title}
+              image={{ uri: recipe.image_url }}
+            >
+              <Text style={{marginBottom: 10}}>{recipe.publisher}</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Button
+                  title='Details'
                   onPress={() => this.onLearnMore(recipe)}
-                  title="More details"
                 />
+                <MaterialIcons name="close" size={28} color="#aaa" />
               </View>
-            );
-          })
-        }
-      </View>
+            </Card>
+          );
+        })
+      }
     </ScrollView>
   );
 };
