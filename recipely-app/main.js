@@ -8,7 +8,7 @@ class App extends Component {
 
     this.state = {
       recipes: [],
-      imageURI: null,
+      image: null,
     };
   }
 
@@ -16,8 +16,8 @@ class App extends Component {
     this.setState({recipes});
   };
 
-  onImageChange = (imageURI) => {
-    this.setState({imageURI});
+  onImageChange = (image) => {
+    this.setState({image});
   }
 
   render() {
@@ -26,7 +26,7 @@ class App extends Component {
         screenProps={
           {
             recipes: this.state.recipes,
-            imageURI: this.state.imageURI,
+            image: this.state.image,
             onRecipesChange: this.onRecipesChange,
             onImageChange: this.onImageChange,
           }
