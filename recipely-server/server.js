@@ -5,7 +5,7 @@ var db = require('./db');
 
 var app = express();
 
-var key = process.env.F2F_API_KEY || require('./config/config');
+var key = process.env.F2F_API_KEY || require('./config/config').F2F_API_KEY;
 
 var morgan = require('morgan');
 
