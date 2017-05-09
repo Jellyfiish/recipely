@@ -10,6 +10,7 @@ class SearchResultScreen extends Component {
     return (
       <View style={styles.container}>
         <Text>Results from searching by ingredients</Text>
+        <Text>{JSON.stringify(this.props.navigation.state.params.recipes)}</Text>
       </View>
     );
   }

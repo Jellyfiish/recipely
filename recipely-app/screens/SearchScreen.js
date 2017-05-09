@@ -44,7 +44,15 @@ class SearchScreen extends Component {
   };
 
   onFindRecipesPress = () => {
-    this.props.navigation.navigate('SearchResults');
+    const queries = this.state.ingredients.map(item => item.name).join(',');
+    if (queries.length === 0) {
+      return;
+    }
+    fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes?q=${queries}`)
+      .then(res => res.json())
+      .then(results => {
+        this.props.navigation.navigate('SearchResults', {recipes: results.recipes});
+      });
   };
 
   render() {
@@ -77,7 +85,7 @@ class SearchScreen extends Component {
 
         <Button
           title="Find recipes"
-          onPress={() => this.onFindRecipesPress}
+          onPress={() => this.onFindRecipesPress()}
         />
       </View>
     );
