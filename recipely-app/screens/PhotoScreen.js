@@ -20,7 +20,6 @@ class PhotoScreen extends Component {
 
     this.state = {
       isGettingPrediction: false,
-      predictions: []
     };
   }
 
@@ -33,6 +32,7 @@ class PhotoScreen extends Component {
 
     if (!result.cancelled) {
       this.props.screenProps.onImageChange(result);
+      this.props.screenProps.onPredictionsChange([]);
     }
   };
 
@@ -45,12 +45,20 @@ class PhotoScreen extends Component {
 
     if (!result.cancelled) {
       this.props.screenProps.onImageChange(result);
+      this.props.screenProps.onPredictionsChange([]);
     }
   };
 
   getPredictions = () => {
+    const { predictions } = this.props.screenProps;
+    if (predictions.length !== 0) {
+      this.props.navigation.navigate('PhotoResult', {predictions});
+      return;
+    }
+
     this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
-    const { image } = this.props.screenProps;
+    const { image, onPredictionsChange } = this.props.screenProps;
+
     ImageStore.getBase64ForTag(image.uri, (encoded) => {
       fetch('https://api.clarifai.com/v2/token', {
         method: 'POST',
@@ -81,9 +89,8 @@ class PhotoScreen extends Component {
         .then(res => res.json())
         .then(res => {
           this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
-          this.setState({ predictions: res.outputs[0].data.concepts});
-          this.props.navigation.navigate('PhotoResult', {predictions: this.state.predictions});
-          console.log(res)
+          onPredictionsChange(res.outputs[0].data.concepts);
+          this.props.navigation.navigate('PhotoResult', {predictions: res.outputs[0].data.concepts});
         });
     }, (err) => {
       console.log(err);
