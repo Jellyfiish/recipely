@@ -8,6 +8,7 @@ class App extends Component {
 
     this.state = {
       recipes: [],
+      imageURI: null,
     };
   }
 
@@ -15,13 +16,19 @@ class App extends Component {
     this.setState({recipes});
   };
 
+  onImageChange = (imageURI) => {
+    this.setState({imageURI});
+  }
+
   render() {
     return (
       <DrawerNav
         screenProps={
           {
             recipes: this.state.recipes,
+            imageURI: this.state.imageURI,
             onRecipesChange: this.onRecipesChange,
+            onImageChange: this.onImageChange,
           }
         }
       />
