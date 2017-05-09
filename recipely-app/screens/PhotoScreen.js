@@ -12,10 +12,6 @@ import {
 class PhotoScreen extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      image: null,
-    };
   }
 
   takeImage = async() => {
@@ -26,7 +22,7 @@ class PhotoScreen extends Component {
     console.log(result);
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this.props.screenProps.onImageChange(result.uri);
     }
   };
 
@@ -38,12 +34,12 @@ class PhotoScreen extends Component {
     console.log(result);
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this.props.screenProps.onImageChange(result.uri);
     }
   };
 
   render() {
-    let { image } = this.state;
+    let { imageURI } = this.props.screenProps;
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -55,8 +51,8 @@ class PhotoScreen extends Component {
           title="Pick an image from camera roll"
           onPress={this.pickImage}
         />
-        {image &&
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        { imageURI &&
+          <Image source={{ uri: imageURI }} style={{ width: 200, height: 200 }} />}
       </View>
     );
   }
