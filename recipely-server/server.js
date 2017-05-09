@@ -79,6 +79,14 @@ app.get('/api/users', (req, res) => {
     .catch(err => console.error(err));
 });
 
+app.get('/api/users/:id', (req, res) => {
+  client.queryAsync(`select * from users where ID = ${req.params.id}`)
+    .then(response => {
+      res.status(200).json(response.rows);
+    })
+    .catch(err => console.error(err));
+});
+
 
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
