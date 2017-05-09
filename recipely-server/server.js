@@ -71,6 +71,15 @@ app.post('/api/signup', (req, res) => {
   })
 });
 
+app.get('/api/users', (req, res) => {
+  client.queryAsync('select * from users')
+    .then(response => {
+      res.status(200).json(response.rows);
+    })
+    .catch(err => console.error(err));
+});
+
+
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
 });
