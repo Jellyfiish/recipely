@@ -16,6 +16,7 @@ import {
   TabNavigator
 } from 'react-navigation';
 import PhotoScreen from '../screens/PhotoScreen';
+import PhotoResultScreen from '../screens/PhotoResultScreen';
 import RecipeScreen from '../screens/RecipeScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import SearchScreen from '../screens/SearchScreen';
@@ -27,6 +28,12 @@ const PhotoStack = StackNavigator({
     screen: PhotoScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Take photo'
+    }),
+  },
+  PhotoResult: {
+    screen: PhotoResultScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Photo Result',
     }),
   },
 }, {

@@ -19,7 +19,8 @@ class PhotoScreen extends Component {
     super(props);
 
     this.state = {
-      isGettingPrediction: false
+      isGettingPrediction: false,
+      predictions: []
     };
   }
 
@@ -80,6 +81,8 @@ class PhotoScreen extends Component {
         .then(res => res.json())
         .then(res => {
           this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
+          this.setState({ predictions: res.outputs[0].data.concepts});
+          this.props.navigation.navigate('PhotoResult', {predictions: this.state.predictions});
           console.log(res)
         });
     }, (err) => {
