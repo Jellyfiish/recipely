@@ -24,9 +24,8 @@
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "morgan": "^1.8.1",
-    "mysql": "^2.13.0"
+    "pg": "^6.1.5"
   },
-
   "devDependencies": {
     "eslint": "^3.19.0",
     "nodemon": "^1.11.0"
