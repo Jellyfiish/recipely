@@ -1,9 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var app = express();
 var axios = require('axios');
+var db = require('./db');
 
-var key = process.env.F2F_API_KEY || require('./config/config');
+var app = express();
+
+var key = process.env.F2F_API_KEY || require('./config/config').F2F_API_KEY;
 
 var morgan = require('morgan');
 
@@ -34,7 +36,7 @@ app.get('/api/recipes/:id', (req, res) => {
 });
 
 
+
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
 });
-
