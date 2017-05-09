@@ -24,8 +24,8 @@ const RecipeList = ({ navigation, recipes }) => {
               title={recipe.title}
               image={{ uri: recipe.image_url }}
             >
-              <Text style={{marginBottom: 10}}>{recipe.publisher}</Text>
-              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={styles.publisherText}>{recipe.publisher}</Text>
+              <View style={styles.buttonContainer}>
                 <Button
                   title='Details'
                   onPress={() => this.onLearnMore(recipe)}
@@ -39,5 +39,15 @@ const RecipeList = ({ navigation, recipes }) => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  publisherText: {
+    marginBottom: 10,
+  },
+});
 
 export default RecipeList;

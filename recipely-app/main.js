@@ -8,6 +8,8 @@ class App extends Component {
 
     this.state = {
       recipes: [],
+      image: null,
+      predictions: [],
     };
   }
 
@@ -15,13 +17,25 @@ class App extends Component {
     this.setState({recipes});
   };
 
+  onImageChange = (image) => {
+    this.setState({image});
+  }
+
+  onPredictionsChange = (predictions) => {
+    this.setState({predictions});
+  }
+
   render() {
     return (
       <DrawerNav
         screenProps={
           {
             recipes: this.state.recipes,
+            image: this.state.image,
+            predictions: this.state.predictions,
             onRecipesChange: this.onRecipesChange,
+            onImageChange: this.onImageChange,
+            onPredictionsChange: this.onPredictionsChange,
           }
         }
       />

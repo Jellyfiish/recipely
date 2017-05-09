@@ -16,11 +16,31 @@ import {
   TabNavigator
 } from 'react-navigation';
 import PhotoScreen from '../screens/PhotoScreen';
+import PhotoResultScreen from '../screens/PhotoResultScreen';
 import RecipeScreen from '../screens/RecipeScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import SearchScreen from '../screens/SearchScreen';
 import NoteScreen from '../screens/NoteScreen';
 import SideDrawer from '../components/SideDrawer.js';
+
+const PhotoStack = StackNavigator({
+  Photos: {
+    screen: PhotoScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Take photo'
+    }),
+  },
+  PhotoResult: {
+    screen: PhotoResultScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Photo Result',
+    }),
+  },
+}, {
+  cardStyle: {
+    paddingTop: Constants.statusBarHeight,
+  }
+});
 
 const RecipeStack = StackNavigator({
   Recipes: {
@@ -43,7 +63,7 @@ const RecipeStack = StackNavigator({
 
 const DrawerNav = DrawerNavigator({
   Photo: {
-    screen: PhotoScreen,
+    screen: PhotoStack,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'Take photo',
       drawerIcon: () => (
