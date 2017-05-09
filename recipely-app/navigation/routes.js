@@ -22,6 +22,19 @@ import SearchScreen from '../screens/SearchScreen';
 import NoteScreen from '../screens/NoteScreen';
 import SideDrawer from '../components/SideDrawer.js';
 
+const PhotoStack = StackNavigator({
+  Photos: {
+    screen: PhotoScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Take photo'
+    }),
+  },
+}, {
+  cardStyle: {
+    paddingTop: Constants.statusBarHeight,
+  }
+});
+
 const RecipeStack = StackNavigator({
   Recipes: {
     screen: RecipeScreen,
@@ -43,7 +56,7 @@ const RecipeStack = StackNavigator({
 
 const DrawerNav = DrawerNavigator({
   Photo: {
-    screen: PhotoScreen,
+    screen: PhotoStack,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'Take photo',
       drawerIcon: () => (
