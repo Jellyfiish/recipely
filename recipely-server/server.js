@@ -1,7 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var app = express();
 var axios = require('axios');
+var db = require('./db');
+
+var app = express();
 
 var key = process.env.F2F_API_KEY || require('./config/config');
 
