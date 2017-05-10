@@ -1,13 +1,6 @@
 import { Constants } from 'expo';
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  ScrollView,
-  View,
-  Button,
-  Image
-} from 'react-native';
+import { View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import {
   DrawerNavigator,
@@ -28,6 +21,8 @@ import SideDrawer from '../components/SideDrawer.js';
 const PhotoStack = StackNavigator({
   Photos: {
     screen: PhotoScreen,
+    // Can set the navigationOptions here or in the screen itself.
+    // Options here override navigationOptions in the screen.
     navigationOptions: ({ navigation }) => ({
       title: 'Take photo'
     }),
@@ -40,6 +35,7 @@ const PhotoStack = StackNavigator({
   },
 }, {
   cardStyle: {
+    // Push card down so that the status bar does not overlap content.
     paddingTop: Constants.statusBarHeight,
   }
 });
@@ -72,6 +68,7 @@ const SearchTab = TabNavigator({
   },
 });
 
+// Create a title for tab navigator.
 SearchTab.navigationOptions = ({ navigation }) => {
   return {
     title: 'Find recipes',
@@ -79,7 +76,7 @@ SearchTab.navigationOptions = ({ navigation }) => {
 };
 
 const SearchStack = StackNavigator({
-  Home: {
+  SearchHome: {
     screen: SearchTab,
   },
   SearchResult: {
@@ -104,6 +101,7 @@ const DrawerNav = DrawerNavigator({
   Photo: {
     screen: PhotoStack,
     navigationOptions: ({navigation}) => ({
+      // Label and icons for the side menu.
       drawerLabel: 'Take photo',
       drawerIcon: () => (
         <MaterialIcons name="photo-camera" size={24} />
@@ -138,6 +136,7 @@ const DrawerNav = DrawerNavigator({
     }),
   },
 }, {
+  // Custom side menu. See '../components/SideDrawer.js'.
   contentComponent: props => SideDrawer(props),
 });
 

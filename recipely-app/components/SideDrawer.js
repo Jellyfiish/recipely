@@ -1,13 +1,11 @@
-import Expo, { Constants } from 'expo';
+import { Constants } from 'expo';
 import React from 'react';
 import {
   StyleSheet,
   Text,
   View
 } from 'react-native';
-import {
-  DrawerItems
-} from 'react-navigation';
+import { DrawerItems } from 'react-navigation';
 
 const SideDrawer = (props) => (
   <View>
