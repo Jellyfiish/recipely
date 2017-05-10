@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var axios = require('axios');
-var client = require('./models/database');
+var db = require('./models/database');
 var jwtAuth = require('./models/jwtAuth');
 var bcrypt = require('./models/bcrypt')
 var app = express();
@@ -47,6 +47,54 @@ app.get('/api/recipes/:id', (req, res) => {
       res.status(200).json(response.data);
     })
     .catch(err => console.error(err));
+});
+
+app.post('/api/users/recipes', (req, res) => {
+  const userId = 1;
+  const title = req.body.title;
+  const image_url = req.body.image_url;
+  const source_url = req.body.source_url;
+  const f2f_id = req.body.f2f_id;
+  const ingredients = req.body.ingredients;
+  db.queryAsync(`SELECT saved_count FROM recipes WHERE f2f_id = $1`, [f2f_id])
+    .then((results)=> {
+      console.log(results.rows);
+      if(!results.rows.length) {
+        // const query = `INSERT INTO recipes (title, thumbnail_url, source_url, ingredients, f2f_id, saved_count)
+        //   VALUES ('${title}', '${image_url}', '${source_url}', '${ingredients}', '${f2f_id}', '1')`;
+          // console.log(query)
+        db.queryAsync('INSERT INTO recipes (title, thumbnail_url, source_url, ingredients, f2f_id, saved_count) VALUES ($1, $2, $3, $4, $5, $6)', [title, image_url, source_url,ingredients ,f2f_id, 1])
+          .then(results => {
+            const query = `INSERT INTO recipes_users (user_id, f2f_id) VALUES (${userId}, ${f2f_id})`;
+            db.queryAsync("INSERT INTO recipes_users (user_id, f2f_id) VALUES ($1, $2)", [userId, f2f_id])
+              .then( results => {
+                res.status(201).json(req.body);
+              })
+              .catch(err => {
+                console.log(err);
+                res.status(500).json(err);
+              });
+          })
+          .catch(err => {
+            res.status(501).json(err);
+            console.log(err)
+          })
+      } else {
+        const savedCount = results.rows[0].saved_count;
+        // UPDATE films SET kind = 'Dramatic' WHERE kind = 'Drama';
+        db.queryAsync('UPDATE recipes SET saved_count=saved_count+1 where f2f_id=$1 RETURNING *', [f2f_id])
+        .then(results => {
+          res.json(results.rows[0]);
+        })
+        .catch(err => {
+          res.status(500).json(err);
+        });
+      }
+    })
+    .catch((err)=> {
+      res.status(500).json(err);
+    });
+
 });
 
 app.post('/api/login', (req, res) => {
