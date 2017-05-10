@@ -217,11 +217,27 @@ app.post('/api/notes', isAuthenticated, (req, res) => {
 app.put('/api/notes/:id_note', isAuthenticated, (req, res) => {
   const noteId = req.params.id_note;
   const text = req.body.text;
-  
+
   db.queryAsync('UPDATE notes SET text = $1 WHERE id = $2', [text, noteId])
     .then(results => {
       if(results.rows.length) {
         res.status(201).send(text);
+      } else {
+        res.status(404).send('resource is not available')
+      }
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
+app.delete('/api/notes/:id_note', isAuthenticated, (req, res) => {
+  const noteId = req.params.id_note;
+  
+  db.queryAsync('DELETE FROM notes WHERE id = $1 RETURNING *', [noteId])
+    .then(results => {
+      if(results.rows.length) {
+        res.status(201).send(results.rows[0]);
       } else {
         res.status(404).send('resource is not available')
       }
