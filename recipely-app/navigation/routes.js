@@ -70,6 +70,11 @@ const SearchTab = TabNavigator({
   },
   Search: {
     screen: SearchScreen,
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => (
+        <MaterialIcons name="search" size={24} color={tintColor} />
+      ),
+    }),
   },
 });
 
