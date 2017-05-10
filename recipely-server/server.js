@@ -57,7 +57,6 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
   const source_url = req.body.source_url;
   const f2f_id = req.body.f2f_id;
   const ingredients = req.body.ingredients;
-
   db.queryAsync(`SELECT saved_count FROM recipes WHERE f2f_id = $1`, [f2f_id])
     .then((results)=> {
       if(!results.rows.length) {

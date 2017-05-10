@@ -18,7 +18,7 @@ var dbAuth = dbParams.auth.split(':');
 
 var config = {
   user: dbAuth[0],
-  password: '12345',
+  password: dbAuth[1],
   host: dbParams.hostname,
   port: dbParams.port,
   database: dbParams.pathname.split('/')[1],
