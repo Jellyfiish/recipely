@@ -16,20 +16,20 @@ class SearchScreen extends Component {
     super(props);
 
     this.state = {
-      ingredients: [
-        {name: 'blueberry'},
-        {name: 'strawberry'},
-        {name: 'blackberry'}
-      ],
       input: '',
     };
   }
 
   addIngredients = (event) => {
     this.setState({
-      ingredients: [ {name: event.nativeEvent.text}, ...this.state.ingredients],
       input: '',
     });
+    this.props.screenProps.onIngredientChange(
+      [
+        {name: event.nativeEvent.text},
+        ...this.props.screenProps.ingredients
+      ]
+    );
   };
 
   onInputChange = (event) => {
@@ -37,20 +37,25 @@ class SearchScreen extends Component {
   };
 
   onRemovePress = (i) => {
-    const ingredients = this.state.ingredients;
-    this.setState({
-      ingredients: [ ...ingredients.slice(0, i), ...ingredients.slice(i + 1)]
-    });
+    const ingredients = this.props.screenProps.ingredients;
+    this.props.screenProps.onIngredientChange(
+      [
+        ...ingredients.slice(0, i),
+        ...ingredients.slice(i + 1)
+      ]
+    );
   };
 
   onFindRecipesPress = () => {
-    const query = this.state.ingredients.map(item => item.name).join(',');
+    const query = this.props.screenProps.ingredients.map(item => item.name).join(',');
     if (query.length !== 0) {
       this.props.navigation.navigate('SearchResults', {query});
     }
   };
 
   render() {
+    const { ingredients } = this.props.screenProps;
+
     return (
       <View style={styles.container}>
         <TextInput
@@ -64,7 +69,7 @@ class SearchScreen extends Component {
       <Text style={styles.ingredientHeading}>Ingredients:</Text>
 
         <ScrollView>
-          { this.state.ingredients.map((item, i) => {
+          { ingredients.map((item, i) => {
               return (
                 <View key={i}>
                   <Text>{item.name}</Text>

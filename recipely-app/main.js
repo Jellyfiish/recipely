@@ -11,6 +11,11 @@ class App extends Component {
       image: null,
       predictions: [],
       searchResults: {},
+      ingredients: [
+        {name: 'blueberry'},
+        {name: 'strawberry'},
+        {name: 'blackberry'}
+      ],
     };
   }
 
@@ -32,6 +37,10 @@ class App extends Component {
     });
   };
 
+  onIngredientChange = (ingredients) => {
+    this.setState({ingredients});
+  };
+
   render() {
     return (
       <DrawerNav
@@ -41,10 +50,12 @@ class App extends Component {
             image: this.state.image,
             predictions: this.state.predictions,
             searchResults: this.state.searchResults,
+            ingredients: this.state.ingredients,
             onRecipesChange: this.onRecipesChange,
             onImageChange: this.onImageChange,
             onPredictionsChange: this.onPredictionsChange,
             onSearchChange: this.onSearchChange,
+            onIngredientChange: this.onIngredientChange,
           }
         }
       />
