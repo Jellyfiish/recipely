@@ -72,7 +72,7 @@ app.post('/api/signup', (req, res) => {
 });
 
 app.get('/api/users', (req, res) => {
-  client.queryAsync('select * from users')
+  client.queryAsync('SELECT * FROM users')
     .then(response => {
       res.status(200).json(response.rows);
     })
@@ -80,12 +80,27 @@ app.get('/api/users', (req, res) => {
 });
 
 app.get('/api/users/:id', (req, res) => {
-  client.queryAsync(`select * from users where ID = ${req.params.id}`)
+  client.queryAsync(`SELECT * FROM users WHERE ID = ${req.params.id}`)
     .then(response => {
       res.status(200).json(response.rows);
     })
     .catch(err => console.error(err));
 });
+
+app.delete('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  const deleteUser = `DELETE FROM users WHERE ID = ${userId}`;
+  const deleteUserNotes = `DELETE FROM notes WHERE user_id = ${userId}`;
+  const deleteUserRecipes = `DELETE FROM recipes_users WHERE user_id = ${userId}`;
+  const deleteRows = [deleteUser, deleteUserRecipes, deleteUserNotes];
+  queryStrings.forEach(queryString => {
+    client.queryAsync(queryString).then(res => {
+      console.log('Deleted!');
+    }).catch(e => {
+      console.error(`Error deleting row(s)\nError: ${e}`);
+    })
+  })
+})
 
 
 app.listen(port, function() {
