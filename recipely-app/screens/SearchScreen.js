@@ -15,15 +15,12 @@ class SearchScreen extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      input: '',
-    };
+    this.state = { input: '' };
   }
 
+  // Add ingredient to list
   addIngredients = (event) => {
-    this.setState({
-      input: '',
-    });
+    this.setState({ input: '' });
     this.props.screenProps.onIngredientChange(
       [
         {name: event.nativeEvent.text},
@@ -36,6 +33,7 @@ class SearchScreen extends Component {
     this.setState({input: event.nativeEvent.text});
   };
 
+  // Remove ingredient from list
   onRemovePress = (i) => {
     const ingredients = this.props.screenProps.ingredients;
     this.props.screenProps.onIngredientChange(
@@ -46,8 +44,11 @@ class SearchScreen extends Component {
     );
   };
 
+  // Find recipes based on list of ingredients
   onFindRecipesPress = () => {
+    // Create a comma separated string of ingredients to pass to our API call
     const query = this.props.screenProps.ingredients.map(item => item.name).join(',');
+    // Change screen only if there is some ingredient being searched
     if (query.length !== 0) {
       this.props.navigation.navigate('SearchResult', {query});
     }

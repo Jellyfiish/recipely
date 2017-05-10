@@ -28,10 +28,10 @@ class RecipeDetailScreen extends Component {
       .then(result => this.setState({ ingredients: result.recipe.ingredients }));
   }
 
+  // Open web browser with directions to recipe
   handlePressButtonAsync = async () => {
     const { source_url } = this.props.navigation.state.params;
     let result = await WebBrowser.openBrowserAsync(source_url);
-    this.setState({ result });
   };
 
   render() {
