@@ -176,10 +176,10 @@ app.delete('/api/users/:id', (req, res) => {
   // const decrementSavedCounts = `UPDATE TABLE recipes WHERE ID = `; // need IDs of all recipes that the deleted user saved, gather from recipes_users table
   const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
   queryStrings.forEach(queryString => {
-    db.queryAsync(queryString).then(res => {
+    client.queryAsync(queryString).then(res => {
       console.log('Deleted!');
-    }).catch(e => {
-      console.error(`Error deleting row(s)\nError: ${e}`);
+    }).catch(err => {
+      console.error(`Error deleting row(s)\nError: ${err}`);
     });
   });
 });
@@ -195,7 +195,6 @@ app.post('/api/notes', (req, res) => {
       console.error(`Error adding note\nError: ${e}`);
     });
 });
-
 
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
