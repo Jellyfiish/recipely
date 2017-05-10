@@ -108,8 +108,8 @@ const DrawerNav = DrawerNavigator({
     navigationOptions: ({navigation}) => ({
       // Label and icons for the side menu.
       drawerLabel: 'Take photo',
-      drawerIcon: () => (
-        <MaterialIcons name="photo-camera" size={24} />
+      drawerIcon: ({ tintColor }) => (
+        <MaterialIcons name="photo-camera" size={24} color={tintColor} />
       ),
     }),
   },
@@ -117,8 +117,8 @@ const DrawerNav = DrawerNavigator({
     screen: RecipeStack,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'View saved recipes',
-      drawerIcon: () => (
-        <MaterialIcons name="list" size={24} />
+      drawerIcon: ({ tintColor }) => (
+        <MaterialIcons name="list" size={24} color={tintColor} />
       ),
     }),
   },
@@ -126,8 +126,8 @@ const DrawerNav = DrawerNavigator({
     screen: SearchStack,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'Find recipes',
-      drawerIcon: () => (
-        <MaterialIcons name="search" size={24} />
+      drawerIcon: ({ tintColor }) => (
+        <MaterialIcons name="search" size={24} color={tintColor} />
       ),
     }),
   },
@@ -135,8 +135,8 @@ const DrawerNav = DrawerNavigator({
     screen: NoteScreen,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'View notes',
-      drawerIcon: () => (
-        <MaterialIcons name="note" size={24} />
+      drawerIcon: ({ tintColor }) => (
+        <MaterialIcons name="note" size={24} color={tintColor} />
       ),
     }),
   },
