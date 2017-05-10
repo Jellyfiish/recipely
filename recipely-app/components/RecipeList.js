@@ -1,17 +1,22 @@
-import React, { Component } from 'react';
+// TODO: RecipeList.js and ResultList.js share a lot of code. Maybe refactor to
+// use higher order components. 
+import React from 'react';
 import {
   StyleSheet,
   Text,
   ScrollView,
   View,
-  Button,
-  Image
+  Button
 } from 'react-native';
 import { Card } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
 
+// Navigation prop needs to be passed down because it does not get passed down
+// child components.
 const RecipeList = ({ navigation, recipes }) => {
   onLearnMore = (recipe) => {
+    // When user presses on "Details" button, navigate them to a detail screen.
+    // Pass down props that can be acessed using this.props.navigation.state.params
     navigation.navigate('Details', { ...recipe });
   }
 
