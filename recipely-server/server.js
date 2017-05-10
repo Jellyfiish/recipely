@@ -31,7 +31,7 @@ var isAuthenticated = (req, res, next) => {
         }).catch((err)=> {
           res.status(500).json(err);
         });
-    } 
+    }
   });
 }
 
@@ -146,7 +146,7 @@ app.post('/api/signup', (req, res) => {
     })
     .catch(err => {
       res.status.json(err);
-    });  
+    });
 });
 // TODO: handling the error
 app.get('/api/users', isAuthenticated, (req, res) => {
@@ -166,6 +166,34 @@ app.get('/api/users/:id', isAuthenticated, (req, res) => {
     .catch(err => console.error(err));
 });
 
+app.delete('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  const deleteUser = `DELETE FROM users WHERE ID = ${userId}`;
+  const deleteUserNotes = `DELETE FROM notes WHERE user_id = ${userId}`;
+  const deleteUserRecipes = `DELETE FROM recipes_users WHERE user_id = ${userId}`;
+  // TODO: Decrement saved count of recipes by 1 that deleted user saved
+  // const decrementSavedCounts = `UPDATE TABLE recipes WHERE ID = `; // need IDs of all recipes that the deleted user saved, gather from recipes_users table
+  const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
+  queryStrings.forEach(queryString => {
+    db.queryAsync(queryString).then(res => {
+      console.log('Deleted!');
+    }).catch(e => {
+      console.error(`Error deleting row(s)\nError: ${e}`);
+    });
+  });
+});
+
+app.post('/api/notes', (req, res) => {
+  const recipeId = req.body.recipe_id;
+  const userId = req.body.user_id;
+  const note = req.body.text;
+  const queryString = `INSERT INTO notes(text, user_id, recipe_id) VALUES (${note}, ${userId}, ${recipeId})`;
+  db.queryAsync(queryString).then(res => {
+      console.log('Added note!');
+    }).catch(e => {
+      console.error(`Error adding note\nError: ${e}`);
+    });
+});
 
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
