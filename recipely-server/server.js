@@ -245,7 +245,7 @@ app.get('/api/recipes/:id/notes', isAuthenticated, (req, res) => {
       } else {
         res.status(404).end('there is no notes for this recipe');
       }
-      
+
     })
     .catch(err => {
       res.status(500).json(err);
@@ -269,7 +269,8 @@ app.put('/api/notes/:id_note', isAuthenticated, (req, res) => {
   const noteId = req.params.id_note;
   const text = req.body.text;
 
-  db.queryAsync('UPDATE notes SET text = $1 WHERE id = $2', [text, noteId])
+  // query must return something for the if else block to check
+  db.queryAsync('UPDATE notes SET text = $1 WHERE id = $2 RETURNING  *', [text, noteId])
     .then(results => {
       if(results.rows.length) {
         res.status(201).send(text);
@@ -284,7 +285,7 @@ app.put('/api/notes/:id_note', isAuthenticated, (req, res) => {
 
 app.delete('/api/notes/:id_note', isAuthenticated, (req, res) => {
   const noteId = req.params.id_note;
-  
+
   db.queryAsync('DELETE FROM notes WHERE id = $1 RETURNING *', [noteId])
     .then(results => {
       if(results.rows.length) {
