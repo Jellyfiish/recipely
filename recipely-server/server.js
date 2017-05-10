@@ -12,7 +12,7 @@ var morgan = require('morgan');
 // to be moved to util models directory after adding the check it the user exists in the DB funciton
 var isAuthenticated = (req, res, next) => {
   if(!req.header('x-access-token')) {
-    res.status(400).end('please log in!')
+    res.status(422).end('please log in!')
   }
 
   const token = req.header('x-access-token').split(' ')[1];
@@ -176,28 +176,24 @@ app.delete('/api/users/:id', (req, res) => {
   const deleteUserRecipes = `DELETE FROM recipes_users WHERE user_id = ${userId}`;
   const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
   queryStrings.forEach(queryString => {
-    db.queryAsync(queryString).then(res => {
-      console.log('Deleted!');
+    db.queryAsync(queryString).then(results => {
       res.json('User deleted')
     }).catch(err => {
-      console.error(`Error deleting row(s)\nError: ${err}`);
       res.json('Error deleting user');
     });
   });
 });
 
-app.post('/api/notes', (req, res) => {
-  const recipeId = req.body.recipe_id;
-  const userId = req.body.user_id;
-  const note = req.body.text;
-  const params = [note, userId, recipeId];
-  const queryString = `INSERT INTO notes(text, user_id, recipe_id) VALUES ($1, $2, $3)`;
-  db.queryAsync(queryString, params).then(res => {
-    console.log('Added note!');
-    res.status(201).json('Added note!')
+app.post('/api/notes', isAuthenticated, (req, res) => {
+  const f2f_id = req.body.f2f_id;
+  const text = req.body.text;
+  const userId = req.body.issuer;
+  const params = [text, userId, f2f_id];
+  const queryString = `INSERT INTO notes(text, user_id, f2f_id) VALUES ($1, $2, $3) RETURNING *`;
+  db.queryAsync(queryString, params).then(results => {
+    res.status(201).json(results.rows);
   }).catch(e => {
-    console.error(`Error adding note\nError: ${e}`);
-    res.json('Error adding note')
+    res.status(500).json(e);
   });
 });
 
