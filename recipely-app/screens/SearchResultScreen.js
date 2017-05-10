@@ -13,12 +13,12 @@ class SearchResultScreen extends Component {
   }
 
   componentDidMount() {
-    const { searchResults } = this.props.screenProps;
+    const { searchResults, onSearchChange } = this.props.screenProps;
     const { query } = this.props.navigation.state.params;
     if (!searchResults.hasOwnProperty(query)) {
       fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes?q=${query}`)
         .then(res => res.json())
-        .then(results => this.props.screenProps.onSearchChange(query, results.recipes));
+        .then(results => onSearchChange(query, results.recipes));
     }
   }
 
