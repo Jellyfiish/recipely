@@ -62,6 +62,11 @@ const RecipeStack = StackNavigator({
 const SearchTab = TabNavigator({
   Popular: {
     screen: PopularScreen,
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => (
+        <MaterialIcons name="whatshot" size={24} color={tintColor} />
+      ),
+    }),
   },
   Search: {
     screen: SearchScreen,
