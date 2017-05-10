@@ -8,7 +8,9 @@ import {
   View,
   Button,
   Image,
-  ImageStore
+  ImageStore,
+  ImageEditor,
+  Platform
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 // Used to get access token from Clarifai
@@ -66,14 +68,28 @@ class PhotoScreen extends Component {
     // Toggle activity indicator so user knows that the photo is being sent to
     // our image prediction API.
     this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
-    const {
-      image,
-      ingredients,
-      onPredictionsChange,
-      onIngredientChange
-    } = this.props.screenProps;
+    const { image } = this.props.screenProps;
+
+    if (Platform.OS === 'ios') {
+      Image.getSize(image.uri, (width, height) => {
+        const imageSize = {
+          size: { width, height},
+          offset: { x: 0, y: 0 },
+        }
+        ImageEditor.cropImage(image.uri, imageSize, (imageStoreURI) => {
+          this.getPredictionHelp(imageStoreURI, () => {
+            ImageStore.removeImageForTag(imageStoreURI);
+          }, (err) => console.log(err))
+        }, (err) => console.log(err))
+      }, (err) => console.log(err));
+    } else if (Platform.OS === 'android') {
+      this.getPredictionHelp(image.uri);
+    }
+  }
+
+  getPredictionHelp = (uri, callback = () => {}) => {
     // Encode image as base64 to send to image prediction API.
-    ImageStore.getBase64ForTag(image.uri, (encoded) => {
+    ImageStore.getBase64ForTag(uri, (encoded) => {
       // Image prediction API requires an authorization token.
       fetch('https://api.clarifai.com/v2/token', {
         method: 'POST',
@@ -83,57 +99,57 @@ class PhotoScreen extends Component {
           'Authorization': 'Basic ' + auth
         }
       }).then(res => res.json())
-        .then(res => {
-          // bd367be194cf45149e75f01d59f77ba7 is the food model. The food model
-          // will give better predictions when images of food are used.
-          return fetch('https://api.clarifai.com/v2/models/bd367be194cf45149e75f01d59f77ba7/outputs', {
-            method: 'POST',
-            headers: {
-              // Send our authorization token that we received.
-              'Authorization': 'Bearer ' + res.access_token,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              inputs: [
-                {
-                  data: {
-                    image: {
-                      // Send our base64 encoded to image prediction API.
-                      base64: encoded
-                    }
-                  }
-                }
-              ]
-            })
-          });
-        })
+        .then(res => this.onAuthSuccess(res.access_token, encoded))
         .then(res => res.json())
-        .then(res => {
-          // Toggle activity indicator off
-          this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
-          // Filter only good predictions. We will consider a prediction to be
-          // good if it has a value >= 0.75.
-          const predictions = res.outputs[0].data.concepts.filter(item => {
-            return item.value >= 0.75;
-          });
-          // Set the state of our predictions on our root component.
-          onPredictionsChange(predictions);
-          // this.props.navigation.navigate('PhotoResult', {predictions: res.outputs[0].data.concepts});
-          // Set the state of our ingredients on our root component
-          onIngredientChange(
-            [
-              ...predictions,
-              ...ingredients
-            ]
-          );
-          // Change our screen to the search screen. The search screen should
-          // have our predictions prepopulated.
-          this.props.navigation.navigate('Search');
-        });
+        .then(res => this.onPredictionSuccess(res));
     }, (err) => {
       console.log(err);
     });
-  }
+  };
+
+  onAuthSuccess = (token, encoded) => {
+    // bd367be194cf45149e75f01d59f77ba7 is the food model. The food model
+    // will give better predictions when images of food are used.
+    return fetch('https://api.clarifai.com/v2/models/bd367be194cf45149e75f01d59f77ba7/outputs', {
+      method: 'POST',
+      headers: {
+        // Send our authorization token that we received.
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        inputs: [
+          {
+            data: {
+              image: {
+                // Send our base64 encoded to image prediction API.
+                base64: encoded
+              }
+            }
+          }
+        ]
+      })
+    });
+  };
+
+  onPredictionSuccess = (res) => {
+    const { ingredients, onPredictionsChange, onIngredientChange } = this.props.screenProps;
+    // Toggle activity indicator off
+    this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
+    // Filter only good predictions. We will consider a prediction to be
+    // good if it has a value >= 0.75.
+    const predictions = res.outputs[0].data.concepts.filter(item => {
+      return item.value >= 0.75;
+    });
+    // Set the state of our predictions on our root component.
+    onPredictionsChange(predictions);
+    // this.props.navigation.navigate('PhotoResult', {predictions: res.outputs[0].data.concepts});
+    // Set the state of our ingredients on our root component
+    onIngredientChange([ ...predictions, ...ingredients]);
+    // Change our screen to the search screen. The search screen should
+    // have our predictions prepopulated.
+    this.props.navigation.navigate('Search');
+  };
 
   render() {
     let { image } = this.props.screenProps;
