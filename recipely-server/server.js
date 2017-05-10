@@ -11,16 +11,27 @@ var morgan = require('morgan');
 
 // to be moved to util models directory after adding the check it the user exists in the DB funciton
 var isAuthenticated = (req, res, next) => {
-  if(!(req.header && req.header.token)) {
+  if(!req.header('x-access-token')) {
     res.status(400).end('please log in!')
   }
-  const token = req.header.token.split(' ')[1];
-  jwtAuth.decodeToken(req.header.token, (err, payload) => {
+
+  const token = req.header('x-access-token').split(' ')[1];
+  jwtAuth.decodeToken(token, (err, payload) => {
+    console.log(payload.sub)
     if(err) res.status(400).end(err);
-    if(payload) req.body.issuer = payload.id;
-    // check if user still exits in the db
-      // yes next();
-      // no return 400
+    if(payload) {
+      db.queryAsync('SELECT * FROM users where id = $1', [payload.sub])
+        .then(results => {
+          if(results.rows.length) {
+            req.body.issuer = payload.sub;
+            next();
+          } else {
+            res.status(400).end('Please login/signup');
+          }
+        }).catch((err)=> {
+          res.status(500).json(err);
+        });
+    } 
   });
 }
 
@@ -137,8 +148,8 @@ app.post('/api/signup', (req, res) => {
       res.status.json(err);
     });  
 });
-
-app.get('/api/users', (req, res) => {
+// TODO: handling the error
+app.get('/api/users', isAuthenticated, (req, res) => {
   db.queryAsync('select * from users')
     .then(response => {
       res.status(200).json(response.rows);
@@ -146,7 +157,8 @@ app.get('/api/users', (req, res) => {
     .catch(err => console.error(err));
 });
 
-app.get('/api/users/:id', (req, res) => {
+//TODO: handling the error,
+app.get('/api/users/:id', isAuthenticated, (req, res) => {
   db.queryAsync(`select * from users where ID = ${req.params.id}`)
     .then(response => {
       res.status(200).json(response.rows);
