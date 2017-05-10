@@ -30,7 +30,7 @@ const ResultList = ({ navigation, recipes }) => {
                   title='Details'
                   onPress={() => this.onLearnMore(recipe)}
                 />
-                <MaterialIcons name="close" size={28} color="#aaa" />
+                <MaterialIcons name="add" size={28} color="#aaa" />
               </View>
             </Card>
           );
