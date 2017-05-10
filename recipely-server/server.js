@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var axios = require('axios');
-//var db = require('./models/database');
+var client = require('./models/database');
 var jwtAuth = require('./models/jwtAuth');
 var bcrypt = require('./models/bcrypt')
 var app = express();
@@ -86,7 +86,6 @@ app.get('/api/users/:id', (req, res) => {
     })
     .catch(err => console.error(err));
 });
-
 
 
 app.listen(port, function() {
