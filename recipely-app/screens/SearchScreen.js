@@ -73,6 +73,9 @@ class SearchScreen extends Component {
               return (
                 <View key={i}>
                   <Text>{item.name}</Text>
+                  { item.value &&
+                    <Text>{item.value}</Text>
+                  }
                   <Button
                     title="Remove"
                     onPress={() => this.onRemovePress(i)}

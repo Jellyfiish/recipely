@@ -90,7 +90,14 @@ class PhotoScreen extends Component {
         .then(res => {
           this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
           onPredictionsChange(res.outputs[0].data.concepts);
-          this.props.navigation.navigate('PhotoResult', {predictions: res.outputs[0].data.concepts});
+          // this.props.navigation.navigate('PhotoResult', {predictions: res.outputs[0].data.concepts});
+          this.props.screenProps.onIngredientChange(
+            [
+              ...this.props.screenProps.ingredients,
+              ...res.outputs[0].data.concepts
+            ]
+          );
+          this.props.navigation.navigate('Search');
         });
     }, (err) => {
       console.log(err);
@@ -140,7 +147,7 @@ class PhotoScreen extends Component {
               <ActivityIndicator size="large" />
             </View>
           }
-          
+
           <View style={styles.buttonLabel}>
             <Icon
               name="photo-camera"
