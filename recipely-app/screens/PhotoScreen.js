@@ -89,12 +89,15 @@ class PhotoScreen extends Component {
         .then(res => res.json())
         .then(res => {
           this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
-          onPredictionsChange(res.outputs[0].data.concepts);
+          const predictions = res.outputs[0].data.concepts.filter(item => {
+            return item.value >= 0.75;
+          })
+          onPredictionsChange(predictions);
           // this.props.navigation.navigate('PhotoResult', {predictions: res.outputs[0].data.concepts});
           this.props.screenProps.onIngredientChange(
             [
-              ...this.props.screenProps.ingredients,
-              ...res.outputs[0].data.concepts
+              ...predictions,
+              ...this.props.screenProps.ingredients
             ]
           );
           this.props.navigation.navigate('Search');
