@@ -92,15 +92,17 @@ app.delete('/api/users/:id', (req, res) => {
   const deleteUser = `DELETE FROM users WHERE ID = ${userId}`;
   const deleteUserNotes = `DELETE FROM notes WHERE user_id = ${userId}`;
   const deleteUserRecipes = `DELETE FROM recipes_users WHERE user_id = ${userId}`;
-  const deleteRows = [deleteUser, deleteUserRecipes, deleteUserNotes];
+  // TODO: Decrement saved count of recipes by 1 that deleted user saved
+  // const decrementSavedCounts;
+  const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
   queryStrings.forEach(queryString => {
     client.queryAsync(queryString).then(res => {
       console.log('Deleted!');
     }).catch(e => {
       console.error(`Error deleting row(s)\nError: ${e}`);
-    })
-  })
-})
+    });
+  });
+});
 
 
 app.listen(port, function() {
