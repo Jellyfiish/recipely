@@ -44,15 +44,10 @@ class SearchScreen extends Component {
   };
 
   onFindRecipesPress = () => {
-    const queries = this.state.ingredients.map(item => item.name).join(',');
-    if (queries.length === 0) {
-      return;
+    const query = this.state.ingredients.map(item => item.name).join(',');
+    if (query.length !== 0) {
+      this.props.navigation.navigate('SearchResults', {query});
     }
-    fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes?q=${queries}`)
-      .then(res => res.json())
-      .then(results => {
-        this.props.navigation.navigate('SearchResults', {recipes: results.recipes});
-      });
   };
 
   render() {
@@ -66,7 +61,7 @@ class SearchScreen extends Component {
           onSubmitEditing={this.addIngredients}
         />
 
-        <Text>Ingredients:</Text>
+      <Text style={styles.ingredientHeading}>Ingredients:</Text>
 
         <ScrollView>
           { this.state.ingredients.map((item, i) => {
@@ -100,6 +95,11 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 15,
   },
+  ingredientHeading: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 10,
+  }
 });
 
 export default SearchScreen;

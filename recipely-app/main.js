@@ -10,6 +10,7 @@ class App extends Component {
       recipes: [],
       image: null,
       predictions: [],
+      searchResults: {},
     };
   }
 
@@ -25,6 +26,12 @@ class App extends Component {
     this.setState({predictions});
   }
 
+  onSearchChange = (query, results) => {
+    this.setState({
+      searchResults: { ...this.state.searchResults, [query]: results }
+    });
+  };
+
   render() {
     return (
       <DrawerNav
@@ -33,9 +40,11 @@ class App extends Component {
             recipes: this.state.recipes,
             image: this.state.image,
             predictions: this.state.predictions,
+            searchResults: this.state.searchResults,
             onRecipesChange: this.onRecipesChange,
             onImageChange: this.onImageChange,
             onPredictionsChange: this.onPredictionsChange,
+            onSearchChange: this.onSearchChange,
           }
         }
       />
