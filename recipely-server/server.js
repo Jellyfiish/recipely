@@ -17,6 +17,7 @@ var isAuthenticated = (req, res, next) => {
   const token = req.header.token.split(' ')[1];
   jwtAuth.decodeToken(req.header.token, (err, payload) => {
     if(err) res.status(400).end(err);
+    if(payload) req.body.issuer = payload.id;
     // check if user still exits in the db
       // yes next();
       // no return 400
@@ -49,35 +50,29 @@ app.get('/api/recipes/:id', (req, res) => {
     .catch(err => console.error(err));
 });
 
-app.post('/api/users/recipes', (req, res) => {
-  const userId = 1;
+app.post('/api/users/recipes', isAuthenticated,(req, res) => {
+  const userId = req.body.issuer;
   const title = req.body.title;
   const image_url = req.body.image_url;
   const source_url = req.body.source_url;
   const f2f_id = req.body.f2f_id;
   const ingredients = req.body.ingredients;
+
   db.queryAsync(`SELECT saved_count FROM recipes WHERE f2f_id = $1`, [f2f_id])
     .then((results)=> {
-      console.log(results.rows);
       if(!results.rows.length) {
-        // const query = `INSERT INTO recipes (title, thumbnail_url, source_url, ingredients, f2f_id, saved_count)
-        //   VALUES ('${title}', '${image_url}', '${source_url}', '${ingredients}', '${f2f_id}', '1')`;
-          // console.log(query)
         db.queryAsync('INSERT INTO recipes (title, thumbnail_url, source_url, ingredients, f2f_id, saved_count) VALUES ($1, $2, $3, $4, $5, $6)', [title, image_url, source_url,ingredients ,f2f_id, 1])
           .then(results => {
-            const query = `INSERT INTO recipes_users (user_id, f2f_id) VALUES (${userId}, ${f2f_id})`;
             db.queryAsync("INSERT INTO recipes_users (user_id, f2f_id) VALUES ($1, $2)", [userId, f2f_id])
               .then( results => {
                 res.status(201).json(req.body);
               })
               .catch(err => {
-                console.log(err);
                 res.status(500).json(err);
               });
           })
           .catch(err => {
             res.status(501).json(err);
-            console.log(err)
           })
       } else {
         const savedCount = results.rows[0].saved_count;
@@ -99,28 +94,53 @@ app.post('/api/users/recipes', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const body = req.body;
-  // waiting until writing a function that retrieves users from DB
-  // db
-  //   .getUser(body.username)
-  //   .bcrypt.comparePassword(body.password, user.password)
-    jwtAuth.encodeToken(body.username, (err, token) => {
-      if(err) res.status(400).end('invalid password or username');
-      res.status(200)
-        .json(token);
-    });
+  db.queryAsync('SELECT * from users where username = $1', [body.username])
+    .then((results)=> {
+      if(results.rows.length) {
+        bcrypt.comparePassword(body.password, results.rows[0].password, (err, match) => {
+          if(err || !match) res.status(401).end('invalid password or username');
+          jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
+            if(err) res.status(401).end('invalid password or username');
+            res.status(200)
+              .json(token);
+          });
+        });
+      } else {
+        res.status(401).end('invalid password or username');
+      }
+    })
 });
 
 app.post('/api/signup', (req, res) => {
   const body = req.body;
   // TODO: add the user to the data base with the salted password after checking that there's no duplicate username in the DB
-  jwtAuth.encodeToken(body.username, (err, token) => {
-    if(err) res.status(400).end(err);
-    if(token) res.status(200).end(token);
-  })
+  db.queryAsync('SELECT * FROM users where username = $1', [body.username])
+    .then((results) => {
+      if(results.rows.length) {
+        res.status(401).end('the user name is already taken :(');
+      } else {
+        bcrypt.hashPassword(body.password, (err, hashedPassword) => {
+          if(err) res.status(500).end('please can you try to signup again in a moment!');
+          db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id', [body.username, hashedPassword])
+            .then((results)=> {
+              jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
+                if(err) res.status(401).json(err);
+                if(token) res.status(200).json(token);
+              })
+            })
+            .catch(err => {
+              res.status(400).json(err);
+            });
+        });
+      }
+    })
+    .catch(err => {
+      res.status.json(err);
+    });  
 });
 
 app.get('/api/users', (req, res) => {
-  client.queryAsync('select * from users')
+  db.queryAsync('select * from users')
     .then(response => {
       res.status(200).json(response.rows);
     })
@@ -128,7 +148,7 @@ app.get('/api/users', (req, res) => {
 });
 
 app.get('/api/users/:id', (req, res) => {
-  client.queryAsync(`select * from users where ID = ${req.params.id}`)
+  db.queryAsync(`select * from users where ID = ${req.params.id}`)
     .then(response => {
       res.status(200).json(response.rows);
     })
