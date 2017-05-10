@@ -25,8 +25,7 @@ var config = {
   max: 20,
   idleTimeoutMillis: 5000
 };
-  //"postgres://obay:obay@localhost:5432/recipely"
-console.log(config)
+
 var client = new pg.Pool(config);
 
 // table creation SQL queries
