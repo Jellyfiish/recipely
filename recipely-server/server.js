@@ -72,7 +72,7 @@ app.post('/api/signup', (req, res) => {
 });
 
 app.get('/api/users', (req, res) => {
-  client.queryAsync('SELECT * FROM users')
+  db.queryAsync('SELECT * FROM users')
     .then(response => {
       res.status(200).json(response.rows);
     })
@@ -80,7 +80,7 @@ app.get('/api/users', (req, res) => {
 });
 
 app.get('/api/users/:id', (req, res) => {
-  client.queryAsync(`SELECT * FROM users WHERE ID = ${req.params.id}`)
+  db.queryAsync(`SELECT * FROM users WHERE ID = ${req.params.id}`)
     .then(response => {
       res.status(200).json(response.rows);
     })
@@ -96,7 +96,7 @@ app.delete('/api/users/:id', (req, res) => {
   // const decrementSavedCounts = `UPDATE TABLE recipes WHERE ID = `; // need IDs of all recipes that the deleted user saved, gather from recipes_users table
   const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
   queryStrings.forEach(queryString => {
-    client.queryAsync(queryString).then(res => {
+    db.queryAsync(queryString).then(res => {
       console.log('Deleted!');
     }).catch(e => {
       console.error(`Error deleting row(s)\nError: ${e}`);
@@ -109,7 +109,7 @@ app.post('/api/notes', (req, res) => {
   const userId = req.body.user_id;
   const note = req.body.text;
   const queryString = `INSERT INTO notes(text, user_id, recipe_id) VALUES (${note}, ${userId}, ${recipeId})`;
-  client.queryAsync(queryString).then(res => {
+  db.queryAsync(queryString).then(res => {
       console.log('Added note!');
     }).catch(e => {
       console.error(`Error adding note\nError: ${e}`);
