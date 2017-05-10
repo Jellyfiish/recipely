@@ -98,8 +98,8 @@ app.delete('/api/users/:id', (req, res) => {
   queryStrings.forEach(queryString => {
     client.queryAsync(queryString).then(res => {
       console.log('Deleted!');
-    }).catch(e => {
-      console.error(`Error deleting row(s)\nError: ${e}`);
+    }).catch(err => {
+      console.error(`Error deleting row(s)\nError: ${err}`);
     });
   });
 });
