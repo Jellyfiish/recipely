@@ -93,7 +93,7 @@ app.delete('/api/users/:id', (req, res) => {
   const deleteUserNotes = `DELETE FROM notes WHERE user_id = ${userId}`;
   const deleteUserRecipes = `DELETE FROM recipes_users WHERE user_id = ${userId}`;
   // TODO: Decrement saved count of recipes by 1 that deleted user saved
-  // const decrementSavedCounts;
+  // const decrementSavedCounts = `UPDATE TABLE recipes WHERE ID = `;
   const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
   queryStrings.forEach(queryString => {
     client.queryAsync(queryString).then(res => {
