@@ -82,7 +82,7 @@ const SearchStack = StackNavigator({
   Home: {
     screen: SearchTab,
   },
-  SearchResults: {
+  SearchResult: {
     screen: SearchResultScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Search results',

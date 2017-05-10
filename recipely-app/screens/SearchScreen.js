@@ -49,7 +49,7 @@ class SearchScreen extends Component {
   onFindRecipesPress = () => {
     const query = this.props.screenProps.ingredients.map(item => item.name).join(',');
     if (query.length !== 0) {
-      this.props.navigation.navigate('SearchResults', {query});
+      this.props.navigation.navigate('SearchResult', {query});
     }
   };
 
