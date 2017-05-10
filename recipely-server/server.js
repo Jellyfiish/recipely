@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 // default to 8080 for development
 var port = process.env.PORT || 8080;
 
-
+// recipes endpoints
 app.get('/api/recipes', (req, res) => {
   var query = req.query.q || '';
   var url = `http://food2fork.com/api/search?key=${key}&q=${query}`
@@ -101,6 +101,21 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
 
 });
 
+app.get('/api/users/recipes/:id/notes', isAuthenticated, (req, res) => {
+  db.queryAsync('SELECT * FROM notes WHERE f2f_id = $1', [req.params.id])
+    .then(results => {
+      if(results.rows.length) {
+        res.status(200).json(results.rows);
+      } else {
+        res.status(404).end('there is no notes for this recipe');
+      }
+      
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+});
+// auth endpoints
 app.post('/api/login', (req, res) => {
   const body = req.body;
   db.queryAsync('SELECT * from users where username = $1', [body.username])
@@ -184,6 +199,7 @@ app.delete('/api/users/:id', (req, res) => {
   });
 });
 
+// notes endpoints
 app.post('/api/notes', isAuthenticated, (req, res) => {
   const f2f_id = req.body.f2f_id;
   const text = req.body.text;
@@ -196,6 +212,7 @@ app.post('/api/notes', isAuthenticated, (req, res) => {
     res.status(500).json(e);
   });
 });
+
 
 
 app.listen(port, function() {
