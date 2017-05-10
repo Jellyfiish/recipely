@@ -101,20 +101,6 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
 
 });
 
-app.get('/api/users/recipes/:id/notes', isAuthenticated, (req, res) => {
-  db.queryAsync('SELECT * FROM notes WHERE f2f_id = $1', [req.params.id])
-    .then(results => {
-      if(results.rows.length) {
-        res.status(200).json(results.rows);
-      } else {
-        res.status(404).end('there is no notes for this recipe');
-      }
-      
-    })
-    .catch(err => {
-      res.status(500).json(err);
-    })
-});
 // auth endpoints
 app.post('/api/login', (req, res) => {
   const body = req.body;
@@ -200,6 +186,21 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 // notes endpoints
+app.get('/api/recipes/:id/notes', isAuthenticated, (req, res) => {
+  db.queryAsync('SELECT * FROM notes WHERE f2f_id = $1', [req.params.id])
+    .then(results => {
+      if(results.rows.length) {
+        res.status(200).json(results.rows);
+      } else {
+        res.status(404).end('there is no notes for this recipe');
+      }
+      
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+});
+
 app.post('/api/notes', isAuthenticated, (req, res) => {
   const f2f_id = req.body.f2f_id;
   const text = req.body.text;
@@ -213,6 +214,38 @@ app.post('/api/notes', isAuthenticated, (req, res) => {
   });
 });
 
+app.put('/api/notes/:id_note', isAuthenticated, (req, res) => {
+  const noteId = req.params.id_note;
+  const text = req.body.text;
+
+  db.queryAsync('UPDATE notes SET text = $1 WHERE id = $2', [text, noteId])
+    .then(results => {
+      if(results.rows.length) {
+        res.status(201).send(text);
+      } else {
+        res.status(404).send('resource is not available')
+      }
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
+app.delete('/api/notes/:id_note', isAuthenticated, (req, res) => {
+  const noteId = req.params.id_note;
+  
+  db.queryAsync('DELETE FROM notes WHERE id = $1 RETURNING *', [noteId])
+    .then(results => {
+      if(results.rows.length) {
+        res.status(201).send(results.rows[0]);
+      } else {
+        res.status(404).send('resource is not available')
+      }
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
 
 
 app.listen(port, function() {
