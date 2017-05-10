@@ -12,12 +12,11 @@ var morgan = require('morgan');
 // to be moved to util models directory after adding the check it the user exists in the DB funciton
 var isAuthenticated = (req, res, next) => {
   if(!req.header('x-access-token')) {
-    res.status(400).end('please log in!')
+    res.status(422).end('please log in!')
   }
 
   const token = req.header('x-access-token').split(' ')[1];
   jwtAuth.decodeToken(token, (err, payload) => {
-    console.log(payload.sub)
     if(err) res.status(400).end(err);
     if(payload) {
       db.queryAsync('SELECT * FROM users where id = $1', [payload.sub])
@@ -123,7 +122,6 @@ app.post('/api/login', (req, res) => {
 
 app.post('/api/signup', (req, res) => {
   const body = req.body;
-  // TODO: add the user to the data base with the salted password after checking that there's no duplicate username in the DB
   db.queryAsync('SELECT * FROM users where username = $1', [body.username])
     .then((results) => {
       if(results.rows.length) {
@@ -178,60 +176,27 @@ app.delete('/api/users/:id', (req, res) => {
   const deleteUserRecipes = `DELETE FROM recipes_users WHERE user_id = ${userId}`;
   const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
   queryStrings.forEach(queryString => {
-    db.queryAsync(queryString).then(res => {
-      console.log('Deleted!');
+    db.queryAsync(queryString).then(results => {
       res.json('User deleted')
     }).catch(err => {
-      console.error(`Error deleting row(s)\nError: ${err}`);
       res.json('Error deleting user');
     });
   });
 });
 
-
-app.post('/api/notes', (req, res) => {
-  const recipeId = req.body.recipe_id;
-  const userId = req.body.user_id;
-  const note = req.body.text;
-  const params = [note, userId, recipeId];
-  const queryString = `INSERT INTO notes(text, user_id, recipe_id) VALUES ($1, $2, $3)`;
-  db.queryAsync(queryString, params).then(res => {
-    console.log('Added note!');
-    res.status(201).json('Added note!')
+app.post('/api/notes', isAuthenticated, (req, res) => {
+  const f2f_id = req.body.f2f_id;
+  const text = req.body.text;
+  const userId = req.body.issuer;
+  const params = [text, userId, f2f_id];
+  const queryString = `INSERT INTO notes(text, user_id, f2f_id) VALUES ($1, $2, $3) RETURNING *`;
+  db.queryAsync(queryString, params).then(results => {
+    res.status(201).json(results.rows);
   }).catch(e => {
-    console.error(`Error adding note\nError: ${e}`);
-    res.json('Error adding note')
+    res.status(500).json(e);
   });
 });
 
-app.delete('/api/users/:id', (req, res) => {
-  const userId = req.params.id;
-  const deleteUser = `DELETE FROM users WHERE ID = ${userId}`;
-  const deleteUserNotes = `DELETE FROM notes WHERE user_id = ${userId}`;
-  const deleteUserRecipes = `DELETE FROM recipes_users WHERE user_id = ${userId}`;
-  // TODO: Decrement saved count of recipes by 1 that deleted user saved
-  // const decrementSavedCounts = `UPDATE TABLE recipes WHERE ID = `; // need IDs of all recipes that the deleted user saved, gather from recipes_users table
-  const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
-  queryStrings.forEach(queryString => {
-    client.queryAsync(queryString).then(res => {
-      console.log('Deleted!');
-    }).catch(err => {
-      console.error(`Error deleting row(s)\nError: ${err}`);
-    });
-  });
-});
-
-app.post('/api/notes', (req, res) => {
-  const recipeId = req.body.recipe_id;
-  const userId = req.body.user_id;
-  const note = req.body.text;
-  const queryString = `INSERT INTO notes(text, user_id, recipe_id) VALUES (${note}, ${userId}, ${recipeId})`;
-  db.queryAsync(queryString).then(res => {
-      console.log('Added note!');
-    }).catch(e => {
-      console.error(`Error adding note\nError: ${e}`);
-    });
-});
 
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
