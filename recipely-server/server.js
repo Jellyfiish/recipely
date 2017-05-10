@@ -166,7 +166,7 @@ app.get('/api/users/:id', isAuthenticated, (req, res) => {
       res.status(200).json(response.rows);
     })
     .catch(err => {
-      res.status(400).json('Error getting the user')
+      res.status(400).json('Error getting the user');
       console.error(err);
     });
 });
@@ -180,8 +180,10 @@ app.delete('/api/users/:id', (req, res) => {
   queryStrings.forEach(queryString => {
     db.queryAsync(queryString).then(res => {
       console.log('Deleted!');
-    }).catch(e => {
-      console.error(`Error deleting row(s)\nError: ${e}`);
+      res.json('User deleted')
+    }).catch(err => {
+      console.error(`Error deleting row(s)\nError: ${err}`);
+      res.json('Error deleting user');
     });
   });
 });
@@ -194,8 +196,10 @@ app.post('/api/notes', (req, res) => {
   const queryString = `INSERT INTO notes(text, user_id, recipe_id) VALUES ($1, $2, $3)`;
   db.queryAsync(queryString, params).then(res => {
     console.log('Added note!');
+    res.status(201).json('Added note!')
   }).catch(e => {
     console.error(`Error adding note\nError: ${e}`);
+    res.json('Error adding note')
   });
 });
 
