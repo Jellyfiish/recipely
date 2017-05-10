@@ -1,8 +1,8 @@
 const moment = require('moment');
 const jwt = require('jwt-simple');
-const config = require('../config/config');
 
-const secretKey = process.env.TOKEN_SECRET || config.TOKEN_SECRET
+// only require config file if env variable doesn't exist (e.g. not running on heroku)
+const secretKey = process.env.TOKEN_SECRET || require('../config/config').TOKEN_SECRET;
 
 function encodeToken(userId, callback) {
   const payload = {
