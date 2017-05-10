@@ -148,10 +148,11 @@ app.post('/api/signup', (req, res) => {
     });
 });
 
+// users endpoints
 app.get('/api/users', isAuthenticated, (req, res) => {
   db.queryAsync('SELECT * FROM users')
     .then(response => {
-      res.status(200).json(response.rows);
+      res.status(200).json(response.rows.map(user => user.username));
     })
     .catch(err => {
       res.status(400).json('Error getting users')
@@ -167,6 +168,56 @@ app.get('/api/users/:id', isAuthenticated, (req, res) => {
     .catch(err => {
       res.status(400).json('Error getting the user');
       console.error(err);
+    });
+});
+
+app.put('/api/users', isAuthenticated, (req, res) => {
+  const body = req.body;
+  const userId = req.body.issuer;
+  const newUsername = body.username;
+  const newPassword = body.password;
+  db.queryAsync('SELECT * FROM users where id = $1', [userId])
+    .then((results) => {
+      if(newPassword && newUsername) {
+        bcrypt.hashPassword(newPassword, (err, hashedPassword) => {
+          if(err) res.status(500).end('please can you try to signup again in a moment!');
+          db.queryAsync('UPDATE users SET username = $1, password = $2 RETURNING id', [newUsername, hashedPassword])
+            .then((results)=> {
+              jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
+                if(err) res.status(401).json(err);
+                if(token) res.status(201).json({username: newUsername, password: newPassword});
+              })
+            })
+            .catch(err => {
+              res.status(400).json(err);
+            });
+        });
+      } else if(newPassword) {
+        bcrypt.hashPassword(newPassword, (err, hashedPassword) => {
+          if(err) res.status(500).end('please can you try again in a moment!');
+          db.queryAsync('UPDATE users SET password = $1 where id = $2 RETURNING id', [hashedPassword, userId])
+            .then((results)=> {
+              jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
+                if(err) res.status(401).json(err);
+                if(token) res.status(201).json({password: newPassword});
+              })
+            })
+            .catch(err => {
+              res.status(400).json(err);
+            });
+        });
+      } else if(newUsername) {
+        db.queryAsync('UPDATE users SET username = $1 where id= $2 RETURNING id', [newUsername, userId])
+          .then((results)=> {
+            res.status(201).json({username: newUsername});
+          })
+          .catch(err => {
+            res.status(400).json(err);
+          });
+      }
+    })
+    .catch(err => {
+      res.status.json(err);
     });
 });
 
