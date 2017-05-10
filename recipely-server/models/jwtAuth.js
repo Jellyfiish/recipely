@@ -4,13 +4,13 @@ const config = require('../config/config');
 
 const secretKey = process.env.TOKEN_SECRET || config.TOKEN_SECRET
 
-function encodeToken(user, callback) {
-  const playload = {
+function encodeToken(userId, callback) {
+  const payload = {
     exp: moment().add(7, 'days').unix(),
     iat: moment().unix(),
-    sub: user
+    sub: userId
   };
-  callback(null, jwt.encode(playload, secretKey));
+  callback(null, jwt.encode(payload, secretKey));
 }
 
 function decodeToken(token, callback) {
@@ -27,4 +27,3 @@ module.exports = {
   encodeToken,
   decodeToken
 };
-
