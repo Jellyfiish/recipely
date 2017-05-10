@@ -4,13 +4,25 @@ import {
   Text,
   View
 } from 'react-native';
+import ResultList from '../components/ResultList';
 
 class SearchResultScreen extends Component {
   render() {
+    const { recipes } = this.props.navigation.state.params;
+    const { navigation } = this.props;
+
     return (
       <View style={styles.container}>
-        <Text>Results from searching by ingredients</Text>
-        <Text>{JSON.stringify(this.props.navigation.state.params.recipes)}</Text>
+        { recipes.length !== 0
+          ? <ResultList
+              navigation={navigation}
+              recipes={recipes}
+            />
+          : <View>
+              <Text>Loading recipes</Text>
+              <ActivityIndicator size="large" />
+            </View>
+        }
       </View>
     );
   }

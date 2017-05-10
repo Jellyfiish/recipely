@@ -88,6 +88,12 @@ const SearchStack = StackNavigator({
       title: 'Search results',
     }),
   },
+  SearchDetail: {
+    screen: RecipeDetailScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: `${navigation.state.params.title}`,
+    }),
+  },
 }, {
   cardStyle: {
     paddingTop: Constants.statusBarHeight,
