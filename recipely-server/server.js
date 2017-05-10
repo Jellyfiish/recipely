@@ -17,7 +17,6 @@ var isAuthenticated = (req, res, next) => {
 
   const token = req.header('x-access-token').split(' ')[1];
   jwtAuth.decodeToken(token, (err, payload) => {
-    console.log(payload.sub)
     if(err) res.status(400).end(err);
     if(payload) {
       db.queryAsync('SELECT * FROM users where id = $1', [payload.sub])
