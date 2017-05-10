@@ -31,7 +31,7 @@ var isAuthenticated = (req, res, next) => {
         }).catch((err)=> {
           res.status(500).json(err);
         });
-    } 
+    }
   });
 }
 
@@ -146,25 +146,62 @@ app.post('/api/signup', (req, res) => {
     })
     .catch(err => {
       res.status.json(err);
-    });  
+    });
 });
 
-// TODO: handling the error
 app.get('/api/users', isAuthenticated, (req, res) => {
-  db.queryAsync('select * from users')
+  db.queryAsync('SELECT * FROM users')
     .then(response => {
       res.status(200).json(response.rows);
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      res.status(400).json('Error getting users')
+      console.error(err);
+    });
 });
 
-//TODO: handling the error,
 app.get('/api/users/:id', isAuthenticated, (req, res) => {
-  db.queryAsync(`select * from users where ID = ${req.params.id}`)
+  db.queryAsync(`SELECT * FROM users WHERE ID = ${req.params.id}`)
     .then(response => {
       res.status(200).json(response.rows);
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      res.status(400).json('Error getting the user');
+      console.error(err);
+    });
+});
+
+app.delete('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  const deleteUser = `DELETE FROM users WHERE ID = ${userId}`;
+  const deleteUserNotes = `DELETE FROM notes WHERE user_id = ${userId}`;
+  const deleteUserRecipes = `DELETE FROM recipes_users WHERE user_id = ${userId}`;
+  const queryStrings = [deleteUser, deleteUserRecipes, deleteUserNotes];
+  queryStrings.forEach(queryString => {
+    db.queryAsync(queryString).then(res => {
+      console.log('Deleted!');
+      res.json('User deleted')
+    }).catch(err => {
+      console.error(`Error deleting row(s)\nError: ${err}`);
+      res.json('Error deleting user');
+    });
+  });
+});
+
+
+app.post('/api/notes', (req, res) => {
+  const recipeId = req.body.recipe_id;
+  const userId = req.body.user_id;
+  const note = req.body.text;
+  const params = [note, userId, recipeId];
+  const queryString = `INSERT INTO notes(text, user_id, recipe_id) VALUES ($1, $2, $3)`;
+  db.queryAsync(queryString, params).then(res => {
+    console.log('Added note!');
+    res.status(201).json('Added note!')
+  }).catch(e => {
+    console.error(`Error adding note\nError: ${e}`);
+    res.json('Error adding note')
+  });
 });
 
 app.delete('/api/users/:id', (req, res) => {
