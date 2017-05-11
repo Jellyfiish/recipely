@@ -124,9 +124,12 @@ app.post('/api/login', (req, res) => {
         bcrypt.comparePassword(body.password, results.rows[0].password, (err, match) => {
           if(err || !match) res.status(401).end('invalid password or username');
           jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
-            if(err) res.status(401).end('invalid password or username');
-            res.status(200)
-              .json(token);
+            if(err) {
+              res.status(401).end('invalid password or username');
+            } else {
+              res.status(200)
+                .json(token);
+            }
           });
         });
       } else {
