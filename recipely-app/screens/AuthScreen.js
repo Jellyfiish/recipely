@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AsyncStorage, StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import dismissKeyboard from 'dismissKeyboard';
 
 class AuthScreen extends Component {
@@ -16,6 +17,7 @@ class AuthScreen extends Component {
   onLoginPress = () => {
     dismissKeyboard();
     const { username, password } = this.state;
+
     fetch('https://jellyfiish-recipely.herokuapp.com/api/login', {
       method: 'POST',
       headers: {
@@ -24,21 +26,32 @@ class AuthScreen extends Component {
       body: JSON.stringify({username, password}),
     }).then(res => {
       if (res.status === 401) {
+        // Show error if invalid username or password.
         res.text().then(error => this.setState({error}));
       } else if (res.status === 200) {
         res.json()
           .then(token => {
+            // Remove error message if there was one.
             this.setState({error: null});
+            // Store our access token so we can use it to authenticate api endpoints
             AsyncStorage.setItem('id_token', token, () => {
+              // Toggle isLoggedIn state
               this.props.screenProps.onLoginChange();
-              console.log('logged in', this.props.screenProps.isLoggedIn)
-              console.log('app ready', this.props.screenProps.isAppReady)
+              // Navigate to main app.
+              const action = NavigationActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({ routeName: 'MainDrawerNavigator' })
+                ]
+              });
+              this.props.navigation.dispatch(action);
             });
           });
       }
     });
   };
 
+  // Completing an input field will trigger the cursor to go to the next field
   focusNextField = (nextField) => {
     this.refs[nextField].focus();
   };
