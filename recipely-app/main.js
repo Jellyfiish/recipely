@@ -11,6 +11,11 @@ class App extends Component {
       isAppReady: false,
       // isLoggedIn: false,
       isLoggedIn: true,
+      // user: null,
+      user: {
+        username: 'bono',
+        userId: 6
+      },
       recipes: [],
       image: null,
       predictions: [],
@@ -68,6 +73,7 @@ class App extends Component {
           {
             isAppReady: this.state.isAppReady,
             isLoggedIn: this.state.isLoggedIn,
+            user: this.state.user,
             recipes: this.state.recipes,
             image: this.state.image,
             predictions: this.state.predictions,
