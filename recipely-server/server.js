@@ -251,6 +251,23 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 // notes endpoints
+app.get('/api/users/notes', isAuthenticated, (req, res) => {
+  const userId = req.body.issuer;
+  db.queryAsync('SELECT n.text, n.user_id, n.f2f_id, r.title, r.thumbnail_url\
+   FROM notes AS n JOIN recipes AS r ON\
+   n.f2f_id = r.f2f_id WHERE n.user_id = $1', [userId])
+    .then(results => {
+      if(results.rows.length) {
+        res.status(200).json(results.rows);
+      } else {
+        res.status(404).end('resources are not found');
+      }
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
 app.get('/api/recipes/:id/notes', isAuthenticated, (req, res) => {
   db.queryAsync('SELECT * FROM notes WHERE f2f_id = $1', [req.params.id])
     .then(results => {
