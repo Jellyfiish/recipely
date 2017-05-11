@@ -18,6 +18,15 @@ import SearchResultScreen from '../screens/SearchResultScreen';
 import NoteScreen from '../screens/NoteScreen';
 import SideDrawer from '../components/SideDrawer.js';
 
+const MenuIcon = (navigation) => (
+  <MaterialIcons
+    name="menu"
+    size={30}
+    style={{paddingLeft: 12, color: '#777'}}
+    onPress={() => navigation.navigate('DrawerOpen')}
+  />
+);
+
 const PhotoStack = StackNavigator({
   Photos: {
     screen: PhotoScreen,
@@ -82,14 +91,7 @@ const SearchTab = TabNavigator({
 SearchTab.navigationOptions = ({ navigation }) => {
   return {
     title: 'Find recipes',
-    headerLeft: (
-      <MaterialIcons
-        name="menu"
-        size={30}
-        style={{paddingLeft: 12, color: '#777'}}
-        onPress={() => navigation.navigate('DrawerOpen')}
-      />
-  ),
+    headerLeft: MenuIcon(navigation),
   }
 };
 
