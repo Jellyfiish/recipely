@@ -60,9 +60,10 @@ class PhotoScreen extends Component {
   getPredictions = () => {
     const { predictions } = this.props.screenProps;
     // Check if we have any existing predictions for our current photo.
-    // If so, redirect them to prediction result screen.
+    // If so, redirect them to search screen with predictions prepopulated.
     if (predictions.length !== 0) {
-      this.props.navigation.navigate('PhotoResult', {predictions});
+      // this.props.navigation.navigate('PhotoResult', {predictions});
+      this.props.navigation.navigate('Search');
       return;
     }
     // Toggle activity indicator so user knows that the photo is being sent to
