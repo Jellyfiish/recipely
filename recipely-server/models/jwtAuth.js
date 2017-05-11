@@ -8,7 +8,7 @@ function encodeToken(userId, username, callback) {
   const payload = {
     exp: moment().add(7, 'days').unix(),
     iat: moment().unix(),
-    sub: userId
+    sub: userId,
     iss: username
   };
 
