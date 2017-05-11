@@ -82,6 +82,14 @@ const SearchTab = TabNavigator({
 SearchTab.navigationOptions = ({ navigation }) => {
   return {
     title: 'Find recipes',
+    headerLeft: (
+      <MaterialIcons
+        name="menu"
+        size={30}
+        style={{paddingLeft: 12, color: '#777'}}
+        onPress={() => navigation.navigate('DrawerOpen')}
+      />
+  ),
   }
 };
 
