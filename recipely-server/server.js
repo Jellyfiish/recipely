@@ -4,35 +4,10 @@ var axios = require('axios');
 var db = require('./models/database');
 var jwtAuth = require('./models/jwtAuth');
 var bcrypt = require('./models/bcrypt')
+var isAuthenticated = require('./models/auth');
 var app = express();
 var key = process.env.F2F_API_KEY || require('./config/config').F2F_API_KEY;
-
 var morgan = require('morgan');
-
-// to be moved to util models directory after adding the check it the user exists in the DB funciton
-var isAuthenticated = (req, res, next) => {
-  if(!req.header('x-access-token')) {
-    res.status(422).end('please log in!')
-  }
-
-  const token = req.header('x-access-token').split(' ')[1];
-  jwtAuth.decodeToken(token, (err, payload) => {
-    if(err) res.status(400).end(err);
-    if(payload) {
-      db.queryAsync('SELECT * FROM users where id = $1', [payload.sub])
-        .then(results => {
-          if(results.rows.length) {
-            req.body.issuer = payload.sub;
-            next();
-          } else {
-            res.status(400).end('Please login/signup');
-          }
-        }).catch((err)=> {
-          res.status(500).json(err);
-        });
-    }
-  });
-}
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -199,16 +174,17 @@ app.get('/api/users', isAuthenticated, (req, res) => {
     });
 });
 
-app.get('/api/users/:id', isAuthenticated, (req, res) => {
-  db.queryAsync(`SELECT * FROM users WHERE ID = ${req.params.id}`)
-    .then(response => {
-      res.status(200).json(response.rows);
-    })
-    .catch(err => {
-      res.status(400).json('Error getting the user');
-      console.error(err);
-    });
-});
+//QUESTION: should we get rid of this endpoint or change it's uri???
+// app.get('/api/users/:id', isAuthenticated, (req, res) => {
+//   db.queryAsync(`SELECT * FROM users WHERE ID = ${req.params.id}`)
+//     .then(response => {
+//       res.status(200).json(response.rows);
+//     })
+//     .catch(err => {
+//       res.status(400).json('Error getting the user');
+//       console.error(err);
+//     });
+// });
 
 app.put('/api/users', isAuthenticated, (req, res) => {
   const body = req.body;
@@ -276,7 +252,24 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 // notes endpoints
-app.get('/api/recipes/:id/notes', isAuthenticated, (req, res) => {
+app.get('/api/users/notes', isAuthenticated, (req, res) => {
+  const userId = req.body.issuer;
+  db.queryAsync('SELECT n.text, n.user_id, n.f2f_id, r.title, r.thumbnail_url\
+   FROM notes AS n JOIN recipes AS r ON\
+   n.f2f_id = r.f2f_id WHERE n.user_id = $1', [userId])
+    .then(results => {
+      if(results.rows.length) {
+        res.status(200).json(results.rows);
+      } else {
+        res.status(404).end('resources are not found');
+      }
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
+app.get('/api/users/recipes/:id/notes', isAuthenticated, (req, res) => {
   db.queryAsync('SELECT * FROM notes WHERE f2f_id = $1', [req.params.id])
     .then(results => {
       if(results.rows.length) {
@@ -291,7 +284,7 @@ app.get('/api/recipes/:id/notes', isAuthenticated, (req, res) => {
     })
 });
 
-app.post('/api/notes', isAuthenticated, (req, res) => {
+app.post('/api/users/recipes/notes', isAuthenticated, (req, res) => {
   const f2f_id = req.body.f2f_id;
   const text = req.body.text;
   const userId = req.body.issuer;
