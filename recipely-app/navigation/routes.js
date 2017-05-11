@@ -33,7 +33,8 @@ const PhotoStack = StackNavigator({
     // Can set the navigationOptions here or in the screen itself.
     // Options here override navigationOptions in the screen.
     navigationOptions: ({ navigation }) => ({
-      title: 'Take photo'
+      title: 'Take photo',
+      headerLeft: MenuIcon(navigation),
     }),
   },
   PhotoResult: {
@@ -54,6 +55,7 @@ const RecipeStack = StackNavigator({
     screen: RecipeScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Saved Recipes',
+      headerLeft: MenuIcon(navigation),
     }),
   },
   Details: {
