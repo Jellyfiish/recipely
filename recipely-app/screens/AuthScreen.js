@@ -11,6 +11,10 @@ class AuthScreen extends Component {
     };
   }
 
+  focusNextField = (nextField) => {
+    this.refs[nextField].focus();
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -23,19 +27,26 @@ class AuthScreen extends Component {
         <View style={styles.wrapper}>
           <View style={styles.inputWrap}>
             <TextInput
+              ref="1"
               style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Username"
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="next"
               value={this.state.username}
               onChangeText={(username) => this.setState({username})}
+              onSubmitEditing={() => this.focusNextField('2')}
             />
           </View>
 
           <View style={styles.inputWrap}>
             <TextInput
+              ref="2"
               style={styles.input}
               underlineColorAndroid="transparent"
               placeholder="Password"
+              returnKeyType="done"
               secureTextEntry={true}
               value={this.state.password}
               onChangeText={(password) => this.setState({password})}
