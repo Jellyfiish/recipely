@@ -31,6 +31,10 @@ const DrawerIcon = (name) => ({ tintColor }) => (
   <MaterialIcons name={name} size={24} color={tintColor} />
 );
 
+const TabBarIcon = (name) => ({ tintColor }) => (
+  <MaterialIcons name={name} size={24} color={tintColor} />
+);
+
 const PhotoStack = StackNavigator({
   Photos: {
     screen: PhotoScreen,
@@ -78,17 +82,13 @@ const SearchTab = TabNavigator({
   Popular: {
     screen: PopularScreen,
     navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ tintColor }) => (
-        <MaterialIcons name="whatshot" size={24} color={tintColor} />
-      ),
+      tabBarIcon: TabBarIcon('whatshot'),
     }),
   },
   Search: {
     screen: SearchScreen,
     navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ tintColor }) => (
-        <MaterialIcons name="search" size={24} color={tintColor} />
-      ),
+      tabBarIcon: TabBarIcon('search'),
     }),
   },
 });
