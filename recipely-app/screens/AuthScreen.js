@@ -16,8 +16,9 @@ class AuthScreen extends Component {
     return (
       <View style={styles.container}>
 
-        <View style={styles.nameContainer}>
-          <Text>recipely</Text>
+        <View style={styles.logoContainer}>
+          <Text style={styles.logo}>recipely</Text>
+          <Text>Shazam for food</Text>
         </View>
 
         <View style={styles.wrapper}>
@@ -67,10 +68,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  nameContainer: {
+  logoContainer: {
     flex: 2,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    marginBottom: 15,
+  },
+  logo: {
+    fontWeight: 'bold',
+    fontSize: 40,
   },
   wrapper: {
     paddingHorizontal: 15,
