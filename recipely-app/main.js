@@ -88,6 +88,7 @@ class App extends Component {
             predictions: this.state.predictions,
             searchResults: this.state.searchResults,
             ingredients: this.state.ingredients,
+            notes: this.state.notes,
             onRecipesChange: this.onRecipesChange,
             onImageChange: this.onImageChange,
             onPredictionsChange: this.onPredictionsChange,
