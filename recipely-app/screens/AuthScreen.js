@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
-import { FormLabel, FormInput } from 'react-native-elements';
 
 class AuthScreen extends Component {
   constructor(props) {
