@@ -8,6 +8,8 @@ import {
   StackNavigator,
   TabNavigator
 } from 'react-navigation';
+import SplashScreen from '../screens/SplashScreen';
+import AuthScreen from '../screens/AuthScreen';
 import PhotoScreen from '../screens/PhotoScreen';
 import PhotoResultScreen from '../screens/PhotoResultScreen';
 import RecipeScreen from '../screens/RecipeScreen';
@@ -123,7 +125,7 @@ const SearchStack = StackNavigator({
   }
 });
 
-const DrawerNav = DrawerNavigator({
+const MainDrawerNavigator = DrawerNavigator({
   Photo: {
     screen: PhotoStack,
     navigationOptions: ({navigation}) => ({
@@ -158,4 +160,17 @@ const DrawerNav = DrawerNavigator({
   contentComponent: props => SideDrawer(props),
 });
 
-export default DrawerNav;
+const StartupStack = StackNavigator(
+  {
+    SplashScreen: { screen: SplashScreen },
+    AuthScreen: { screen: AuthScreen },
+    MainDrawerNavigator: { screen: MainDrawerNavigator },
+  },
+  {
+    navigationOptions: {
+      header: null
+    }
+  }
+);
+
+export default StartupStack;

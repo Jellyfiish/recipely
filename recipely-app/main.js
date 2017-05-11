@@ -1,12 +1,15 @@
 import Expo from 'expo';
 import React, { Component } from 'react';
-import DrawerNav from './navigation/routes';
+import { StyleSheet, ActivityIndicator, View, Text, Button } from 'react-native';
+import StartupStack from './navigation/routes';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      isAppReady: false,
+      isLoggedIn: false,
       recipes: [],
       image: null,
       predictions: [],
@@ -17,6 +20,18 @@ class App extends Component {
         {name: 'blackberry'}
       ],
     };
+  }
+
+  // componentDidMount() {
+  //   const login = () => this.setState({isLoggedIn: true});
+  //   setTimeout(login.bind(this), 2000);
+  // }
+
+  componentDidMount() {
+    fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
+      .then(res => res.json())
+      .then(results => this.onRecipesChange(results.recipes))
+      .then(() => this.setState({isAppReady: true}));
   }
 
   onRecipesChange = (recipes) => {
@@ -41,11 +56,17 @@ class App extends Component {
     this.setState({ingredients});
   };
 
+  onLoginChange = () => {
+    this.setState({isLoggedIn: !this.state.isLoggedIn});
+  }
+
   render() {
     return (
-      <DrawerNav
+      <StartupStack
         screenProps={
           {
+            isAppReady: this.state.isAppReady,
+            isLoggedIn: this.state.isLoggedIn,
             recipes: this.state.recipes,
             image: this.state.image,
             predictions: this.state.predictions,
@@ -56,6 +77,7 @@ class App extends Component {
             onPredictionsChange: this.onPredictionsChange,
             onSearchChange: this.onSearchChange,
             onIngredientChange: this.onIngredientChange,
+            onLoginChange: this.onLoginChange,
           }
         }
       />
