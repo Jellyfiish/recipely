@@ -51,6 +51,43 @@ class AuthScreen extends Component {
     });
   };
 
+  onSignupPress = () => {
+    dismissKeyboard();
+    const { username, password } = this.state;
+
+    fetch('https://jellyfiish-recipely.herokuapp.com/api/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({username, password}),
+    }).then(res => {
+      if (res.status === 401) {
+        // Show error if invalid username or password.
+        res.text().then(error => this.setState({error}));
+      } else if (res.status === 200) {
+        res.json()
+          .then(token => {
+            // Remove error message if there was one.
+            this.setState({error: null});
+            // Store our access token so we can use it to authenticate api endpoints
+            AsyncStorage.setItem('id_token', token, () => {
+              // Toggle isLoggedIn state
+              this.props.screenProps.onLoginChange();
+              // Navigate to main app.
+              const action = NavigationActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({ routeName: 'MainDrawerNavigator' })
+                ]
+              });
+              this.props.navigation.dispatch(action);
+            });
+          });
+      }
+    });
+  };
+
   // Completing an input field will trigger the cursor to go to the next field
   focusNextField = (nextField) => {
     this.refs[nextField].focus();
@@ -108,7 +145,7 @@ class AuthScreen extends Component {
           <View style={styles.button}>
             <Button
               title="Signup"
-              onPress={() => {}}
+              onPress={this.onSignupPress}
             />
           </View>
         </View>
