@@ -269,7 +269,7 @@ app.get('/api/users/notes', isAuthenticated, (req, res) => {
     });
 });
 
-app.get('/api/recipes/:id/notes', isAuthenticated, (req, res) => {
+app.get('/api/users/recipes/:id/notes', isAuthenticated, (req, res) => {
   db.queryAsync('SELECT * FROM notes WHERE f2f_id = $1', [req.params.id])
     .then(results => {
       if(results.rows.length) {
@@ -284,7 +284,7 @@ app.get('/api/recipes/:id/notes', isAuthenticated, (req, res) => {
     })
 });
 
-app.post('/api/notes', isAuthenticated, (req, res) => {
+app.post('/api/users/recipes/notes', isAuthenticated, (req, res) => {
   const f2f_id = req.body.f2f_id;
   const text = req.body.text;
   const userId = req.body.issuer;
