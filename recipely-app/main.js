@@ -51,7 +51,7 @@ class App extends Component {
           text: 'sample test note for Chocolate Cake',
           recipe_title: 'Chocolate Cake',
           id: 7
-        }
+        },
       ]
     };
   }
