@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import { AsyncStorage, StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import dismissKeyboard from 'dismissKeyboard';
 
 class AuthScreen extends Component {
@@ -25,11 +25,16 @@ class AuthScreen extends Component {
     }).then(res => {
       if (res.status === 401) {
         res.text().then(error => this.setState({error}));
-      } else {
-        res.json().then(token => {
-          this.setState({error: null});
-          console.log(token);
-        });
+      } else if (res.status === 200) {
+        res.json()
+          .then(token => {
+            this.setState({error: null});
+            AsyncStorage.setItem('id_token', token, () => {
+              this.props.screenProps.onLoginChange();
+              console.log('logged in', this.props.screenProps.isLoggedIn)
+              console.log('app ready', this.props.screenProps.isAppReady)
+            });
+          });
       }
     });
   };

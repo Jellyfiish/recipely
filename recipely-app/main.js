@@ -56,6 +56,10 @@ class App extends Component {
     this.setState({ingredients});
   };
 
+  onLoginChange = () => {
+    this.setState({isLoggedIn: !this.state.isLoggedIn});
+  }
+
   render() {
     return (
       <StartupStack
@@ -73,6 +77,7 @@ class App extends Component {
             onPredictionsChange: this.onPredictionsChange,
             onSearchChange: this.onSearchChange,
             onIngredientChange: this.onIngredientChange,
+            onLoginChange: this.onLoginChange,
           }
         }
       />
