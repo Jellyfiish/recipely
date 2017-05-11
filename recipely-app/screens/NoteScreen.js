@@ -4,12 +4,22 @@ import {
   Text,
   View
 } from 'react-native';
+import NoteList from '../components/NoteList';
 
 class NoteScreen extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    const { navigation, screenProps } = this.props;
+
     return (
       <View style={styles.container}>
-        <Text>Show notes</Text>
+        <NoteList
+          navigation={navigation}
+          notes={this.props.screenProps.notes}
+        />
       </View>
     );
   }
