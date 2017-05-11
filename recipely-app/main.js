@@ -9,8 +9,8 @@ class App extends Component {
 
     this.state = {
       isAppReady: false,
-      // isLoggedIn: false,
-      isLoggedIn: true,
+      isLoggedIn: false,
+      // isLoggedIn: true,
       // user: null,
       user: {
         username: 'bono',
