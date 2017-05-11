@@ -153,12 +153,18 @@ app.post('/api/signup', (req, res) => {
           if(err) {
           res.status(500).end('please can you try to signup again in a moment!');
           } 
-          
+
           db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id', [body.username, hashedPassword])
             .then((results)=> {
               jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
-                if(err) res.status(401).json(err);
-                if(token) res.status(200).json(token);
+                if(err) {
+                 res.status(401).json(err);
+                 return;
+                }
+
+                if(token) {
+                  res.status(200).json(token);
+                } 
               })
             })
             .catch(err => {
