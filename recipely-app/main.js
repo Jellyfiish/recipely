@@ -25,11 +25,6 @@ class App extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   const login = () => this.setState({isLoggedIn: true});
-  //   setTimeout(login.bind(this), 2000);
-  // }
-
   componentDidMount() {
     AsyncStorage.getItem('id_token', (error, idToken) => {
       // Check if the user is still logged in
