@@ -69,12 +69,19 @@ class App extends Component {
         this.setState({isLoggedIn: true});
         this.setIdToken(idToken);
         // Fetch user's recipes
-        fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
-          .then(res => res.json())
-          .then(results => this.onRecipesChange(results.recipes))
-          .then(() => {
-            this.setState({isAppReady: true})
-          });
+        fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes', {
+          headers: {
+            'x-access-token': `Bearer ${this.state.idToken}`
+          }
+        }).then(res => {
+            if (res.status === 200) {
+              res.json()
+                .then(recipes => this.onRecipesChange(recipes))
+                .then(() => this.setState({isAppReady: true}));
+            } else {
+              this.setState({isAppReady: true})
+            }
+        });
       } else {
         this.setState({isAppReady: true});
       }

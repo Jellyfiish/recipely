@@ -22,8 +22,8 @@ class RecipeDetailScreen extends Component {
   }
 
   componentDidMount() {
-    const { recipe_id } = this.props.navigation.state.params;
-    fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${recipe_id}`)
+    const { f2f_id } = this.props.navigation.state.params;
+    fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${f2f_id}`)
       .then(res => res.json())
       .then(result => this.setState({ ingredients: result.recipe.ingredients }));
   }
@@ -35,16 +35,15 @@ class RecipeDetailScreen extends Component {
   };
 
   render() {
-    const { title, image_url, publisher} = this.props.navigation.state.params;
+    const { title, thumbnail_url } = this.props.navigation.state.params;
 
     return (
       <ScrollView>
         <Card
           title={title}
           titleStyle={styles.titleStyle}
-          image={{ uri: image_url }}
+          image={{ uri: thumbnail_url }}
         >
-          <Text style={styles.publisherText}>{publisher}</Text>
           { this.state.ingredients
             ? <View>
                 <Text style={styles.ingredientText}>Ingredients</Text>

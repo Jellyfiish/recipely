@@ -1,5 +1,5 @@
 // TODO: RecipeList.js and ResultList.js share a lot of code. Maybe refactor to
-// use higher order components. 
+// use higher order components.
 import React from 'react';
 import {
   StyleSheet,
@@ -25,11 +25,10 @@ const RecipeList = ({ navigation, recipes }) => {
       { recipes.map(recipe => {
           return (
             <Card
-              key={recipe.recipe_id}
+              key={recipe.f2f_id}
               title={recipe.title}
-              image={{ uri: recipe.image_url }}
+              image={{ uri: recipe.thumbnail_url }}
             >
-              <Text style={styles.publisherText}>{recipe.publisher}</Text>
               <View style={styles.buttonContainer}>
                 <Button
                   title='Details'
