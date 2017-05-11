@@ -9,7 +9,11 @@ class SplashScreen extends Component {
 
   componentDidUpdate() {
     if (this.props.screenProps.isAppReady) {
-      this.navigateTo('MainDrawerNavigator');
+      if (this.props.screenProps.isLoggedIn) {
+        this.navigateTo('MainDrawerNavigator');
+      } else {
+        this.navigateTo('AuthScreen');
+      }
     }
   }
 
