@@ -16,6 +16,43 @@ class App extends Component {
         {name: 'strawberry'},
         {name: 'blackberry'}
       ],
+      notes: [
+        {
+          text: 'sample test note for Iced Coffee',
+          recipe_title: 'Iced Coffee',
+          id: 1
+        },
+        {
+          text: 'sample test note for Jalapeno Popper Grilled Cheese Sandwich',
+          recipe_title: 'Jalapeno Popper Grilled Cheese Sandwich',
+          id: 2
+        },
+        {
+          text: 'sample test note for Crash Hot Potatoes',
+          recipe_title: 'Crash Hot Potatoes',
+          id: 3
+        },
+        {
+          text: 'sample test note for Stovetop Avocado Mac and Cheese',
+          recipe_title: 'Stovetop Avocado Mac and Cheese',
+          id: 4
+        },
+        {
+          text: 'sample test note for Cinnamon Rolls',
+          recipe_title: 'Cinnamon Rolls',
+          id: 5
+        },
+        {
+          text: 'sample test note for Parmesan Roasted Potatoes',
+          recipe_title: 'Parmesan Roasted Potatoes',
+          id: 6
+        },
+        {
+          text: 'sample test note for Chocolate Cake',
+          recipe_title: 'Chocolate Cake',
+          id: 7
+        }
+      ]
     };
   }
 
