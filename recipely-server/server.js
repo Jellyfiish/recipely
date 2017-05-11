@@ -174,16 +174,17 @@ app.get('/api/users', isAuthenticated, (req, res) => {
     });
 });
 
-app.get('/api/users/:id', isAuthenticated, (req, res) => {
-  db.queryAsync(`SELECT * FROM users WHERE ID = ${req.params.id}`)
-    .then(response => {
-      res.status(200).json(response.rows);
-    })
-    .catch(err => {
-      res.status(400).json('Error getting the user');
-      console.error(err);
-    });
-});
+//QUESTION: should we get rid of this endpoint or change it's uri???
+// app.get('/api/users/:id', isAuthenticated, (req, res) => {
+//   db.queryAsync(`SELECT * FROM users WHERE ID = ${req.params.id}`)
+//     .then(response => {
+//       res.status(200).json(response.rows);
+//     })
+//     .catch(err => {
+//       res.status(400).json('Error getting the user');
+//       console.error(err);
+//     });
+// });
 
 app.put('/api/users', isAuthenticated, (req, res) => {
   const body = req.body;
