@@ -152,6 +152,7 @@ app.post('/api/signup', (req, res) => {
         bcrypt.hashPassword(body.password, (err, hashedPassword) => {
           if(err) {
           res.status(500).end('please can you try to signup again in a moment!');
+          return;
           } 
 
           db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id', [body.username, hashedPassword])
@@ -160,11 +161,10 @@ app.post('/api/signup', (req, res) => {
                 if(err) {
                  res.status(401).json(err);
                  return;
+                } else if(token) {
+                  res.status(200).json(token);
                 }
 
-                if(token) {
-                  res.status(200).json(token);
-                } 
               })
             })
             .catch(err => {
