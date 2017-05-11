@@ -6,12 +6,17 @@ import {
   View
 } from 'react-native';
 import { DrawerItems } from 'react-navigation';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const SideDrawer = (props) => (
   <View>
     <View style={styles.drawerHeader}>
       <Text style={styles.appName}>recipely</Text>
-      <Text style={styles.user}>Login/Logout</Text>
+      <MaterialIcons
+        name="exit-to-app"
+        color="#fff"
+        style={styles.logoutIcon}
+        size={24} />
     </View>
     <DrawerItems {...props} />
   </View>
@@ -37,7 +42,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingRight: 10,
     paddingBottom: 5,
-  }
+  },
+  logoutIcon: {
+    marginRight: 3,
+    marginBottom: 2,
+  },
 });
 
 export default SideDrawer;

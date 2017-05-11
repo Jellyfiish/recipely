@@ -9,7 +9,8 @@ class App extends Component {
 
     this.state = {
       isAppReady: false,
-      isLoggedIn: false,
+      // isLoggedIn: false,
+      isLoggedIn: true,
       recipes: [],
       image: null,
       predictions: [],
