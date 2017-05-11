@@ -67,6 +67,7 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
   const source_url = req.body.source_url;
   const f2f_id = req.body.f2f_id;
   const ingredients = req.body.ingredients;
+
   db.queryAsync(`SELECT saved_count FROM recipes WHERE f2f_id = $1`, [f2f_id])
     .then((results)=> {
       if(!results.rows.length) {
@@ -82,13 +83,18 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
           })
           .catch(err => {
             res.status(501).json(err);
-          })
+          });
       } else {
         const savedCount = results.rows[0].saved_count;
-        // UPDATE films SET kind = 'Dramatic' WHERE kind = 'Drama';
         db.queryAsync('UPDATE recipes SET saved_count=saved_count+1 where f2f_id=$1 RETURNING *', [f2f_id])
-        .then(results => {
-          res.json(results.rows[0]);
+        .then(recipe => {
+          db.queryAsync("INSERT INTO recipes_users (user_id, f2f_id) VALUES ($1, $2)", [userId, f2f_id])
+            .then( results => {
+              res.status(200).json(recipe.rows[0]);
+            })
+            .catch(err => {
+              res.status(500).json(err);
+            });
         })
         .catch(err => {
           res.status(500).json(err);
@@ -118,6 +124,22 @@ app.get('/api/users/recipes', isAuthenticated, (req, res) => {
     });
 });
 
+app.delete('/api/users/recipes/:recipeId', isAuthenticated, (req, res) => {
+  const userId = req.body.issuer;
+  const f2f_id = req.params.recipeId;
+
+  db.queryAsync('DELETE FROM recipes_users WHERE user_id = $1 AND f2f_id = $2', [userId, f2f_id])
+    .then(results => {
+      if(results.rowCount) {
+        res.status(201).json(results.rows)
+      } else {
+        res.status(404).end('The resource is not found')       
+      }
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
 // auth endpoints
 app.post('/api/login', (req, res) => {
   const body = req.body;
