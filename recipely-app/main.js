@@ -2,6 +2,7 @@ import Expo from 'expo';
 import React, { Component } from 'react';
 import { AsyncStorage, StyleSheet, ActivityIndicator, View, Text, Button } from 'react-native';
 import StartupStack from './navigation/routes';
+import jwtDecode from 'jwt-decode';
 
 class App extends Component {
   constructor(props) {
@@ -10,13 +11,8 @@ class App extends Component {
     this.state = {
       isAppReady: false,
       isLoggedIn: false,
-      // isLoggedIn: true,
-      // user: null,
       idToken: null,
-      user: {
-        username: 'bono',
-        userId: 6
-      },
+      user: { username: null, userId: null },
       recipes: [],
       image: null,
       predictions: [],
@@ -36,17 +32,40 @@ class App extends Component {
 
   componentDidMount() {
     AsyncStorage.getItem('id_token', (error, idToken) => {
-      this.setState({idToken});
+      // Check if the user is still logged in
+      if (idToken !== null) {
+        this.setState({isLoggedIn: true});
+        this.setIdToken(idToken);
+        // Fetch user's recipes
+        fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
+          .then(res => res.json())
+          .then(results => this.onRecipesChange(results.recipes))
+          .then(() => {
+            this.setState({isAppReady: true})
+          });
+      } else {
+        this.setState({isAppReady: true});
+      }
     });
-
-    fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
-      .then(res => res.json())
-      .then(results => this.onRecipesChange(results.recipes))
-      .then(() => this.setState({isAppReady: true}));
   }
 
   setIdToken = (idToken) => {
-    this.setState({idToken});
+    if (idToken === null) {
+      this.setState({
+        idToken: null,
+        user: { username: null, userId: null }
+      });
+    } else {
+      // Set token and user information
+      const decoded = jwtDecode(idToken);
+      this.setState({
+        idToken,
+        user: {
+          username: decoded.user,
+          userId: decoded.sub
+        }
+      });
+    }
   };
 
   onRecipesChange = (recipes) => {
