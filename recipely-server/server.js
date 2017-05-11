@@ -86,11 +86,15 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
           });
       } else {
         const savedCount = results.rows[0].saved_count;
-        // UPDATE films SET kind = 'Dramatic' WHERE kind = 'Drama';
         db.queryAsync('UPDATE recipes SET saved_count=saved_count+1 where f2f_id=$1 RETURNING *', [f2f_id])
-        .then(results => {
-          // add it to recipes_users table
-          res.json(results.rows[0]);
+        .then(recipe => {
+          db.queryAsync("INSERT INTO recipes_users (user_id, f2f_id) VALUES ($1, $2)", [userId, f2f_id])
+            .then( results => {
+              res.status(200).json(recipe.rows[0]);
+            })
+            .catch(err => {
+              res.status(500).json(err);
+            });
         })
         .catch(err => {
           res.status(500).json(err);
