@@ -87,6 +87,25 @@ const NoteStack = StackNavigator({
   }
 });
 
+const NoteStack = StackNavigator({
+  Notes: {
+    screen: NoteScreen,
+    navigationOptions: ({navigation}) => ({
+      title: 'All Notes'
+    }),
+  },
+}, {
+  cardStyle: {
+    paddingTop: Constants.statusBarHeight,
+  }
+});
+
+// NoteStack.navigationOptions = ({ navigation }) => {
+//   return {
+//     title: 'All notes',
+//   }
+// };
+
 const SearchTab = TabNavigator({
   Photo: {
     screen: PhotoScreen,
