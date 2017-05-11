@@ -12,12 +12,6 @@ class RecipeScreen extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
-      .then(res => res.json())
-      .then(results => this.props.screenProps.onRecipesChange(results.recipes));
-  }
-
   render() {
     const { navigation, screenProps } = this.props;
 
