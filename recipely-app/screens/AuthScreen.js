@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import dismissKeyboard from 'dismissKeyboard';
 
 class AuthScreen extends Component {
   constructor(props) {
@@ -10,6 +11,19 @@ class AuthScreen extends Component {
       password: '',
     };
   }
+
+  onLoginPress = () => {
+    dismissKeyboard();
+    const { username, password } = this.state;
+    fetch('https://jellyfiish-recipely.herokuapp.com/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({username, password}),
+    }).then(res => res.json())
+      .then(token => console.log(token));
+  };
 
   focusNextField = (nextField) => {
     this.refs[nextField].focus();
@@ -56,7 +70,7 @@ class AuthScreen extends Component {
           <View style={styles.button}>
             <Button
               title="Login"
-              onPress={() => {}}
+              onPress={this.onLoginPress}
             />
           </View>
 
