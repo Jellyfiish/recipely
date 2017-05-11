@@ -21,6 +21,7 @@ describe('JWT Authentication', () => {
         expect(payload.sub).to.equal('test');
 	  });
 	});
+	
 	it('should return error when decoding expired token', () => {
 	  jwtAuth.decodeToken(expiredToken, (err, payload) => {
         expect(err).to.equal('Token has been expired');
