@@ -9,6 +9,7 @@ class AuthScreen extends Component {
     this.state = {
       username: '',
       password: '',
+      error: null,
     };
   }
 
@@ -21,8 +22,16 @@ class AuthScreen extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({username, password}),
-    }).then(res => res.json())
-      .then(token => console.log(token));
+    }).then(res => {
+      if (res.status === 401) {
+        res.text().then(error => this.setState({error}));
+      } else {
+        res.json().then(token => {
+          this.setState({error: null});
+          console.log(token);
+        });
+      }
+    });
   };
 
   focusNextField = (nextField) => {
@@ -66,6 +75,10 @@ class AuthScreen extends Component {
               onChangeText={(password) => this.setState({password})}
             />
           </View>
+
+          { this.state.error &&
+            <Text style={styles.error}>{this.state.error}</Text>
+          }
 
           <View style={styles.button}>
             <Button
@@ -118,6 +131,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 5,
+  },
+  error: {
+    color: 'red'
   },
 });
 
