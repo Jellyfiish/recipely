@@ -19,7 +19,6 @@ class ProfileScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Profile screen!</Text>
         <Button
           title="Logout"
           onPress={() => this.navigateTo('AuthScreen')}
