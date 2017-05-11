@@ -122,7 +122,11 @@ app.post('/api/login', (req, res) => {
     .then((results)=> {
       if(results.rows.length) {
         bcrypt.comparePassword(body.password, results.rows[0].password, (err, match) => {
-          if(err || !match) res.status(401).end('invalid password or username');
+          if(err || !match) {
+            res.status(401).end('invalid password or username');
+            return;
+          } 
+
           jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
             if(err) {
               res.status(401).end('invalid password or username');
@@ -146,12 +150,21 @@ app.post('/api/signup', (req, res) => {
         res.status(401).end('the user name is already taken :(');
       } else {
         bcrypt.hashPassword(body.password, (err, hashedPassword) => {
-          if(err) res.status(500).end('please can you try to signup again in a moment!');
+          if(err) {
+          res.status(500).end('please can you try to signup again in a moment!');
+          return;
+          } 
+
           db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id', [body.username, hashedPassword])
             .then((results)=> {
               jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
-                if(err) res.status(401).json(err);
-                if(token) res.status(200).json(token);
+                if(err) {
+                 res.status(401).json(err);
+                 return;
+                } else if(token) {
+                  res.status(200).json(token);
+                }
+
               })
             })
             .catch(err => {
