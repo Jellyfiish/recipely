@@ -1,6 +1,6 @@
 import Expo from 'expo';
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, View, Text, Button } from 'react-native';
+import { AsyncStorage, StyleSheet, ActivityIndicator, View, Text, Button } from 'react-native';
 import StartupStack from './navigation/routes';
 
 class App extends Component {
@@ -12,6 +12,7 @@ class App extends Component {
       isLoggedIn: false,
       // isLoggedIn: true,
       // user: null,
+      idToken: null,
       user: {
         username: 'bono',
         userId: 6
@@ -34,11 +35,19 @@ class App extends Component {
   // }
 
   componentDidMount() {
+    AsyncStorage.getItem('id_token', (error, idToken) => {
+      this.setState({idToken});
+    });
+
     fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
       .then(res => res.json())
       .then(results => this.onRecipesChange(results.recipes))
       .then(() => this.setState({isAppReady: true}));
   }
+
+  setIdToken = (idToken) => {
+    this.setState({idToken});
+  };
 
   onRecipesChange = (recipes) => {
     this.setState({recipes});
@@ -79,6 +88,7 @@ class App extends Component {
             predictions: this.state.predictions,
             searchResults: this.state.searchResults,
             ingredients: this.state.ingredients,
+            setIdToken: this.setIdToken,
             onRecipesChange: this.onRecipesChange,
             onImageChange: this.onImageChange,
             onPredictionsChange: this.onPredictionsChange,

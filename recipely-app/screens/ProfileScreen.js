@@ -14,7 +14,11 @@ class ProfileScreen extends Component {
   }
 
   onLogoutPress = () => {
+    // Remove token from storage
     AsyncStorage.removeItem('id_token', () => {
+      // Remove token from state
+      this.props.screenProps.setIdToken(null);
+      // Redirect user to login/signup screen
       this.navigateTo('AuthScreen');
     });
   };
