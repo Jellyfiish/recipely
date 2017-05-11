@@ -108,7 +108,7 @@ app.delete('/api/users/recipes/:recipeId', isAuthenticated, (req, res) => {
       if(results.rowCount) {
         res.status(201).json(results.rows)
       } else {
-        res.status(404).end('The resource is not found')       
+        res.status(404).end('The resource is not found')
       }
     })
     .catch(err => {
@@ -125,9 +125,9 @@ app.post('/api/login', (req, res) => {
           if(err || !match) {
             res.status(401).end('invalid password or username');
             return;
-          } 
+          }
 
-          jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
+          jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
             if(err) {
               res.status(401).end('invalid password or username');
             } else {
@@ -153,11 +153,11 @@ app.post('/api/signup', (req, res) => {
           if(err) {
           res.status(500).end('please can you try to signup again in a moment!');
           return;
-          } 
+          }
 
-          db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id', [body.username, hashedPassword])
+          db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id, username', [body.username, hashedPassword])
             .then((results)=> {
-              jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
+              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
                 if(err) {
                  res.status(401).json(err);
                  return;
@@ -212,9 +212,9 @@ app.put('/api/users', isAuthenticated, (req, res) => {
       if(newPassword && newUsername) {
         bcrypt.hashPassword(newPassword, (err, hashedPassword) => {
           if(err) res.status(500).end('please can you try to signup again in a moment!');
-          db.queryAsync('UPDATE users SET username = $1, password = $2 RETURNING id', [newUsername, hashedPassword])
+          db.queryAsync('UPDATE users SET username = $1, password = $2 RETURNING id, username', [newUsername, hashedPassword])
             .then((results)=> {
-              jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
+              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
                 if(err) res.status(401).json(err);
                 if(token) res.status(201).json({username: newUsername, password: newPassword});
               })
@@ -226,10 +226,11 @@ app.put('/api/users', isAuthenticated, (req, res) => {
       } else if(newPassword) {
         bcrypt.hashPassword(newPassword, (err, hashedPassword) => {
           if(err) res.status(500).end('please can you try again in a moment!');
-          db.queryAsync('UPDATE users SET password = $1 where id = $2 RETURNING id', [hashedPassword, userId])
+          db.queryAsync('UPDATE users SET password = $1 where id = $2 RETURNING id, username', [hashedPassword, userId])
             .then((results)=> {
-              jwtAuth.encodeToken(results.rows[0].id, (err, token) => {
+              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
                 if(err) res.status(401).json(err);
+                // for now I will simply append the token, but I would assume that we should return the new token instead of the username and password?
                 if(token) res.status(201).json({password: newPassword});
               })
             })
@@ -238,9 +239,9 @@ app.put('/api/users', isAuthenticated, (req, res) => {
             });
         });
       } else if(newUsername) {
-        db.queryAsync('UPDATE users SET username = $1 where id= $2 RETURNING id', [newUsername, userId])
+        db.queryAsync('UPDATE users SET username = $1 where id= $2 RETURNING id, username', [newUsername, userId])
           .then((results)=> {
-            res.status(201).json({username: newUsername});
+            if(token) res.status(201).json({username: newUsername});
           })
           .catch(err => {
             res.status(400).json(err);
