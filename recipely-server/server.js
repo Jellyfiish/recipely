@@ -4,35 +4,10 @@ var axios = require('axios');
 var db = require('./models/database');
 var jwtAuth = require('./models/jwtAuth');
 var bcrypt = require('./models/bcrypt')
+var isAuthenticated = require('./models/auth');
 var app = express();
 var key = process.env.F2F_API_KEY || require('./config/config').F2F_API_KEY;
-
 var morgan = require('morgan');
-
-// to be moved to util models directory after adding the check it the user exists in the DB funciton
-var isAuthenticated = (req, res, next) => {
-  if(!req.header('x-access-token')) {
-    res.status(422).end('please log in!')
-  }
-
-  const token = req.header('x-access-token').split(' ')[1];
-  jwtAuth.decodeToken(token, (err, payload) => {
-    if(err) res.status(400).end(err);
-    if(payload) {
-      db.queryAsync('SELECT * FROM users where id = $1', [payload.sub])
-        .then(results => {
-          if(results.rows.length) {
-            req.body.issuer = payload.sub;
-            next();
-          } else {
-            res.status(400).end('Please login/signup');
-          }
-        }).catch((err)=> {
-          res.status(500).json(err);
-        });
-    }
-  });
-}
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
