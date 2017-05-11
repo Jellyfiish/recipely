@@ -27,6 +27,10 @@ const MenuIcon = (navigation) => (
   />
 );
 
+const DrawerIcon = (name) => ({ tintColor }) => (
+  <MaterialIcons name={name} size={24} color={tintColor} />
+);
+
 const PhotoStack = StackNavigator({
   Photos: {
     screen: PhotoScreen,
@@ -125,36 +129,28 @@ const DrawerNav = DrawerNavigator({
     navigationOptions: ({navigation}) => ({
       // Label and icons for the side menu.
       drawerLabel: 'Take photo',
-      drawerIcon: ({ tintColor }) => (
-        <MaterialIcons name="photo-camera" size={24} color={tintColor} />
-      ),
+      drawerIcon: DrawerIcon('photo-camera'),
     }),
   },
   RecipeStack: {
     screen: RecipeStack,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'View saved recipes',
-      drawerIcon: ({ tintColor }) => (
-        <MaterialIcons name="list" size={24} color={tintColor} />
-      ),
+      drawerIcon: DrawerIcon('list'),
     }),
   },
   Find: {
     screen: SearchStack,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'Find recipes',
-      drawerIcon: ({ tintColor }) => (
-        <MaterialIcons name="search" size={24} color={tintColor} />
-      ),
+      drawerIcon: DrawerIcon('search'),
     }),
   },
   Notes: {
     screen: NoteScreen,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'View notes',
-      drawerIcon: ({ tintColor }) => (
-        <MaterialIcons name="note" size={24} color={tintColor} />
-      ),
+      drawerIcon: DrawerIcon('note'),
     }),
   },
 }, {
