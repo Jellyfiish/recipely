@@ -101,6 +101,23 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
 
 });
 
+app.get('/api/users/recipes', isAuthenticated, (req, res) => {
+  const userId = req.body.issuer;
+  db.queryAsync('SELECT r.f2f_id, r.title, r.ingredients, r.source_url,\
+     r.thumbnail_url, r.saved_count FROM recipes AS r JOIN recipes_users ON\
+      recipes_users.user_id=$1 AND recipes_users.f2f_id = r.f2f_id', [userId])
+    .then(results => {
+      if(!results.rows.length) {
+        res.status(400).end('No saved recipes found!')
+      } else {
+        res.status(200).json(results.rows);
+      }
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
 // auth endpoints
 app.post('/api/login', (req, res) => {
   const body = req.body;
