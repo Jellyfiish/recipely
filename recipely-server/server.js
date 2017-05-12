@@ -100,7 +100,6 @@ app.get('/api/users/recipes', isAuthenticated, (req, res) => {
         res.status(400).end('No saved recipes found!')
       } else {
         // parse ingredients string into an array so clientside only has to json parse once
-        console.log(results.rows);
         results.rows.forEach((recipe) => {
           recipe.ingredients = JSON.parse(recipe.ingredients);
         });
