@@ -1,6 +1,6 @@
-var jwtAuth = require('../models/jwtAuth');
-var chai = require('chai');
-var expect = chai.expect;
+const jwtAuth = require('../models/jwtAuth');
+const chai = require('chai');
+const expect = chai.expect;
 
 describe('JWT Authentication', () => {
 	var testToken;
