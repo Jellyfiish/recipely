@@ -11,18 +11,18 @@ function encodeToken(userId, username, callback) {
     sub: userId,
     user: username
   };
-
+  
   callback(null, jwt.encode(payload, secretKey));
 }
 
 function decodeToken(token, callback) {
-  const payload = jwt.decode(token, secretKey);
-  const now = moment.unix();
-  if(now > payload.exp) {
-    callback('Token has been expired');
-  } else {
+  try {
+    const payload = jwt.decode(token, secretKey);
     callback(null, payload);
+  } catch(e) {
+    callback('Token has been expired');
   }
+
 }
 
 module.exports = {
