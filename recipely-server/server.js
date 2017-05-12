@@ -271,7 +271,7 @@ app.delete('/api/users/:id', (req, res) => {
 // notes endpoints
 app.get('/api/users/notes', isAuthenticated, (req, res) => {
   const userId = req.body.issuer;
-  db.queryAsync('SELECT n.text, n.user_id, n.f2f_id, r.title, r.thumbnail_url\
+  db.queryAsync('SELECT n.text, n.user_id, n.f2f_id, n.id, r.title, r.thumbnail_url\
    FROM notes AS n JOIN recipes AS r ON\
    n.f2f_id = r.f2f_id WHERE n.user_id = $1', [userId])
     .then(results => {
