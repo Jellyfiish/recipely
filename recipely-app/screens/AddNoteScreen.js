@@ -21,7 +21,35 @@ class AddNoteScreen extends Component {
 
   onAddPress = () => {
     this.setState({isAdding: true});
-    const { idToken } = this.props.navigation.state.params;
+    const { idToken, f2f_id, title, thumbnail_url, onGoBack } = this.props.navigation.state.params;
+
+    fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes/notes', {
+      method: 'POST',
+      headers: {
+        'x-access-token': `Bearer ${idToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: this.state.text,
+        f2f_id
+      }),
+    }).then(res => res.json())
+      .then(noteArray => {
+        // API returns a note inside an rray
+        const note = noteArray[0];
+        const newNote = {...note, title, thumbnail_url};
+        return newNote;
+      })
+      .then(newNote => {
+        const notes = this.props.screenProps.notes;
+        this.props.screenProps.onNotesChange([ ...notes, newNote ]);
+        // // Need to trigger a render in previous component.
+        onGoBack(this.props.screenProps.notes.filter(
+          otherNote => newNote.f2f_id === otherNote.f2f_id)
+        );
+        this.setState({isAdding: false});
+      })
+      .then(() => this.props.navigation.goBack());
   };
 
   render() {

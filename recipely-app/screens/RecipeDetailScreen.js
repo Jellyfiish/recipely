@@ -54,8 +54,14 @@ class RecipeDetailScreen extends Component {
 
   // Navigate to add note screen
   onAddPress = () => {
-    const { idToken, title } = this.props.navigation.state.params;
-    this.props.navigation.navigate('AddNote', {idToken, title});
+    const { idToken, title, f2f_id, thumbnail_url } = this.props.navigation.state.params;
+    this.props.navigation.navigate('AddNote', {
+      idToken,
+      title,
+      f2f_id,
+      thumbnail_url,
+      onGoBack: (notes) => this.updateNotes(notes),
+    });
   }
 
   updateNotes = (notes) => {
