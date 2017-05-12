@@ -7,10 +7,12 @@ import {
   ScrollView,
   View,
   Button,
-  Image
+  Image,
+  KeyboardAvoidingView
 } from 'react-native';
 import { Card } from 'react-native-elements';
 import IngredientList from '../components/IngredientList';
+import { MaterialIcons } from '@expo/vector-icons';
 
 class RecipeDetailScreen extends Component {
   constructor(props) {
@@ -67,14 +69,25 @@ class RecipeDetailScreen extends Component {
           />
         </Card>
 
-        { notes.map(note => {
-            return (
-              <Card key={note.id}>
-                <Text>{note.text}</Text>
-              </Card>
-            );
-          })
-        }
+        <View>
+          { notes && <Text>Notes</Text>}
+          
+          { notes.map(note => {
+              return (
+                <Card key={note.id}>
+                  <Text>{note.text}</Text>
+                  <View style={styles.buttonContainer}>
+                    <Button
+                      title='Edit'
+                      onPress={() => {}}
+                      />
+                    <MaterialIcons name="close" size={28} color="#aaa" />
+                  </View>
+                </Card>
+              );
+            })
+          }
+        </View>
       </ScrollView>
     );
   }
@@ -91,6 +104,11 @@ const styles = StyleSheet.create({
   ingredientText: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
 });
 
