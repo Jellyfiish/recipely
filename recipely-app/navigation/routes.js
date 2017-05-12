@@ -111,16 +111,25 @@ const NoteStack = StackNavigator({
 });
 
 const SearchTab = TabNavigator({
-  Popular: {
-    screen: PopularScreen,
+  Photo: {
+    screen: PhotoScreen,
     navigationOptions: ({ navigation }) => ({
-      tabBarIcon: TabBarIcon('whatshot'),
+      tabBarLabel: 'Photo',
+      tabBarIcon: TabBarIcon('photo-camera'),
     }),
   },
   Search: {
     screen: SearchScreen,
     navigationOptions: ({ navigation }) => ({
+      tabBarLabel: 'Ingredients',
       tabBarIcon: TabBarIcon('search'),
+    }),
+  },
+  Popular: {
+    screen: PopularScreen,
+    navigationOptions: ({ navigation }) => ({
+      tabBarLabel: 'Popular',
+      tabBarIcon: TabBarIcon('whatshot'),
     }),
   },
 });
@@ -170,12 +179,11 @@ const ProfileStack = StackNavigator({
 });
 
 const MainDrawerNavigator = DrawerNavigator({
-  Photo: {
-    screen: PhotoStack,
+  Find: {
+    screen: SearchStack,
     navigationOptions: ({navigation}) => ({
-      // Label and icons for the side menu.
-      drawerLabel: 'Take photo',
-      drawerIcon: DrawerIcon('photo-camera'),
+      drawerLabel: 'Find recipes',
+      drawerIcon: DrawerIcon('search'),
     }),
   },
   RecipeStack: {
@@ -183,13 +191,6 @@ const MainDrawerNavigator = DrawerNavigator({
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'View saved recipes',
       drawerIcon: DrawerIcon('list'),
-    }),
-  },
-  Find: {
-    screen: SearchStack,
-    navigationOptions: ({navigation}) => ({
-      drawerLabel: 'Find recipes',
-      drawerIcon: DrawerIcon('search'),
     }),
   },
   Notes: {
