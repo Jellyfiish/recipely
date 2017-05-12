@@ -70,7 +70,10 @@ class PhotoScreen extends Component {
     // our image prediction API.
     this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
     const { image } = this.props.screenProps;
-
+    // On iOS, the image will not be stored in the ImageStore. In order to put
+    // it into the ImageStore so that we can base64 encode it, we make a copy of
+    // the image by cropping with its existing dimensions. When we crop it, iOS
+    // will put the image in the ImageStore.
     if (Platform.OS === 'ios') {
       Image.getSize(image.uri, (width, height) => {
         const imageSize = {
