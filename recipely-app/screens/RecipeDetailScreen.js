@@ -15,17 +15,6 @@ import IngredientList from '../components/IngredientList';
 class RecipeDetailScreen extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      ingredients: null,
-    };
-  }
-
-  componentDidMount() {
-    const { f2f_id } = this.props.navigation.state.params;
-    fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${f2f_id}`)
-      .then(res => res.json())
-      .then(result => this.setState({ ingredients: result.recipe.ingredients }));
   }
 
   // Open web browser with directions to recipe
@@ -35,7 +24,7 @@ class RecipeDetailScreen extends Component {
   };
 
   render() {
-    const { title, thumbnail_url } = this.props.navigation.state.params;
+    const { title, thumbnail_url, ingredients } = this.props.navigation.state.params;
 
     return (
       <ScrollView>
@@ -44,17 +33,12 @@ class RecipeDetailScreen extends Component {
           titleStyle={styles.titleStyle}
           image={{ uri: thumbnail_url }}
         >
-          { this.state.ingredients
-            ? <View>
-                <Text style={styles.ingredientText}>Ingredients</Text>
-                <IngredientList ingredients={this.state.ingredients}
-                />
-              </View>
-            : <View>
-                <Text>Loading ingredients</Text>
-                <ActivityIndicator size="large" />
-              </View>
-          }
+          <View>
+            <Text style={styles.ingredientText}>Ingredients</Text>
+            <IngredientList ingredients={ingredients.split(',')}
+            />
+          </View>
+
           <Button
             title='Directions'
             onPress={this.handlePressButtonAsync}
