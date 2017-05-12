@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 const IngredientList = ({ ingredients }) => {
+  console.log(ingredients)
   return (
     <View>
       { ingredients.map((ingredient, i) => {
