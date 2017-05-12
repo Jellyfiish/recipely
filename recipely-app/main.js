@@ -23,7 +23,6 @@ class App extends Component {
         {name: 'blackberry'}
       ],
       notes: [],
-      savedRecipes: []
     };
   }
 
