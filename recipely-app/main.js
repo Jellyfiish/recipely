@@ -69,12 +69,28 @@ class App extends Component {
         this.setState({isLoggedIn: true});
         this.setIdToken(idToken);
         // Fetch user's recipes
-        fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
-          .then(res => res.json())
-          .then(results => this.onRecipesChange(results.recipes))
-          .then(() => {
-            this.setState({isAppReady: true})
-          });
+        const fetchRecipes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes', {
+          headers: { 'x-access-token': `Bearer ${this.state.idToken}` }
+        }).then(res => {
+            if (res.status === 200) {
+              res.json()
+                .then(recipes => this.onRecipesChange(recipes));
+            }
+        });
+
+        // Fetch user's notes
+        const fetchNotes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/notes', {
+          headers: { 'x-access-token': `Bearer ${this.state.idToken}` }
+        }).then(res => {
+            if (res.status === 200) {
+              res.json()
+                .then(notes => this.onNotesChange(notes));
+            }
+        });
+
+        // App is ready when the user's recipes and notes have been fetched.
+        Promise.all([fetchRecipes, fetchNotes])
+          .then(() => this.setState({isAppReady: true}));
       } else {
         this.setState({isAppReady: true});
       }
@@ -126,6 +142,10 @@ class App extends Component {
     this.setState({isLoggedIn: !this.state.isLoggedIn});
   }
 
+  onNotesChange = (notes) => {
+    this.setState({notes});
+  };
+
   render() {
     return (
       <StartupStack
@@ -147,6 +167,7 @@ class App extends Component {
             onSearchChange: this.onSearchChange,
             onIngredientChange: this.onIngredientChange,
             onLoginChange: this.onLoginChange,
+            onNotesChange: this.onNotesChange,
           }
         }
       />

@@ -23,8 +23,7 @@ class RecipeScreen extends Component {
               recipes={screenProps.recipes}
             />
           : <View>
-              <Text>Loading recipes</Text>
-              <ActivityIndicator size="large" />
+              <Text>You have no saved recipes.</Text>
             </View>
         }
       </View>
@@ -35,8 +34,6 @@ class RecipeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 

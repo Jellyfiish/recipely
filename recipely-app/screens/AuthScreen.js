@@ -50,14 +50,39 @@ class AuthScreen extends Component {
           AsyncStorage.setItem('id_token', token, () => {
             // Toggle isLoggedIn state
             this.props.screenProps.onLoginChange();
-            // Navigate to main app.
-            const action = NavigationActions.reset({
-              index: 0,
-              actions: [
-                NavigationActions.navigate({ routeName: 'MainDrawerNavigator' })
-              ]
+
+            const fetchRecipes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes', {
+              headers: { 'x-access-token': `Bearer ${token}` }
+            }).then(res => {
+                if (res.status === 200) {
+                  res.json()
+                    .then(recipes => this.props.screenProps.onRecipesChange(recipes));
+                }
             });
-            this.props.navigation.dispatch(action);
+
+            // Fetch user's notes
+            const fetchNotes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/notes', {
+              headers: { 'x-access-token': `Bearer ${token}` }
+            }).then(res => {
+                if (res.status === 200) {
+                  res.json()
+                    .then(notes => this.props.screenProps.onNotesChange(notes));
+                }
+            });
+
+            // App is ready when the user's recipes and notes have been fetched.
+            Promise.all([fetchRecipes, fetchNotes])
+              .then(() => {
+                // Navigate to main app.
+                const action = NavigationActions.reset({
+                  index: 0,
+                  actions: [
+                    NavigationActions.navigate({ routeName: 'MainDrawerNavigator' })
+                  ]
+                });
+                this.props.navigation.dispatch(action);
+              });
+
           });
         });
     }
