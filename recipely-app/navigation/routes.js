@@ -17,6 +17,7 @@ import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import PopularScreen from '../screens/PopularScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
+import SearchDetailScreen from '../screens/SearchDetailScreen';
 import NoteScreen from '../screens/NoteScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SideDrawer from '../components/SideDrawer.js';
@@ -129,7 +130,7 @@ const SearchStack = StackNavigator({
     }),
   },
   SearchDetail: {
-    screen: RecipeDetailScreen,
+    screen: SearchDetailScreen,
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.title}`,
     }),
