@@ -20,6 +20,7 @@ class RecipeDetailScreen extends Component {
 
     this.state = {
       ingredients: this.props.navigation.state.params.ingredients,
+      notes: this.props.navigation.state.params.notes,
     };
   }
 
@@ -42,11 +43,21 @@ class RecipeDetailScreen extends Component {
   // Navigate to edit screen
   onEditPress = (note) => {
     const idToken = this.props.navigation.state.params.idToken;
-    this.props.navigation.navigate('EditNote', {note, idToken});
+    this.props.navigation.navigate('EditNote', {
+      note,
+      idToken,
+      // navigation.goBack() does not trigger a render in previous component.
+      // This function will trigger a render when called.
+      onGoBack: (notes) => this.updateNotes(notes),
+    });
+  };
+
+  updateNotes = (notes) => {
+    this.setState({notes});
   };
 
   render() {
-    const { title, thumbnail_url, image_url, notes } = this.props.navigation.state.params;
+    const { title, thumbnail_url, image_url } = this.props.navigation.state.params;
 
     return (
       <ScrollView>
@@ -76,9 +87,9 @@ class RecipeDetailScreen extends Component {
         </Card>
 
         <View>
-          { notes && <Text>Notes</Text>}
+          { this.state.notes && <Text>Notes</Text>}
 
-          { notes.map(note => {
+          { this.state.notes.map(note => {
               return (
                 <Card key={note.id}>
                   <Text>{note.text}</Text>

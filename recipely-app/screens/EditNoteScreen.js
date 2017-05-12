@@ -18,7 +18,7 @@ class EditNoteScreen extends Component {
   }
 
   onUpdatePress = () => {
-    const { note, idToken } = this.props.navigation.state.params;
+    const { note, idToken, onGoBack } = this.props.navigation.state.params;
 
     fetch(`https://jellyfiish-recipely.herokuapp.com/api/notes/${note.id}`, {
       method: 'PUT',
@@ -36,9 +36,14 @@ class EditNoteScreen extends Component {
         const otherNotes = this.props.screenProps.notes.filter(
           otherNote => otherNote.id !== note.id
         );
+        const recipeNotes = this.props.screenProps.notes.filter(
+          otherNote => otherNote.f2f_id === note.f2f_id && otherNote.id !== note.id
+        );
         this.props.screenProps.onNotesChange(
           [ newNote, ...otherNotes ]
         );
+        // Need to trigger a render in previous component.
+        onGoBack([ newNote, ...recipeNotes ]);
       })
       .then(() => this.props.navigation.goBack());
   };
