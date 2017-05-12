@@ -17,8 +17,9 @@ const NoteList = ({ navigation, notes }) => {
           return (
             <Card
               key={note.id}
+              title={note.title}
+              image={{uri: note.thumbnail_url}}
             >
-              <Text style={styles.publisherText}>{note.recipe_title}</Text>
               <Text style={styles.publisherText}>{note.text}</Text>
             </Card>
           );

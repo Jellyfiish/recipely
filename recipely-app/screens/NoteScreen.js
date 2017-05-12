@@ -11,14 +11,6 @@ class NoteScreen extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    fetch('https://jellyfiish-recipely.herokuapp.com/api/users/notes', {
-      method: 'GET'
-    })
-      .then(res => res.json())
-      .then(results => this.props.screenProps.onNotesChange(results.notes));
-  }
-
   render() {
     const { navigation, screenProps } = this.props;
 
