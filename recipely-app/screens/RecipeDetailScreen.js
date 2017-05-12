@@ -64,6 +64,26 @@ class RecipeDetailScreen extends Component {
     });
   }
 
+  // Delete note
+  onDeletePress = (note) => {
+    // Remove note from user's list of notes
+    this.props.screenProps.onNotesChange(
+      this.props.screenProps.notes.filter(otherNote => otherNote.id !== note.id)
+    );
+    // Show notes that are associated with this recipe except for the deleted one
+    this.setState({
+      notes: this.state.notes.filter(otherNote => otherNote.id !== note.id)
+    });
+    // Remove note from database
+    const { idToken } = this.props.navigation.state.params;
+    fetch(`https://jellyfiish-recipely.herokuapp.com/api/notes/${note.id}`, {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': `Bearer ${idToken}`,
+      },
+    });
+  };
+
   updateNotes = (notes) => {
     this.setState({notes});
   };
@@ -113,8 +133,12 @@ class RecipeDetailScreen extends Component {
                     <Button
                       title='Edit'
                       onPress={() => this.onEditPress(note)}
-                      />
-                    <MaterialIcons name="close" size={28} color="#aaa" />
+                    />
+
+                    <Button
+                      title='Delete'
+                      onPress={() => this.onDeletePress(note)}
+                    />
                   </View>
                 </Card>
               );
