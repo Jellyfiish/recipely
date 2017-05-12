@@ -1,5 +1,5 @@
 // TODO: RecipeList.js and ResultList.js share a lot of code. Maybe refactor to
-// use higher order components. 
+// use higher order components.
 import React from 'react';
 import {
   StyleSheet,
@@ -13,11 +13,16 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 // Navigation prop needs to be passed down because it does not get passed down
 // child components.
-const ResultList = ({ navigation, recipes }) => {
+const ResultList = ({ navigation, recipes, savedRecipes }) => {
   onLearnMore = (recipe) => {
     // When user presses on "Details" button, navigate them to a detail screen.
     // Pass down props that can be acessed using this.props.navigation.state.params
     navigation.navigate('SearchDetail', { ...recipe });
+  }
+
+  handleSaveRecipeButton = (recipe) => {
+    console.log(recipe.recipe_id);
+    console.log(recipe);
   }
 
   return (
@@ -35,7 +40,7 @@ const ResultList = ({ navigation, recipes }) => {
                   title='Details'
                   onPress={() => this.onLearnMore(recipe)}
                 />
-                <MaterialIcons name="add" size={28} color="#aaa" />
+                <MaterialIcons name="add" size={28} color="#aaa" onPress={() => this.handleSaveRecipeButton(recipe)} />
               </View>
             </Card>
           );
