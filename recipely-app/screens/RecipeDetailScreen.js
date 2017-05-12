@@ -52,6 +52,18 @@ class RecipeDetailScreen extends Component {
     });
   };
 
+  // Navigate to add note screen
+  onAddPress = () => {
+    const { idToken, title, f2f_id, thumbnail_url } = this.props.navigation.state.params;
+    this.props.navigation.navigate('AddNote', {
+      idToken,
+      title,
+      f2f_id,
+      thumbnail_url,
+      onGoBack: (notes) => this.updateNotes(notes),
+    });
+  }
+
   updateNotes = (notes) => {
     this.setState({notes});
   };
@@ -87,7 +99,11 @@ class RecipeDetailScreen extends Component {
         </Card>
 
         <View>
-          { this.state.notes && <Text>Notes</Text>}
+          <Text>Notes</Text>
+          <Button
+            title="Add"
+            onPress={() => this.onAddPress()}
+          />
 
           { this.state.notes.map(note => {
               return (

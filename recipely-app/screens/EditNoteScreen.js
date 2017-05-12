@@ -57,6 +57,7 @@ class EditNoteScreen extends Component {
     return (
       <ScrollView>
         <TextInput
+          autoFocus={true}
           multiline={true}
           onChangeText={text => {
             this.setState({text});
