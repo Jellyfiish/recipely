@@ -35,7 +35,7 @@ class RecipeDetailScreen extends Component {
         >
           <View>
             <Text style={styles.ingredientText}>Ingredients</Text>
-            <IngredientList ingredients={ingredients.split(',')}
+            <IngredientList ingredients={ingredients}
             />
           </View>
 
