@@ -15,6 +15,7 @@ import PhotoResultScreen from '../screens/PhotoResultScreen';
 import RecipeScreen from '../screens/RecipeScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import EditNoteScreen from '../screens/EditNoteScreen';
+import AddNoteScreen from '../screens/AddNoteScreen';
 import PopularScreen from '../screens/PopularScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
@@ -82,7 +83,13 @@ const RecipeStack = StackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: 'Edit Note',
     }),
-  }
+  },
+  AddNote: {
+    screen: AddNoteScreen,
+    navigationOptions: ({navigation }) => ({
+      title: `Add Note: ${navigation.state.params.title}`
+    }),
+  },
 }, {
   cardStyle: {
     paddingTop: Constants.statusBarHeight,
