@@ -26,37 +26,37 @@ class App extends Component {
         {
           text: 'sample test note for Iced Coffee',
           recipe_title: 'Iced Coffee',
-          id: 1
+          f2f_id: 1
         },
         {
           text: 'sample test note for Jalapeno Popper Grilled Cheese Sandwich',
           recipe_title: 'Jalapeno Popper Grilled Cheese Sandwich',
-          id: 2
+          f2f_id: 2
         },
         {
           text: 'sample test note for Crash Hot Potatoes',
           recipe_title: 'Crash Hot Potatoes',
-          id: 3
+          f2f_id: 3
         },
         {
           text: 'sample test note for Stovetop Avocado Mac and Cheese',
           recipe_title: 'Stovetop Avocado Mac and Cheese',
-          id: 4
+          f2f_id: 4
         },
         {
           text: 'sample test note for Cinnamon Rolls',
           recipe_title: 'Cinnamon Rolls',
-          id: 5
+          f2f_id: 5
         },
         {
           text: 'sample test note for Parmesan Roasted Potatoes',
           recipe_title: 'Parmesan Roasted Potatoes',
-          id: 6
+          f2f_id: 6
         },
         {
           text: 'sample test note for Chocolate Cake',
           recipe_title: 'Chocolate Cake',
-          id: 7
+          f2f_id: 7
         },
       ]
     };
@@ -69,19 +69,32 @@ class App extends Component {
         this.setState({isLoggedIn: true});
         this.setIdToken(idToken);
         // Fetch user's recipes
-        fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes', {
+        const fetchRecipes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes', {
           headers: {
             'x-access-token': `Bearer ${this.state.idToken}`
           }
         }).then(res => {
             if (res.status === 200) {
               res.json()
-                .then(recipes => this.onRecipesChange(recipes))
-                .then(() => this.setState({isAppReady: true}));
-            } else {
-              this.setState({isAppReady: true})
+                .then(recipes => this.onRecipesChange(recipes));
             }
         });
+
+        // Fetch user's notes
+        const fetchNotes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/notes', {
+          headers: {
+            'x-access-token': `Bearer ${this.state.idToken}`
+          }
+        }).then(res => {
+            if (res.status === 200) {
+              res.json()
+                .then(notes => this.onNotesChange(notes));
+            }
+        });
+
+        // App is ready when the user's recipes and notes have been fetched.
+        Promise.all([fetchRecipes, fetchNotes])
+          .then(() => this.setState({isAppReady: true}));
       } else {
         this.setState({isAppReady: true});
       }
@@ -133,6 +146,10 @@ class App extends Component {
     this.setState({isLoggedIn: !this.state.isLoggedIn});
   }
 
+  onNotesChange = (notes) => {
+    this.setState({notes});
+  };
+
   render() {
     return (
       <StartupStack
@@ -154,6 +171,7 @@ class App extends Component {
             onSearchChange: this.onSearchChange,
             onIngredientChange: this.onIngredientChange,
             onLoginChange: this.onLoginChange,
+            onNotesChange: this.onNotesChange,
           }
         }
       />
