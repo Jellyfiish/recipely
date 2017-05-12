@@ -13,7 +13,15 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 // Navigation prop needs to be passed down because it does not get passed down
 // child components.
-const ResultList = ({ navigation, recipes, savedRecipes, idToken, onRecipesChange }) => {
+const ResultList = ({
+  navigation,
+  recipes,
+  savedRecipes,
+  idToken,
+  query,
+  onRecipesChange,
+  onSearchChange
+}) => {
   onLearnMore = (recipe) => {
     // When user presses on "Details" button, navigate them to a detail screen.
     // Pass down props that can be acessed using this.props.navigation.state.params
@@ -25,6 +33,8 @@ const ResultList = ({ navigation, recipes, savedRecipes, idToken, onRecipesChang
     const isSaved = savedRecipes.find(recipe => recipe.f2f_id === id);
     // Only add recipe if it has not been saved yet
     if (!isSaved) {
+      // Remove recipe from search so user knows it was saved
+      removeRecipeFromSearch(recipe);
       // Making get request to get details of recipe so that it can be added to database
       let recipeObj = await
         fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${id}`)
@@ -47,6 +57,11 @@ const ResultList = ({ navigation, recipes, savedRecipes, idToken, onRecipesChang
         body: JSON.stringify(recipeObj),
       });
     }
+  };
+
+  removeRecipeFromSearch = (recipe) => {
+    const newResults = recipes.filter(otherRecipe => otherRecipe.recipe_id !== recipe.recipe_id);
+    onSearchChange(query, newResults);
   };
 
   return (
