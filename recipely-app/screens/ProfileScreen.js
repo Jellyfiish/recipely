@@ -36,6 +36,9 @@ class ProfileScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Text>You have</Text>
+        <Text>{this.props.screenProps.notes.length} notes</Text>
+        <Text>{this.props.screenProps.recipes.length} saved recipes</Text>
         <Button
           title="Logout"
           onPress={this.onLogoutPress}
