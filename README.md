@@ -19,6 +19,7 @@
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
     1. [Installing Postgres](#installing-postgres)
+    1. [Configuring Environment Variables](#configuring-environment-variables)
 1. [Contributing](#contributing)
     1. [Roadmap](#roadmap)
 
@@ -36,11 +37,13 @@
   * Bcrypt - encryption and decryption
   * Bluebird - promises
   * Express - server framework
+  * Food2Fork API - recipe database
   * JWT - validation tokens
   * Morgan - traffic logging
   * Postgres/pg - data persistance
 * Client Side
   * Base64 - decoding
+  * Clarifai API - image analysis
   * Expo - mobile app bundling/development
   * React-native - frontend framework
   * React-navigation - mobile screen navigation
@@ -49,7 +52,7 @@
 
 
 ### Login & Signup
-* `POST /api/signup`
+* ### `POST /api/signup`
 
  Add and authenticate a new user. Pass the user's name and password in the body of the request:
 ```JSON
@@ -66,13 +69,13 @@
 
  **Note: tokens will expire after 7 days.**
 
-* `POST /api/login`
+* ### `POST /api/login`
 
  Login an existing user. Pass the username and password in the body of the request, exactly as above. Will return a fresh token string if successful.
 
 
 ### Recipes From The Web
-* `GET /api/recipes`
+* ### `GET /api/recipes`
 
  Fetch a list of recipes from the [Food2Fork](http://food2fork.com/) database. Optionally, you may search by ingredients by adding them as a comma separated string in the query string.
 
@@ -82,7 +85,7 @@
 
  **Note: recipe objects do not contain the recipe ingredients. Please use the following endpoint to retrieve ingredients. Refer to the [Food2Fork documentation](http://food2fork.com/about/api) for more information.**
 
-* `GET /api/recipes/:id`
+* ### `GET /api/recipes/:id`
 
  Fetch the details (including the ingredients) of a single recipe from the Food2Fork database. The recipe id can be obtained from the results of the above endpoint or from the Food2Fork website, and must be passed in the request url:
 
@@ -92,7 +95,7 @@
 ### Saved Recipes
 These are protected endpoints requiring a valid JSON web token. See the [Signup & Login](#login-signup) section for how to obtain and pass tokens.
 
-* `GET /api/users/recipes`
+* ### `GET /api/users/recipes`
 
  Fetch the user's saved/favorited recipes. No data must be passed other than the JSON web token. Returns an array of all recipes that the user has saved. Recipe objects contain the recipe id (under the `f2f_id` key), title, ingredients, source url, thumbnail url, and the number of recipely users who have saved that recipe.
 
@@ -127,7 +130,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
   ]
  ```
 
-* `POST /api/users/recipes`
+* ### `POST /api/users/recipes`
 
  Add a new recipe to the user's list of saved recipes. Recipe details must be passed in the body of the request.
 
@@ -149,7 +152,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
   }
  ```
 
-* `DELETE /api/users/recipes/:id`
+* ### `DELETE /api/users/recipes/:id`
 
  Remove a recipe from the user's list of saved recipes. The recipe/Food2Fork id must be passed in the request url.
 
@@ -161,7 +164,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
 ### Notes
 These are protected endpoints requiring a valid JSON web token. See the [Signup & Login](#login-signup) section for how to obtain and pass tokens.
 
-* `GET /api/users/notes`
+* ### `GET /api/users/notes`
 
  Fetch all notes for all recipes in the user's list of saved recipes. No data other than the JSON web token header is required. Returns an array of note objects. Each note object contains the note text, user id, recipe/Food2Fork id, note id, recipe title, and a thumbnail url.
 
@@ -187,7 +190,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
   ]
  ```
 
-* `GET /api/users/recipes/:id/notes`
+* ### `GET /api/users/recipes/:id/notes`
 
  Fetch all notes for a specific recipe in the user's list of saved recipes. The recipe id must be passed in the request url.
 
@@ -195,7 +198,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
 
  Returns an array of note objects similar to the above endpoint.
 
-* `POST /api/users/recipes/notes`
+* ### `POST /api/users/recipes/notes`
 
  Add a new note to a specific recipe in the user's list of saved recipes. The recipe/Food2Fork id and note text must be passed in the body of the request.
 
@@ -209,7 +212,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
 
  Returns the added note object.
 
-* `PUT /api/notes/:id`
+* ### `PUT /api/notes/:id`
 
  Modify an existing note. The note id must be passed in the request url, and the note text must be passed in the body of the request.
 
@@ -224,7 +227,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
 
  Returns the modified text.
 
-* `DELETE /api/notes/:id`
+* ### `DELETE /api/notes/:id`
 
  Remove a specific note. The note id must be passed in the request url, as in the above endpoint. Returns the deleted note object.
 
@@ -232,11 +235,11 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
 ### Users
 These are protected endpoints requiring a valid JSON web token. See the [Signup & Login](#login-signup) section for how to obtain and pass tokens.
 
-* `GET /api/users`
+* ### `GET /api/users`
 
  Fetch a list of all usernames in the database. Returns an array of strings containing every username.
 
-* `PUT /api/users`
+* ### `PUT /api/users`
 
  Modify the current user's username and/or password. Must pass the new username and/or the new password in the request body. You may choose to pass only the password, only the username, or both.
 
@@ -250,7 +253,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
 
  Returns an object containing all updated properties.
 
-* `DELETE /api/users`
+* ### `DELETE /api/users`
 
  Remove an existing user. No data other than the JSON web token header is required.
 
@@ -271,6 +274,23 @@ Repeat from inside the recipely/recipely-app directory.
 
 TODO: Add section.
 
+### Configuring Environment Variables
+
+* Client side
+
+ 1. Make a new file `config.js` in the `/recipely/recipely-app/config` directory using the existing `config.example.js` file as a template.
+
+ 1. Replace the `CLIENT_ID` and `CLIENT_SECRET` variables with your own [Clarifai API](https://www.clarifai.com/api) keys.
+
+* Server side
+
+ 1. Make a new file `config.js` in the `/recipely/recipely-server/config` directory using the existing `config.example.js` file as a template.
+
+ 1. Replace the `F2F_API_KEY` variable with your own [Food2Fork API](http://food2fork.com/about/api) key.
+
+ 1. Replace the `DATABASE_URL` variable with the path to your local Postgres server (e.g. `postgres://user:password@localhost:5432/mydatabasefile`).
+
+ 1. Replace the `TOKEN_SECRET` variable with your own secret phrase. This will be used to encode JSON web tokens.
 
 ## Contributing
 

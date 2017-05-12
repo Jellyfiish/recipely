@@ -11,7 +11,6 @@ function encodeToken(userId, username, callback) {
     sub: userId,
     user: username
   };
-  
   callback(null, jwt.encode(payload, secretKey));
 }
 
