@@ -23,7 +23,7 @@ class SearchResultScreen extends Component {
   }
 
   render() {
-    const { searchResults } = this.props.screenProps;
+    const { searchResults, idToken, onRecipesChange, recipes: savedRecipes } = this.props.screenProps;
     const { query } = this.props.navigation.state.params;
     const { navigation } = this.props;
 
@@ -38,6 +38,9 @@ class SearchResultScreen extends Component {
           ? <ResultList
               navigation={navigation}
               recipes={recipes}
+              savedRecipes={savedRecipes}
+              idToken={idToken}
+              onRecipesChange={onRecipesChange}
             />
           : <View>
               <Text>Loading recipes</Text>

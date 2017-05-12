@@ -132,7 +132,7 @@ class App extends Component {
             onSearchChange: this.onSearchChange,
             onIngredientChange: this.onIngredientChange,
             onLoginChange: this.onLoginChange,
-            onNotesChange: this.onNotesChange,
+            onNotesChange: this.onNotesChange
           }
         }
       />
