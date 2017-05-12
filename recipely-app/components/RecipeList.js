@@ -13,12 +13,12 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 // Navigation prop needs to be passed down because it does not get passed down
 // child components.
-const RecipeList = ({ navigation, recipes, notes }) => {
+const RecipeList = ({ navigation, recipes, notes, idToken }) => {
   onLearnMore = (recipe) => {
     // When user presses on "Details" button, navigate them to a detail screen.
     // Pass down props that can be acessed using this.props.navigation.state.params
     const recipeNotes = notes.filter(note => note.f2f_id === recipe.f2f_id);
-    navigation.navigate('Details', { ...recipe, notes: recipeNotes });
+    navigation.navigate('Details', { ...recipe, notes: recipeNotes, idToken });
   }
 
   return (

@@ -117,6 +117,7 @@ class App extends Component {
           {
             isAppReady: this.state.isAppReady,
             isLoggedIn: this.state.isLoggedIn,
+            idToken: this.state.idToken,
             user: this.state.user,
             recipes: this.state.recipes,
             image: this.state.image,

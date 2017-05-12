@@ -41,7 +41,8 @@ class RecipeDetailScreen extends Component {
 
   // Navigate to edit screen
   onEditPress = (note) => {
-    this.props.navigation.navigate('EditNote', {note});
+    const idToken = this.props.navigation.state.params.idToken;
+    this.props.navigation.navigate('EditNote', {note, idToken});
   };
 
   render() {
