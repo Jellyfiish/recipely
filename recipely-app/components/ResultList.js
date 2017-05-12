@@ -25,12 +25,6 @@ const ResultList = ({ navigation, recipes, idToken }) => {
     let recipeObj = await fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${recipe.recipe_id}`);
     recipeObj = JSON.parse(recipeObj._bodyInit).recipe;
     recipeObj.f2f_id = recipeObj.recipe_id;
-    // console.log('recipeObj: ', recipeObj);
-    // console.log('title: ', recipeObj.title);
-    // console.log('image_url: ', recipeObj.image_url);
-    // console.log('source_url: ', recipeObj.source_url);
-    // console.log('f2f_id: ', recipeObj.f2f_id);
-    // console.log('ingredients: ', recipeObj.ingredients);
     fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes/', {
       headers: {
         'Content-Type': 'application/json',
