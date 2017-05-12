@@ -21,10 +21,14 @@ const ResultList = ({ navigation, recipes, idToken }) => {
   }
 
   handleSaveRecipeButton = async (recipe) => {
+    // Pushing the recipe to recipes array in the form its received from f2f api which will trigger re-render as well
     recipes.push(recipe);
+    // Making get request to get details of recipe so that it can be added to database
     let recipeObj = await fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${recipe.recipe_id}`);
     recipeObj = JSON.parse(recipeObj._bodyInit).recipe;
+    // Adding f2f_id to make it compliant with enpoint for post request
     recipeObj.f2f_id = recipeObj.recipe_id;
+    // with request body have required data in it, make the post request to add recipe to database
     fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes/', {
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +36,7 @@ const ResultList = ({ navigation, recipes, idToken }) => {
       },
       method: 'POST',
       body: JSON.stringify(recipeObj),
-    })
+    });
   }
 
   return (
