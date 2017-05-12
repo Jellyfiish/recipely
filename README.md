@@ -2,13 +2,14 @@
 
 ## Team
 
-  - __Product Owner__: Ilke Akcay
-  - __Scrum Master__: Mark Schleske
-  - __Development Team Members__: John Cheng, Obay Mardini
+  - __Product Owner__: [Ilke Akcay](https://github.com/akcays)
+  - __Scrum Master__: [Mark Schleske](https://github.com/mschlesk)
+  - __Development Team Members__: [John Cheng](https://github.com/gzeegz), [Obay Mardini](https://github.com/obay-mardini)
 
 ## Table of Contents
 
 1. [Requirements](#requirements)
+1. [Technologies Used](#technologies-used)
 1. [API Usage](#api-usage)
     1. [Login & Signup](#login-signup)
     1. [Recipes From The Web](#recipes-from-the-web)
@@ -17,17 +18,32 @@
     1. [Users](#users)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
-1. [Team](#team)
+    1. [Installing Postgres](#installing-postgres)
 1. [Contributing](#contributing)
+    1. [Roadmap](#roadmap)
 
 ## Requirements
 
 - Node 6.x
 - Postgresql 9.5.x
 - Expo 16.0.0
-- etc
 
+
+## Technologies Used
+
+* Server Side
+  * Axios - requests
+  * Bcrypt - encryption and decryption
+  * Bluebird - promises
+  * Express - server framework
+  * JWT - validation tokens
+  * Morgan - traffic logging
+  * Postgres/pg - data persistance
+* Client Side
+  * Base64 - decoding
+  * Expo - mobile app bundling/development
+  * React-native - frontend framework
+  * React-navigation - mobile screen navigation
 
 ## API Usage
 
@@ -243,19 +259,23 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
 
 ### Installing Dependencies
 
-From within the root directory:
+From within the recipely/recipely-server directory:
 
 ```sh
-sudo npm install -g bower
 npm install
-bower install
 ```
 
-### Roadmap
+Repeat from inside the recipely/recipely-app directory.
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+### Installing Postgres
+
+TODO: Add section.
 
 
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+### Roadmap
+
+View the project roadmap [here](https://github.com/Jellyfiish/recipely/issues)
