@@ -41,29 +41,6 @@ const TabBarIcon = (name) => ({ tintColor }) => (
   <MaterialIcons name={name} size={24} color={tintColor} />
 );
 
-const PhotoStack = StackNavigator({
-  Photos: {
-    screen: PhotoScreen,
-    // Can set the navigationOptions here or in the screen itself.
-    // Options here override navigationOptions in the screen.
-    navigationOptions: ({ navigation }) => ({
-      title: 'Take photo',
-      headerLeft: MenuIcon(navigation),
-    }),
-  },
-  PhotoResult: {
-    screen: PhotoResultScreen,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Photo Result',
-    }),
-  },
-}, {
-  cardStyle: {
-    // Push card down so that the status bar does not overlap content.
-    paddingTop: Constants.statusBarHeight,
-  }
-});
-
 const RecipeStack = StackNavigator({
   Recipes: {
     screen: RecipeScreen,
