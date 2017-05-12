@@ -3,7 +3,8 @@ var db = require('./database');
 
 var isAuthenticated = (req, res, next) => {
   if(!req.header('x-access-token')) {
-    res.status(422).end('please log in!')
+    res.status(400).end('please log in!');
+    return;
   }
 
   const token = req.header('x-access-token').split(' ')[1];
