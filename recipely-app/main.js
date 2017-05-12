@@ -1,7 +1,8 @@
 import Expo from 'expo';
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, View, Text, Button } from 'react-native';
+import { AsyncStorage, StyleSheet, ActivityIndicator, View, Text, Button } from 'react-native';
 import StartupStack from './navigation/routes';
+import jwtDecode from 'jwt-decode';
 
 class App extends Component {
   constructor(props) {
@@ -10,6 +11,8 @@ class App extends Component {
     this.state = {
       isAppReady: false,
       isLoggedIn: false,
+      idToken: null,
+      user: { username: null, userId: null },
       recipes: [],
       image: null,
       predictions: [],
@@ -59,17 +62,43 @@ class App extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   const login = () => this.setState({isLoggedIn: true});
-  //   setTimeout(login.bind(this), 2000);
-  // }
-
   componentDidMount() {
-    fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
-      .then(res => res.json())
-      .then(results => this.onRecipesChange(results.recipes))
-      .then(() => this.setState({isAppReady: true}));
+    AsyncStorage.getItem('id_token', (error, idToken) => {
+      // Check if the user is still logged in
+      if (idToken !== null) {
+        this.setState({isLoggedIn: true});
+        this.setIdToken(idToken);
+        // Fetch user's recipes
+        fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes?q=')
+          .then(res => res.json())
+          .then(results => this.onRecipesChange(results.recipes))
+          .then(() => {
+            this.setState({isAppReady: true})
+          });
+      } else {
+        this.setState({isAppReady: true});
+      }
+    });
   }
+
+  setIdToken = (idToken) => {
+    if (idToken === null) {
+      this.setState({
+        idToken: null,
+        user: { username: null, userId: null }
+      });
+    } else {
+      // Set token and user information
+      const decoded = jwtDecode(idToken);
+      this.setState({
+        idToken,
+        user: {
+          username: decoded.user,
+          userId: decoded.sub
+        }
+      });
+    }
+  };
 
   onRecipesChange = (recipes) => {
     this.setState({recipes});
@@ -104,12 +133,14 @@ class App extends Component {
           {
             isAppReady: this.state.isAppReady,
             isLoggedIn: this.state.isLoggedIn,
+            user: this.state.user,
             recipes: this.state.recipes,
             image: this.state.image,
             predictions: this.state.predictions,
             searchResults: this.state.searchResults,
             ingredients: this.state.ingredients,
             notes: this.state.notes,
+            setIdToken: this.setIdToken,
             onRecipesChange: this.onRecipesChange,
             onImageChange: this.onImageChange,
             onPredictionsChange: this.onPredictionsChange,

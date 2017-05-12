@@ -18,6 +18,7 @@ import PopularScreen from '../screens/PopularScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
 import NoteScreen from '../screens/NoteScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import SideDrawer from '../components/SideDrawer.js';
 
 const MenuIcon = (navigation) => (
@@ -138,6 +139,20 @@ const SearchStack = StackNavigator({
   }
 });
 
+const ProfileStack = StackNavigator({
+  ProfileHome: {
+    screen: ProfileScreen,
+    navigationOptions: ({ screenProps, navigation }) => ({
+      title: `${screenProps.user.username}'s profile`,
+      headerLeft: MenuIcon(navigation),
+    }),
+  }
+}, {
+  cardStyle: {
+    paddingTop: Constants.statusBarHeight,
+  }
+});
+
 const MainDrawerNavigator = DrawerNavigator({
   Photo: {
     screen: PhotoStack,
@@ -168,6 +183,13 @@ const MainDrawerNavigator = DrawerNavigator({
       drawerIcon: DrawerIcon('note'),
     }),
   },
+  Profile: {
+    screen: ProfileStack,
+    navigationOptions: ({navigation}) => ({
+      drawerLabel: 'Profile',
+      drawerIcon: DrawerIcon('account-circle'),
+    }),
+  },
 }, {
   // Custom side menu. See '../components/SideDrawer.js'.
   contentComponent: props => SideDrawer(props),
@@ -177,7 +199,11 @@ const StartupStack = StackNavigator(
   {
     SplashScreen: { screen: SplashScreen },
     AuthScreen: { screen: AuthScreen },
-    MainDrawerNavigator: { screen: MainDrawerNavigator },
+    MainDrawerNavigator: {
+      screen: ({ screenProps, navigation }) => (
+        <MainDrawerNavigator screenProps={{ ...screenProps, rootNavigation: navigation }} />
+      )
+    },
   },
   {
     navigationOptions: {
