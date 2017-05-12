@@ -43,11 +43,16 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
   const f2f_id = req.body.f2f_id;
   const ingredients = req.body.ingredients;
 
+  // check if recipe already exists in the database
   db.queryAsync(`SELECT saved_count FROM recipes WHERE f2f_id = $1`, [f2f_id])
     .then((results)=> {
-      if(!results.rows.length) {
-        db.queryAsync('INSERT INTO recipes (title, thumbnail_url, source_url, ingredients, f2f_id, saved_count) VALUES ($1, $2, $3, $4, $5, $6)', [title, image_url, source_url,ingredients ,f2f_id, 1])
+      if(!results.rows.length) {  // if recipe does not exist
+        // stringify ingredients array for storage in database
+        var stringIngredients = JSON.stringify(ingredients);
+        // insert new recipe with save count of 1
+        db.queryAsync('INSERT INTO recipes (title, thumbnail_url, source_url, ingredients, f2f_id, saved_count) VALUES ($1, $2, $3, $4, $5, $6)', [title, image_url, source_url, stringIngredients, f2f_id, 1])
           .then(results => {
+            // insert user and recipe into the junction table
             db.queryAsync("INSERT INTO recipes_users (user_id, f2f_id) VALUES ($1, $2)", [userId, f2f_id])
               .then( results => {
                 res.status(201).json(req.body);
@@ -59,10 +64,12 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
           .catch(err => {
             res.status(501).json(err);
           });
-      } else {
-        const savedCount = results.rows[0].saved_count;
+      } else {  // recipe already exists in the database
+        // increment saved count
         db.queryAsync('UPDATE recipes SET saved_count=saved_count+1 where f2f_id=$1 RETURNING *', [f2f_id])
         .then(recipe => {
+          // insert user and recipe into the junction table
+          // THIS PROBABLY DUPLICATES
           db.queryAsync("INSERT INTO recipes_users (user_id, f2f_id) VALUES ($1, $2)", [userId, f2f_id])
             .then( results => {
               res.status(200).json(recipe.rows[0]);
@@ -84,6 +91,7 @@ app.post('/api/users/recipes', isAuthenticated,(req, res) => {
 
 app.get('/api/users/recipes', isAuthenticated, (req, res) => {
   const userId = req.body.issuer;
+
   db.queryAsync('SELECT r.f2f_id, r.title, r.ingredients, r.source_url,\
      r.thumbnail_url, r.saved_count FROM recipes AS r JOIN recipes_users ON\
       recipes_users.user_id=$1 AND recipes_users.f2f_id = r.f2f_id', [userId])
@@ -91,6 +99,10 @@ app.get('/api/users/recipes', isAuthenticated, (req, res) => {
       if(!results.rows.length) {
         res.status(400).end('No saved recipes found!')
       } else {
+        // parse ingredients string into an array so clientside only has to json parse once
+        results.rows.forEach((recipe) => {
+          recipe.ingredients = JSON.parse(recipe.ingredients);
+        });
         res.status(200).json(results.rows);
       }
     })
@@ -118,6 +130,7 @@ app.delete('/api/users/recipes/:recipeId', isAuthenticated, (req, res) => {
 // auth endpoints
 app.post('/api/login', (req, res) => {
   const body = req.body;
+  // QUESTION: We might want to do a toLowerCase on body.username and also when whenever we store a username (put username/signup) unless we care about username being case sensitive.
   db.queryAsync('SELECT * from users where username = $1', [body.username])
     .then((results)=> {
       if(results.rows.length) {

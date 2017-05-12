@@ -1,7 +1,7 @@
--- DROP TABLE IF EXISTS notes CASCADE;
--- DROP TABLE IF EXISTS recipes_users CASCADE;
--- DROP TABLE IF EXISTS recipes CASCADE;
--- DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS notes CASCADE;
+DROP TABLE IF EXISTS recipes_users CASCADE;
+DROP TABLE IF EXISTS recipes CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE IF NOT EXISTS users(
   ID SERIAL PRIMARY KEY,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS recipes(
   f2f_id varchar(40) PRIMARY KEY,
   title VARCHAR(40) NOT NULL,
-  ingredients VARCHAR(255) NOT NULL,
+  ingredients TEXT NOT NULL,
   source_url VARCHAR(255) NOT NULL,
   thumbnail_url VARCHAR(255) NOT NULL,
   saved_count INTEGER NOT NULL
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS notes(
   f2f_id VARCHAR(40) REFERENCES recipes (f2f_id) NOT NULL
 );
 
-TRUNCATE TABLE users, recipes_users, notes, recipes;
+-- TRUNCATE TABLE users, recipes_users, notes, recipes;
 
 -- users
 -- All user passwords are '1234'
@@ -43,11 +43,12 @@ INSERT INTO users (username, password) VALUES
 
 -- recipes
 INSERT INTO recipes (f2f_id, title, ingredients, source_url, thumbnail_url, saved_count) VALUES
-  ('35169', 'Buffalo Chicken Chowder', '2 tablespoons butter,1 pound chicken cut into bite sized pieces,1 onion diced,2 carrots diced,2 stalks celery diced
-', 'http://www.closetcooking.com/2011/11/buffalo-chicken-chowder.html', 'http://static.food2fork.com/Buffalo2BChicken2BChowder2B5002B0075c131caa8.jpg', 3),
-  ('367438', 'How to Make Peepshi = Peeps Sushi', '6 Peeps per roll,1 Peep per handroll,1 Peep per nigiri,1 box of Rice Krispies Treats,1 box of Fruit by the Foot', 'http://www.seriouseats.com/recipes/2010/03/peeps-recipes-how-to-make-peepshi-sushi-rice-krispies-treats-easter.html', 'http://static.food2fork.com/22100331peepshiprimarydb4a.jpg', 1),
-  ('48136', 'Sesame Almond Brown Rice Balls', '2 cups / 14 oz / 400 g brown sushi rice (stubby, short grains),3 cups / 710 ml water,1/2 teaspoon fine grain sea salt,1/4 cup / 1.5 oz / 45 g sesame seeds (white/black mix)', 'http://www.101cookbooks.com/archives/sesame-almond-brown-rice-balls-recipe.html', 'http://static.food2fork.com/brown_rice_ballscf4e.jpg', 2),
-  ('48364', 'Vietnamese Pho: Beef Noodle Soup Recipe', '2 onions, halved,4" nub of ginger, halved lengthwise,5-6 lbs of good beef bones, preferably leg and knuckle,1 lb of beef meat - chuck, brisket, rump, cut into large slices [optional],6 quarts of water', 'http://www.steamykitchen.com/271-vietnamese-beef-noodle-soup-pho.html', 'http://static.food2fork.com/vietnamesephorecipe2200x150b8fd.jpg', 1);
+  ('35169', 'Buffalo Chicken Chowder', '["2 tablespoons butter","1 pound chicken, cut into bite sized pieces","1 onion, diced","2 carrots, diced","2 stalks celery, diced","2 cloves garlic, chopped","1/4 cup flour (rice flour for gluten free)","3 cups chicken stock","hot sauce to taste (I used 1/4 cup Franks Red Hot sauce)","1 large yukon gold or other boiling potato, peeled and cut into bite sized pieces","salt and pepper to taste","1 cup heavy cream","1/4 cup blue cheese, crumbled\\n"]', 'http://www.closetcooking.com/2011/11/buffalo-chicken-chowder.html', 'http://static.food2fork.com/Buffalo2BChicken2BChowder2B5002B0075c131caa8.jpg', 3),
+  ('367438', 'How to Make Peepshi = Peeps Sushi', '["6 Peeps per roll, 1 Peep per handroll, 1 Peep per nigiri","1 box of Rice Krispies Treats","1 box of Fruit by the Foot"]', 'http://www.seriouseats.com/recipes/2010/03/peeps-recipes-how-to-make-peepshi-sushi-rice-krispies-treats-easter.html', 'http://static.food2fork.com/22100331peepshiprimarydb4a.jpg', 1),
+  ('48136', 'Sesame Almond Brown Rice Balls', E'["2 cups / 14 oz / 400 g brown sushi rice (stubby, short grains)","3 cups / 710 ml water","1/2 teaspoon fine grain sea salt","1/4 cup / 1.5 oz / 45 g sesame seeds (white/black mix)","3 tablespoons toasted almond slices/slivers, chopped","1/4 cup / 4 tablespoons minced green onions","Optional: things to tuck in the middle: avocado cubes (toss in lemon juice first), tofu, etc."]', 'http://www.101cookbooks.com/archives/sesame-almond-brown-rice-balls-recipe.html', 'http://static.food2fork.com/brown_rice_ballscf4e.jpg', 2),
+  ('48364', 'Vietnamese Pho: Beef Noodle Soup Recipe', E'["THE BROTH","2 onions, halved","4\\" nub of ginger, halved lengthwise","5-6 lbs of good beef bones, preferably leg and knuckle","1 lb of beef meat - chuck, brisket, rump, cut into large slices [optional]","6 quarts of water","1 package of Pho Spices [1 cinnamon stick, 1 tbl coriander seeds, 1 tbl fennel seeds, 5 whole star anise, 1 cardamom pod, 6 whole cloves - in mesh bag]","1 1/2 tablespoons kosher salt (halve if using regular table salt)","1/4 cup fish sauce","1 inch chunk of yellow rock sugar (about 1 oz) - or 1oz of regular sugar","THE BOWLS","2 lbs rice noodles (dried or fresh)","cooked beef from the broth","1/2 lb flank, london broil, sirloin or eye of round, sliced as thin as possible.","big handful of each: mint, cilantro, basil","2 limes, cut into wedges","2-3 chili peppers, sliced","2 big handfuls of bean sprouts","Hoisin sauce","Sriracha hot sauce"]', 'http://www.steamykitchen.com/271-vietnamese-beef-noodle-soup-pho.html', 'http://static.food2fork.com/vietnamesephorecipe2200x150b8fd.jpg', 1);
+
+
 
 -- recipes_users
 INSERT INTO recipes_users (user_id, f2f_id) VALUES
