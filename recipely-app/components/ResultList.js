@@ -13,7 +13,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 // Navigation prop needs to be passed down because it does not get passed down
 // child components.
-const ResultList = ({ navigation, recipes, idToken }) => {
+const ResultList = ({ navigation, recipes, savedRecipes, idToken, onRecipesChange }) => {
   onLearnMore = (recipe) => {
     // When user presses on "Details" button, navigate them to a detail screen.
     // Pass down props that can be acessed using this.props.navigation.state.params
@@ -21,22 +21,26 @@ const ResultList = ({ navigation, recipes, idToken }) => {
   }
 
   handleSaveRecipeButton = async (recipe) => {
-    // Pushing the recipe to recipes array in the form its received from f2f api which will trigger re-render as well
-    recipes.push(recipe);
-    // Making get request to get details of recipe so that it can be added to database
-    let recipeObj = await fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${recipe.recipe_id}`);
-    recipeObj = JSON.parse(recipeObj._bodyInit).recipe;
-    // Adding f2f_id to make it compliant with enpoint for post request
-    recipeObj.f2f_id = recipeObj.recipe_id;
-    // with request body have required data in it, make the post request to add recipe to database
-    fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes/', {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-access-token': `Bearer ${idToken}`,
-      },
-      method: 'POST',
-      body: JSON.stringify(recipeObj),
-    });
+    const id = recipe.recipe_id;
+    const isSaved = savedRecipes.find(recipe => recipe.f2f_id === id);
+    console.log('isSaved: ', isSaved);
+    if (!isSaved) {
+      onRecipesChange([ ...savedRecipes, recipe]);
+      // Making get request to get details of recipe so that it can be added to database
+      let recipeObj = await fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${id}`);
+      recipeObj = await recipeObj.json();
+      recipeObj = recipeObj.recipe;
+      recipeObj.f2f_id = recipeObj.recipe_id;
+      // with request body have required data in it, make the post request to add recipe to database
+      fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes/', {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': `Bearer ${idToken}`,
+        },
+        method: 'POST',
+        body: JSON.stringify(recipeObj),
+      });
+    }
   }
 
   return (

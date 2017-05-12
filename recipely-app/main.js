@@ -110,10 +110,6 @@ class App extends Component {
     this.setState({notes});
   };
 
-  onSavedRecipeChange = (savedRecipes) => {
-    this.setState({savedRecipes});
-  }
-
   render() {
     return (
       <StartupStack
@@ -136,8 +132,7 @@ class App extends Component {
             onSearchChange: this.onSearchChange,
             onIngredientChange: this.onIngredientChange,
             onLoginChange: this.onLoginChange,
-            onNotesChange: this.onNotesChange,
-            onSavedRecipeChange: this.onSavedRecipeChange
+            onNotesChange: this.onNotesChange
           }
         }
       />
