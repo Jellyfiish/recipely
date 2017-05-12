@@ -23,6 +23,7 @@ class App extends Component {
         {name: 'blackberry'}
       ],
       notes: [],
+      savedRecipes: []
     };
   }
 
@@ -110,6 +111,10 @@ class App extends Component {
     this.setState({notes});
   };
 
+  onSavedRecipeChange = (savedRecipes) => {
+    this.setState({savedRecipes});
+  }
+
   render() {
     return (
       <StartupStack
@@ -133,6 +138,7 @@ class App extends Component {
             onIngredientChange: this.onIngredientChange,
             onLoginChange: this.onLoginChange,
             onNotesChange: this.onNotesChange,
+            onSavedRecipeChange: this.onSavedRecipeChange
           }
         }
       />
