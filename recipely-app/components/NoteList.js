@@ -22,7 +22,7 @@ const NoteList = ({ navigation, notes }) => {
               <Text style={styles.publisherText}>{note.text}</Text>
             </Card>
           );
-        });
+        })
       }
     </ScrollView>
   );
