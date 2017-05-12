@@ -13,13 +13,28 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 // Navigation prop needs to be passed down because it does not get passed down
 // child components.
-const RecipeList = ({ navigation, recipes, notes, idToken }) => {
+const RecipeList = ({ navigation, recipes, notes, idToken, onRecipesChange }) => {
   onLearnMore = (recipe) => {
     // When user presses on "Details" button, navigate them to a detail screen.
     // Pass down props that can be acessed using this.props.navigation.state.params
     const recipeNotes = notes.filter(note => note.f2f_id === recipe.f2f_id);
     navigation.navigate('Details', { ...recipe, notes: recipeNotes, idToken });
   }
+
+  // Delete recipe
+  onDeletePress = (recipe) => {
+    // Remove recipe from user's list of recipes
+    onRecipesChange(
+      recipes.filter(otherRecipe => otherRecipe.f2f_id !== recipe.f2f_id)
+    );
+    // Remove user's saved recipe from database
+    fetch(`https://jellyfiish-recipely.herokuapp.com/api/users/recipes/${recipe.f2f_id}`, {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': `Bearer ${idToken}`,
+      },
+    });
+  };
 
   return (
     <ScrollView>
@@ -35,7 +50,11 @@ const RecipeList = ({ navigation, recipes, notes, idToken }) => {
                   title='Details'
                   onPress={() => this.onLearnMore(recipe)}
                 />
-                <MaterialIcons name="close" size={28} color="#aaa" />
+
+                <Button
+                  title='Delete'
+                  onPress={() => this.onDeletePress(recipe)}
+                />
               </View>
             </Card>
           );
