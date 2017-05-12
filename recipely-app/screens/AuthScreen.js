@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import { AsyncStorage, StyleSheet, ActivityIndicator, View, Text, TextInput, Button } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import dismissKeyboard from 'dismissKeyboard';
 
@@ -11,6 +11,7 @@ class AuthScreen extends Component {
       username: '',
       password: '',
       error: null,
+      isFetchingInfo: false,
     };
   }
 
@@ -40,6 +41,8 @@ class AuthScreen extends Component {
       // Show error if invalid username or password.
       res.text().then(error => this.setState({error}));
     } else if (res.status === 200) {
+      // Toggle activity indicator to indicate we are fetching user's info
+      this.setState({isFetchingInfo: true});
       res.json()
         .then(token => {
           // Remove error message if there was one.
@@ -73,6 +76,8 @@ class AuthScreen extends Component {
             // App is ready when the user's recipes and notes have been fetched.
             Promise.all([fetchRecipes, fetchNotes])
               .then(() => {
+                // Toggle activity indicator off
+                this.setState({isFetchingInfo: true});
                 // Navigate to main app.
                 const action = NavigationActions.reset({
                   index: 0,
@@ -135,12 +140,16 @@ class AuthScreen extends Component {
             <Text style={styles.error}>{this.state.error}</Text>
           }
 
-          <View style={styles.button}>
-            <Button
-              title="Login"
-              onPress={this.onLoginPress}
-            />
-          </View>
+          { this.state.isFetchingInfo
+            ? <ActivityIndicator size="large" />
+            : <View style={styles.button}>
+                <Button
+                  title="Login"
+                  onPress={this.onLoginPress}
+                />
+              </View>
+          }
+
 
           <View style={styles.button}>
             <Button
