@@ -39,6 +39,11 @@ class RecipeDetailScreen extends Component {
     let result = await WebBrowser.openBrowserAsync(source_url);
   };
 
+  // Navigate to edit screen
+  onEditPress = (note) => {
+    this.props.navigation.navigate('EditNote', {note});
+  };
+
   render() {
     const { title, thumbnail_url, image_url, notes } = this.props.navigation.state.params;
 
@@ -71,7 +76,7 @@ class RecipeDetailScreen extends Component {
 
         <View>
           { notes && <Text>Notes</Text>}
-          
+
           { notes.map(note => {
               return (
                 <Card key={note.id}>
@@ -79,7 +84,7 @@ class RecipeDetailScreen extends Component {
                   <View style={styles.buttonContainer}>
                     <Button
                       title='Edit'
-                      onPress={() => {}}
+                      onPress={() => this.onEditPress(note)}
                       />
                     <MaterialIcons name="close" size={28} color="#aaa" />
                   </View>
