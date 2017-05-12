@@ -38,20 +38,19 @@ class RecipeDetailScreen extends Component {
   };
 
   render() {
-    const { title, thumbnail_url } = this.props.navigation.state.params;
+    const { title, thumbnail_url, image_url } = this.props.navigation.state.params;
 
     return (
       <ScrollView>
         <Card
           title={title}
           titleStyle={styles.titleStyle}
-          image={{ uri: thumbnail_url }}
+          image={{ uri: thumbnail_url || image_url }}
         >
           <View>
             <Text style={styles.ingredientText}>Ingredients</Text>
             { this.state.ingredients
               ? <View>
-                  <Text style={styles.ingredientText}>Ingredients</Text>
                   <IngredientList ingredients={this.state.ingredients}
                   />
                 </View>
