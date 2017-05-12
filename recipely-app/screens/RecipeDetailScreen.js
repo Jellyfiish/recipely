@@ -74,6 +74,14 @@ class RecipeDetailScreen extends Component {
     this.setState({
       notes: this.state.notes.filter(otherNote => otherNote.id !== note.id)
     });
+    // Remove note from database
+    const { idToken } = this.props.navigation.state.params;
+    fetch(`https://jellyfiish-recipely.herokuapp.com/api/notes/${note.id}`, {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': `Bearer ${idToken}`,
+      },
+    });
   };
 
   updateNotes = (notes) => {
