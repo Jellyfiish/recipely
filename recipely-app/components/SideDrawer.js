@@ -11,7 +11,6 @@ const SideDrawer = (props) => (
   <View>
     <View style={styles.drawerHeader}>
       <Text style={styles.appName}>recipely</Text>
-      <Text style={styles.user}>Login/Logout</Text>
     </View>
     <DrawerItems {...props} />
   </View>
@@ -32,12 +31,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     color: 'white',
   },
-  user: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    paddingRight: 10,
-    paddingBottom: 5,
-  }
 });
 
 export default SideDrawer;

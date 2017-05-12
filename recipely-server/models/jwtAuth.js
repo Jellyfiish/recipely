@@ -9,7 +9,7 @@ function encodeToken(userId, username, callback) {
     exp: moment().add(7, 'days').unix(),
     iat: moment().unix(),
     sub: userId,
-    iss: username
+    user: username
   };
   
   callback(null, jwt.encode(payload, secretKey));

@@ -44,6 +44,8 @@ class AuthScreen extends Component {
         .then(token => {
           // Remove error message if there was one.
           this.setState({error: null});
+          // Put the token in our state so we do not need to repeatedly get it from storage
+          this.props.screenProps.setIdToken(token);
           // Store our access token so we can use it to authenticate api endpoints
           AsyncStorage.setItem('id_token', token, () => {
             // Toggle isLoggedIn state
