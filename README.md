@@ -116,7 +116,7 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
  ```JSON
   {
     "f2f_id": "35169",
-    "title": "Buffalo Chicken Chowder"
+    "title": "Buffalo Chicken Chowder",
     "ingredients": [
       "2 tablespoons butter",
       "1 pound chicken cut into bite sized pieces",
