@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
+  ActivityIndicator,
   ScrollView,
   Text,
   View,
@@ -13,11 +14,13 @@ class EditNoteScreen extends Component {
     super(props);
 
     this.state = {
-      text: this.props.navigation.state.params.note.text
+      text: this.props.navigation.state.params.note.text,
+      isUpdating: false,
     };
   }
 
   onUpdatePress = () => {
+    this.setState({isUpdating: true});
     const { note, idToken, onGoBack } = this.props.navigation.state.params;
 
     fetch(`https://jellyfiish-recipely.herokuapp.com/api/notes/${note.id}`, {
@@ -35,7 +38,7 @@ class EditNoteScreen extends Component {
       .then(newNote => {
         const notes = this.props.screenProps.notes;
         const i = this.props.screenProps.notes.indexOf(note);
-
+        // Update notes with new note
         this.props.screenProps.onNotesChange(
           [ ...notes.slice(0, i), newNote, ...notes.slice(i + 1) ]
         );
@@ -43,6 +46,7 @@ class EditNoteScreen extends Component {
         onGoBack(this.props.screenProps.notes.filter(
           otherNote => note.f2f_id === otherNote.f2f_id)
         );
+        this.setState({isUpdating: false});
       })
       .then(() => this.props.navigation.goBack());
   };
@@ -61,10 +65,13 @@ class EditNoteScreen extends Component {
           <Text>{this.state.text}</Text>
         </TextInput>
 
-        <Button
-          title="Update"
-          onPress={this.onUpdatePress}
-        />
+        { this.state.isUpdating
+          ? <ActivityIndicator size="large" />
+          : <Button
+              title="Update"
+              onPress={this.onUpdatePress}
+            />
+        }
       </ScrollView>
     );
   }
