@@ -85,7 +85,8 @@ const NoteStack = StackNavigator({
   Notes: {
     screen: NoteScreen,
     navigationOptions: ({navigation}) => ({
-      title: 'All Notes'
+      title: 'All Notes',
+      headerLeft: MenuIcon(navigation),
     }),
   },
 }, {
@@ -177,7 +178,7 @@ const MainDrawerNavigator = DrawerNavigator({
     }),
   },
   Notes: {
-    screen: NoteScreen,
+    screen: NoteStack,
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'View notes',
       drawerIcon: DrawerIcon('note'),
