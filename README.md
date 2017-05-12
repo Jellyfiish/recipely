@@ -10,6 +10,11 @@
 
 1. [Requirements](#requirements)
 1. [API Usage](#api-usage)
+    1. [Login & Signup](#login-signup)
+    1. [Recipes From The Web](#recipes-from-the-web)
+    1. [Saved Recipes](#saved-recipes)
+    1. [Notes](#notes)
+    1. [Users](#users)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
     1. [Tasks](#tasks)
@@ -50,7 +55,7 @@
  Login an existing user. Pass the username and password in the body of the request, exactly as above. Will return a fresh token string if successful.
 
 
-### Recipes from the web
+### Recipes From The Web
 * `GET /api/recipes`
 
  Fetch a list of recipes from the [Food2Fork](http://food2fork.com/) database. Optionally, you may search by ingredients by adding them as a comma separated string in the query string.
@@ -68,7 +73,7 @@
  e.g. `https://jellyfiish-recipely.herokuapp.com/api/recipes/54384`
 
 
-### Saved recipes
+### Saved Recipes
 These are protected endpoints requiring a valid JSON web token. See the [Signup & Login](#login-signup) section for how to obtain and pass tokens.
 
 * `GET /api/users/recipes`
@@ -229,13 +234,9 @@ These are protected endpoints requiring a valid JSON web token. See the [Signup 
 
  Returns an object containing all updated properties.
 
-* `DELETE /api/users/:id`
+* `DELETE /api/users`
 
- Remove an existing user. The target user id must be passed in the request url.
-
- e.g. `https://jellyfiish-recipely.herokuapp.com/api/notes/21`
-
- The current user id can be obtained by decoding the token payload which is encoded in base64. The payload string is the second period-delimited string in the token string (`header-string.payload-string.verify-string`).
+ Remove an existing user. No data other than the JSON web token header is required.
 
 
 ## Development
