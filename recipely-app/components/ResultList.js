@@ -23,15 +23,21 @@ const ResultList = ({ navigation, recipes, savedRecipes, idToken, onRecipesChang
   handleSaveRecipeButton = async (recipe) => {
     const id = recipe.recipe_id;
     const isSaved = savedRecipes.find(recipe => recipe.f2f_id === id);
-    console.log('isSaved: ', isSaved);
+    // Only add recipe if it has not been saved yet
     if (!isSaved) {
-      onRecipesChange([ ...savedRecipes, recipe]);
       // Making get request to get details of recipe so that it can be added to database
-      let recipeObj = await fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${id}`);
-      recipeObj = await recipeObj.json();
-      recipeObj = recipeObj.recipe;
-      recipeObj.f2f_id = recipeObj.recipe_id;
-      // with request body have required data in it, make the post request to add recipe to database
+      let recipeObj = await
+        fetch(`https://jellyfiish-recipely.herokuapp.com/api/recipes/${id}`)
+          .then(res => res.json())
+          .then(result => result.recipe);
+      recipeObj = {
+        ...recipeObj,
+        f2f_id: recipe.recipe_id,
+        thumbnail_url: recipe.image_url,
+      };
+      // Update client's list of recipes. We wait until we get the ingredients to add it.
+      onRecipesChange([ ...savedRecipes, recipeObj]);
+      // Make the post request to add recipe to database
       fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes/', {
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +47,7 @@ const ResultList = ({ navigation, recipes, savedRecipes, idToken, onRecipesChang
         body: JSON.stringify(recipeObj),
       });
     }
-  }
+  };
 
   return (
     <ScrollView>
@@ -58,7 +64,11 @@ const ResultList = ({ navigation, recipes, savedRecipes, idToken, onRecipesChang
                   title='Details'
                   onPress={() => this.onLearnMore(recipe)}
                 />
-                <MaterialIcons name="add" size={28} color="#aaa" onPress={() => this.handleSaveRecipeButton(recipe)} />
+
+                <Button
+                  title='Add'
+                  onPress={() => this.handleSaveRecipeButton(recipe)}
+                />
               </View>
             </Card>
           );
