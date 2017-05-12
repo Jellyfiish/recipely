@@ -21,6 +21,7 @@ class RecipeScreen extends Component {
           ? <RecipeList
               navigation={navigation}
               recipes={screenProps.recipes}
+              notes={screenProps.notes}
             />
           : <View>
               <Text>You have no saved recipes.</Text>

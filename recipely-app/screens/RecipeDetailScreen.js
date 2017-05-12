@@ -38,7 +38,7 @@ class RecipeDetailScreen extends Component {
   };
 
   render() {
-    const { title, thumbnail_url, image_url } = this.props.navigation.state.params;
+    const { title, thumbnail_url, image_url, notes } = this.props.navigation.state.params;
 
     return (
       <ScrollView>
@@ -66,6 +66,15 @@ class RecipeDetailScreen extends Component {
             onPress={this.handlePressButtonAsync}
           />
         </Card>
+
+        { notes.map(note => {
+            return (
+              <Card key={note.id}>
+                <Text>{note.text}</Text>
+              </Card>
+            );
+          })
+        }
       </ScrollView>
     );
   }
