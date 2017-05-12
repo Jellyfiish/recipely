@@ -66,16 +66,14 @@ class RecipeDetailScreen extends Component {
 
   // Delete note
   onDeletePress = (note) => {
-    const notes = this.props.screenProps.notes;
-    const index = notes.indexOf(note);
-    if (index !== -1) {
-      this.props.screenProps.onNotesChange(
-        [ ...notes.slice(0, index), ...notes.slice(index + 1)]
-      );
-    }
-    this.updateNotes(this.props.screenProps.notes.filter(
-      otherNote => note.f2f_id === otherNote.f2f_id
-    ));
+    // Remove note from user's list of notes
+    this.props.screenProps.onNotesChange(
+      this.props.screenProps.notes.filter(otherNote => otherNote.id !== note.id)
+    );
+    // Show notes that are associated with this recipe except for the deleted one
+    this.setState({
+      notes: this.state.notes.filter(otherNote => otherNote.id !== note.id)
+    });
   };
 
   updateNotes = (notes) => {
@@ -127,12 +125,10 @@ class RecipeDetailScreen extends Component {
                     <Button
                       title='Edit'
                       onPress={() => this.onEditPress(note)}
-                      />
+                    />
 
-                    <MaterialIcons
-                      name="close"
-                      size={28}
-                      color="#aaa"
+                    <Button
+                      title='Delete'
                       onPress={() => this.onDeletePress(note)}
                     />
                   </View>
