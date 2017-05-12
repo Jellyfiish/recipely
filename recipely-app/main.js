@@ -70,9 +70,7 @@ class App extends Component {
         this.setIdToken(idToken);
         // Fetch user's recipes
         const fetchRecipes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes', {
-          headers: {
-            'x-access-token': `Bearer ${this.state.idToken}`
-          }
+          headers: { 'x-access-token': `Bearer ${this.state.idToken}` }
         }).then(res => {
             if (res.status === 200) {
               res.json()
@@ -82,9 +80,7 @@ class App extends Component {
 
         // Fetch user's notes
         const fetchNotes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/notes', {
-          headers: {
-            'x-access-token': `Bearer ${this.state.idToken}`
-          }
+          headers: { 'x-access-token': `Bearer ${this.state.idToken}` }
         }).then(res => {
             if (res.status === 200) {
               res.json()
