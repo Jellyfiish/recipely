@@ -33,17 +33,16 @@ class EditNoteScreen extends Component {
         return newNote;
       })
       .then(newNote => {
-        const otherNotes = this.props.screenProps.notes.filter(
-          otherNote => otherNote.id !== note.id
-        );
-        const recipeNotes = this.props.screenProps.notes.filter(
-          otherNote => otherNote.f2f_id === note.f2f_id && otherNote.id !== note.id
-        );
+        const notes = this.props.screenProps.notes;
+        const i = this.props.screenProps.notes.indexOf(note);
+
         this.props.screenProps.onNotesChange(
-          [ newNote, ...otherNotes ]
+          [ ...notes.slice(0, i), newNote, ...notes.slice(i + 1) ]
         );
         // Need to trigger a render in previous component.
-        onGoBack([ newNote, ...recipeNotes ]);
+        onGoBack(this.props.screenProps.notes.filter(
+          otherNote => note.f2f_id === otherNote.f2f_id)
+        );
       })
       .then(() => this.props.navigation.goBack());
   };
