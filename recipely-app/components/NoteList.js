@@ -16,7 +16,7 @@ const NoteList = ({ navigation, notes }) => {
       { notes.map(note => {
           return (
             <Card
-              key={note.f2f_id}
+              key={note.id}
             >
               <Text style={styles.publisherText}>{note.recipe_title}</Text>
               <Text style={styles.publisherText}>{note.text}</Text>

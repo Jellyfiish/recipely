@@ -26,37 +26,37 @@ class App extends Component {
         {
           text: 'sample test note for Iced Coffee',
           recipe_title: 'Iced Coffee',
-          f2f_id: 1
+          id: 1
         },
         {
           text: 'sample test note for Jalapeno Popper Grilled Cheese Sandwich',
           recipe_title: 'Jalapeno Popper Grilled Cheese Sandwich',
-          f2f_id: 2
+          id: 2
         },
         {
           text: 'sample test note for Crash Hot Potatoes',
           recipe_title: 'Crash Hot Potatoes',
-          f2f_id: 3
+          id: 3
         },
         {
           text: 'sample test note for Stovetop Avocado Mac and Cheese',
           recipe_title: 'Stovetop Avocado Mac and Cheese',
-          f2f_id: 4
+          id: 4
         },
         {
           text: 'sample test note for Cinnamon Rolls',
           recipe_title: 'Cinnamon Rolls',
-          f2f_id: 5
+          id: 5
         },
         {
           text: 'sample test note for Parmesan Roasted Potatoes',
           recipe_title: 'Parmesan Roasted Potatoes',
-          f2f_id: 6
+          id: 6
         },
         {
           text: 'sample test note for Chocolate Cake',
           recipe_title: 'Chocolate Cake',
-          f2f_id: 7
+          id: 7
         },
       ]
     };
