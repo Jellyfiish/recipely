@@ -14,9 +14,11 @@ import PhotoScreen from '../screens/PhotoScreen';
 import PhotoResultScreen from '../screens/PhotoResultScreen';
 import RecipeScreen from '../screens/RecipeScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
+import EditNoteScreen from '../screens/EditNoteScreen';
 import PopularScreen from '../screens/PopularScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
+import SearchDetailScreen from '../screens/SearchDetailScreen';
 import NoteScreen from '../screens/NoteScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SideDrawer from '../components/SideDrawer.js';
@@ -75,6 +77,12 @@ const RecipeStack = StackNavigator({
       title: `${navigation.state.params.title}`,
     }),
   },
+  EditNote: {
+    screen: EditNoteScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Edit Note',
+    }),
+  }
 }, {
   cardStyle: {
     paddingTop: Constants.statusBarHeight,
@@ -129,7 +137,7 @@ const SearchStack = StackNavigator({
     }),
   },
   SearchDetail: {
-    screen: RecipeDetailScreen,
+    screen: SearchDetailScreen,
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.title}`,
     }),

@@ -7,20 +7,17 @@ import {
   ScrollView,
   View,
   Button,
-  Image,
-  KeyboardAvoidingView
+  Image
 } from 'react-native';
 import { Card } from 'react-native-elements';
 import IngredientList from '../components/IngredientList';
-import { MaterialIcons } from '@expo/vector-icons';
 
-class RecipeDetailScreen extends Component {
+class SearchDetailScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       ingredients: this.props.navigation.state.params.ingredients,
-      notes: this.props.navigation.state.params.notes,
     };
   }
 
@@ -38,22 +35,6 @@ class RecipeDetailScreen extends Component {
   handlePressButtonAsync = async () => {
     const { source_url } = this.props.navigation.state.params;
     let result = await WebBrowser.openBrowserAsync(source_url);
-  };
-
-  // Navigate to edit screen
-  onEditPress = (note) => {
-    const idToken = this.props.navigation.state.params.idToken;
-    this.props.navigation.navigate('EditNote', {
-      note,
-      idToken,
-      // navigation.goBack() does not trigger a render in previous component.
-      // This function will trigger a render when called.
-      onGoBack: (notes) => this.updateNotes(notes),
-    });
-  };
-
-  updateNotes = (notes) => {
-    this.setState({notes});
   };
 
   render() {
@@ -85,26 +66,6 @@ class RecipeDetailScreen extends Component {
             onPress={this.handlePressButtonAsync}
           />
         </Card>
-
-        <View>
-          { this.state.notes && <Text>Notes</Text>}
-
-          { this.state.notes.map(note => {
-              return (
-                <Card key={note.id}>
-                  <Text>{note.text}</Text>
-                  <View style={styles.buttonContainer}>
-                    <Button
-                      title='Edit'
-                      onPress={() => this.onEditPress(note)}
-                      />
-                    <MaterialIcons name="close" size={28} color="#aaa" />
-                  </View>
-                </Card>
-              );
-            })
-          }
-        </View>
       </ScrollView>
     );
   }
@@ -122,11 +83,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
 });
 
-export default RecipeDetailScreen;
+export default SearchDetailScreen;

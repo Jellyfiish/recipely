@@ -11,7 +11,7 @@ class AuthScreen extends Component {
       username: '',
       password: '',
       error: null,
-      isFetchingInfo: false,
+      isLoggingIn: false,
     };
   }
 
@@ -24,6 +24,7 @@ class AuthScreen extends Component {
   };
 
   handleLoginSignupPress = (type) => {
+    this.setState({isLoggingIn: true});
     dismissKeyboard();
     const { username, password } = this.state;
 
@@ -40,9 +41,8 @@ class AuthScreen extends Component {
     if (res.status === 401) {
       // Show error if invalid username or password.
       res.text().then(error => this.setState({error}));
+      this.setState({isLoggingIn: false});
     } else if (res.status === 200) {
-      // Toggle activity indicator to indicate we are fetching user's info
-      this.setState({isFetchingInfo: true});
       res.json()
         .then(token => {
           // Remove error message if there was one.
@@ -77,7 +77,7 @@ class AuthScreen extends Component {
             Promise.all([fetchRecipes, fetchNotes])
               .then(() => {
                 // Toggle activity indicator off
-                this.setState({isFetchingInfo: true});
+                this.setState({isLoggingIn: false});
                 // Navigate to main app.
                 const action = NavigationActions.reset({
                   index: 0,
@@ -140,23 +140,24 @@ class AuthScreen extends Component {
             <Text style={styles.error}>{this.state.error}</Text>
           }
 
-          { this.state.isFetchingInfo
+          { this.state.isLoggingIn
             ? <ActivityIndicator size="large" />
-            : <View style={styles.button}>
-                <Button
-                  title="Login"
-                  onPress={this.onLoginPress}
-                />
+            : <View>
+                <View style={styles.button}>
+                  <Button
+                    title="Login"
+                    onPress={this.onLoginPress}
+                  />
+                </View>
+
+                <View style={styles.button}>
+                  <Button
+                    title="Signup"
+                    onPress={this.onSignupPress}
+                  />
+                </View>
               </View>
           }
-
-
-          <View style={styles.button}>
-            <Button
-              title="Signup"
-              onPress={this.onSignupPress}
-            />
-          </View>
         </View>
 
         <View style={{flex: 3}} />
