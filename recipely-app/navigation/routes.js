@@ -41,29 +41,6 @@ const TabBarIcon = (name) => ({ tintColor }) => (
   <MaterialIcons name={name} size={24} color={tintColor} />
 );
 
-const PhotoStack = StackNavigator({
-  Photos: {
-    screen: PhotoScreen,
-    // Can set the navigationOptions here or in the screen itself.
-    // Options here override navigationOptions in the screen.
-    navigationOptions: ({ navigation }) => ({
-      title: 'Take photo',
-      headerLeft: MenuIcon(navigation),
-    }),
-  },
-  PhotoResult: {
-    screen: PhotoResultScreen,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Photo Result',
-    }),
-  },
-}, {
-  cardStyle: {
-    // Push card down so that the status bar does not overlap content.
-    paddingTop: Constants.statusBarHeight,
-  }
-});
-
 const RecipeStack = StackNavigator({
   Recipes: {
     screen: RecipeScreen,
@@ -111,16 +88,25 @@ const NoteStack = StackNavigator({
 });
 
 const SearchTab = TabNavigator({
-  Popular: {
-    screen: PopularScreen,
+  Photo: {
+    screen: PhotoScreen,
     navigationOptions: ({ navigation }) => ({
-      tabBarIcon: TabBarIcon('whatshot'),
+      tabBarLabel: 'Photo',
+      tabBarIcon: TabBarIcon('photo-camera'),
     }),
   },
   Search: {
     screen: SearchScreen,
     navigationOptions: ({ navigation }) => ({
+      tabBarLabel: 'Ingredients',
       tabBarIcon: TabBarIcon('search'),
+    }),
+  },
+  Popular: {
+    screen: PopularScreen,
+    navigationOptions: ({ navigation }) => ({
+      tabBarLabel: 'Popular',
+      tabBarIcon: TabBarIcon('whatshot'),
     }),
   },
 });
@@ -170,12 +156,11 @@ const ProfileStack = StackNavigator({
 });
 
 const MainDrawerNavigator = DrawerNavigator({
-  Photo: {
-    screen: PhotoStack,
+  Find: {
+    screen: SearchStack,
     navigationOptions: ({navigation}) => ({
-      // Label and icons for the side menu.
-      drawerLabel: 'Take photo',
-      drawerIcon: DrawerIcon('photo-camera'),
+      drawerLabel: 'Find recipes',
+      drawerIcon: DrawerIcon('search'),
     }),
   },
   RecipeStack: {
@@ -183,13 +168,6 @@ const MainDrawerNavigator = DrawerNavigator({
     navigationOptions: ({navigation}) => ({
       drawerLabel: 'View saved recipes',
       drawerIcon: DrawerIcon('list'),
-    }),
-  },
-  Find: {
-    screen: SearchStack,
-    navigationOptions: ({navigation}) => ({
-      drawerLabel: 'Find recipes',
-      drawerIcon: DrawerIcon('search'),
     }),
   },
   Notes: {
