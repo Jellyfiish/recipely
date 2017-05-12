@@ -17,11 +17,7 @@ class App extends Component {
       image: null,
       predictions: [],
       searchResults: {},
-      ingredients: [
-        {name: 'blueberry'},
-        {name: 'strawberry'},
-        {name: 'blackberry'}
-      ],
+      ingredients: [],
       notes: [],
     };
   }

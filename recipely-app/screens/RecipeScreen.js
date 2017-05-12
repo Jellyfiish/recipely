@@ -23,6 +23,7 @@ class RecipeScreen extends Component {
               recipes={screenProps.recipes}
               notes={screenProps.notes}
               idToken={screenProps.idToken}
+              onRecipesChange={screenProps.onRecipesChange}
             />
           : <View>
               <Text>You have no saved recipes.</Text>
