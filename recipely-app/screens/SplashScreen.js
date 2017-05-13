@@ -31,12 +31,14 @@ class SplashScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>{this.state.loadingMessage}</Text>
+        <View style={styles.logoContainer}>
+          <Text style={styles.logo}>recipely</Text>
+        </View>
+
+        <Text style={styles.loadingMessage}>
+          {this.state.loadingMessage}
+        </Text>
         <ActivityIndicator size="large" />
-        <Button
-          title="Go to main app"
-          onPress={() => this.navigateTo('MainDrawerNavigator')}
-        />
       </View>
     );
   }
@@ -47,6 +49,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logoContainer: {
+    marginBottom: 30,
+  },
+  logo: {
+    fontWeight: 'bold',
+    fontSize: 40,
+  },
+  loadingMessage: {
+    marginBottom: 15,
   },
 });
 
