@@ -6,11 +6,10 @@ import {
   Text,
   ScrollView,
   View,
-  Button,
   Image,
   KeyboardAvoidingView
 } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Button, Card } from 'react-native-elements';
 import IngredientList from '../components/IngredientList';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -114,16 +113,16 @@ class RecipeDetailScreen extends Component {
 
           <Button
             title='Directions'
+            color='white'
+            fontWeight='bold'
+            backgroundColor='#397af8'
+            raised
             onPress={this.handlePressButtonAsync}
           />
         </Card>
 
         <View>
           <Text>Notes</Text>
-          <Button
-            title="Add"
-            onPress={() => this.onAddPress()}
-          />
 
           { this.state.notes.map(note => {
               return (
@@ -132,11 +131,21 @@ class RecipeDetailScreen extends Component {
                   <View style={styles.buttonContainer}>
                     <Button
                       title='Edit'
+                      color='white'
+                      fontWeight='bold'
+                      backgroundColor='#397af8'
+                      raised
+                      icon={{name: 'mode-edit'}}
                       onPress={() => this.onEditPress(note)}
                     />
 
                     <Button
                       title='Delete'
+                      color='white'
+                      fontWeight='bold'
+                      backgroundColor='#397af8'
+                      raised
+                      icon={{name: 'delete'}}
                       onPress={() => this.onDeletePress(note)}
                     />
                   </View>
@@ -144,6 +153,17 @@ class RecipeDetailScreen extends Component {
               );
             })
           }
+          <View style={styles.buttonMargins}>
+            <Button
+              title='Add'
+              color='white'
+              fontWeight='bold'
+              backgroundColor='#397af8'
+              raised
+              icon={{name: 'note-add'}}
+              onPress={() => this.onAddPress()}
+            />
+          </View>
         </View>
       </ScrollView>
     );
@@ -167,6 +187,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 10,
   },
+  buttonMargins: {
+    marginTop: 5,
+    marginBottom: 5,
+  }
 });
 
 export default RecipeDetailScreen;
