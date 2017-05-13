@@ -19,6 +19,7 @@
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
     1. [Installing Postgres](#installing-postgres)
+    1. [Seed Database](#seed-database)
     1. [Configuring Environment Variables](#configuring-environment-variables)
 1. [Contributing](#contributing)
     1. [Roadmap](#roadmap)
@@ -272,7 +273,27 @@ Repeat from inside the recipely/recipely-app directory.
 
 ### Installing Postgres
 
-TODO: Add section.
+1. Install the appropriate postgres server software for your system:
+
+ * Linux: `sudo apt-get install` or download and install the [binary from Enterprise DB](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads).
+ * Mac: Download [Postgres.app](http://postgresapp.com/) and follow the instructions on their site.
+ * Windows: Download and install the [binary from Enterprise DB](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads).
+
+1. Create a user/role (unnecessary on Postgres.app):
+ 1. Follow the [first steps guide](https://wiki.postgresql.org/wiki/First_steps) to login as the default user `postgres`.
+ 1. Run the `CREATE USER new_username WITH PASSWORD 'new_password' CREATEDB;` query from within the psql shell to make a new user role with the ability to create databases.
+
+1. Create a new database by running the `CREATE DATABASE database_name;` query from within the psql shell.
+
+1. Use the above variables when forming your DATABASE_URL environment variable (see the [Configuring Environment Variables](#configuring-environment-variables) section).
+
+
+### Seed Database
+
+Some dummy data has been provided for testing. To seed your local postgres database, run `psql your_database_url -f sampleData.sql` in your terminal from within the recipely/recipely-server directory.
+
+**CAUTION: this command will overwrite any pre-existing data in your database.**
+
 
 ### Configuring Environment Variables
 
