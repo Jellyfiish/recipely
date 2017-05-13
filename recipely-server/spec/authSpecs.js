@@ -3,18 +3,20 @@ const chai = require('chai');
 const expect = chai.expect;
 const sinon = require('sinon');
 const jwtAuth = require('../models/jwtAuth');
-
+const db = require('../models/database');
 describe('AUTH', () => {
 
 	it('should return true if the header has a token in it', () => {
 	  const next = new sinon.stub();
 	  const res = new sinon.stub();
 	  const decodeToken = new sinon.stub(jwtAuth, 'decodeToken'); 
+	  const queryAsync = new sinon.stub(db, 'queryAsync');
 	  const testToken = 'some-token'
 	  const req = {
 		header: new sinon.stub()
 	  }
-	  
+	  decodeToken.returns(Promise.resolve({sub: 1231}));
+	  queryAsync.returns(Promise.resolve({rows: [123]}));
 	  req.header.withArgs('x-access-token').returns('Bearer ' + testToken);
 	  isAuthenticated(req,res, next);
 	  expect(decodeToken.called).to.be.true;
@@ -22,7 +24,7 @@ describe('AUTH', () => {
 	  decodeToken.restore();
 	});
 
-	it.skip('should return 400 as status code when there is no token header', () => {
+	it('should return 400 as status code when there is no token header', () => {
 	  const next = new sinon.stub();
 	  const decodeToken = new sinon.stub(jwtAuth, 'decodeToken'); 
 	  const req = {
