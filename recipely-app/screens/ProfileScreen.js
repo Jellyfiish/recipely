@@ -4,9 +4,10 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
+import { List, ListItem } from 'react-native-elements';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -37,11 +38,26 @@ class ProfileScreen extends Component {
   };
 
   render() {
+    const numNotes = this.props.screenProps.notes.length;
+    const numRecipes = this.props.screenProps.recipes.length;
+
     return (
       <View style={styles.container}>
         <Text>You have</Text>
-        <Text>{this.props.screenProps.notes.length} notes</Text>
-        <Text>{this.props.screenProps.recipes.length} saved recipes</Text>
+
+        <List containerStyle={styles.listContainer}>
+          <ListItem
+            title="Notes"
+            badge={{value: numNotes}}
+            hideChevron
+          />
+          <ListItem
+            title="Recipes"
+            badge={{value: numRecipes}}
+            hideChevron
+          />
+        </List>
+
         <Button
           title="Logout"
           onPress={this.onLogoutPress}
@@ -54,8 +70,9 @@ class ProfileScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  listContainer: {
+    marginBottom: 20,
   },
 });
 
