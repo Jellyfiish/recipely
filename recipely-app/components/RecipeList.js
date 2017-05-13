@@ -52,6 +52,7 @@ const RecipeList = ({ navigation, recipes, notes, idToken, onRecipesChange }) =>
                   raised
                   backgroundColor='#397af8'
                   icon={{name: 'explore'}}
+                  buttonStyle={{marginLeft: 0}}
                   onPress={() => this.onLearnMore(recipe)}
                 />
 
@@ -62,6 +63,7 @@ const RecipeList = ({ navigation, recipes, notes, idToken, onRecipesChange }) =>
                   backgroundColor='#397af8'
                   raised
                   icon={{name: 'delete'}}
+                  buttonStyle={{marginRight: 0}}
                   onPress={() => this.onDeletePress(recipe)}
                 />
               </View>

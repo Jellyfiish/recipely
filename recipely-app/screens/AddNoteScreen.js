@@ -6,8 +6,8 @@ import {
   Text,
   View,
   TextInput,
-  Button
 } from 'react-native';
+import { Button } from 'react-native-elements';
 
 class AddNoteScreen extends Component {
   constructor(props) {
@@ -62,23 +62,32 @@ class AddNoteScreen extends Component {
 
     return (
       <ScrollView>
-        <TextInput
-          autoFocus={true}
-          multiline={true}
-          onChangeText={text => {
-            this.setState({text});
-          }}
-        >
-          <Text>{this.state.text}</Text>
-        </TextInput>
+        <View style={styles.wrapper}>
+          <View style={styles.inputWrap}>
+            <TextInput
+              style={styles.input}
+              autoFocus={true}
+              multiline={true}
+              onChangeText={text => {
+                this.setState({text});
+              }}
+            >
+              <Text>{this.state.text}</Text>
+            </TextInput>
+          </View>
 
-        { this.state.isAdding
-          ? <ActivityIndicator size="large" />
-          : <Button
-              title="Add"
-              onPress={this.onAddPress}
-            />
-        }
+          { this.state.isAdding
+            ? <ActivityIndicator size="large" />
+              : <Button
+                  title="Add"
+                  icon={{name: 'note-add'}}
+                  backgroundColor="#397af8"
+                  raised
+                  fontWeight='bold'
+                  onPress={this.onAddPress}
+                />
+          }
+        </View>
       </ScrollView>
     );
   }
@@ -87,6 +96,20 @@ class AddNoteScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  wrapper: {
+    paddingHorizontal: 15,
+  },
+  inputWrap: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    height: 40,
+    backgroundColor: 'transparent',
+  },
+  input: {
+    flex: 1,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
   },
 });
 

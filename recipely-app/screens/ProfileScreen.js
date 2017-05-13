@@ -61,6 +61,7 @@ class ProfileScreen extends Component {
           icon={{name: 'exit-to-app'}}
           backgroundColor="#397af8"
           raised
+          fontWeight='bold'
           onPress={this.onLogoutPress}
         />
       </View>

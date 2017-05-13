@@ -150,6 +150,7 @@ class AuthScreen extends Component {
                     icon={{name: 'power-settings-new'}}
                     backgroundColor="#397af8"
                     raised
+                    fontWeight='bold'
                     onPress={this.onLoginPress}
                   />
                 </View>
@@ -160,6 +161,7 @@ class AuthScreen extends Component {
                     icon={{name: 'account-circle'}}
                     backgroundColor="#397af8"
                     raised
+                    fontWeight='bold'
                     onPress={this.onSignupPress}
                   />
                 </View>
