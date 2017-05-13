@@ -38,7 +38,7 @@ class PopularScreen extends Component {
     const { navigation } = this.props;
 
     return (
-      <View>
+      <View style={styles.container}>
 
         { this.state.recipes.length !== 0
           ? <ResultList
@@ -62,8 +62,6 @@ class PopularScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 
