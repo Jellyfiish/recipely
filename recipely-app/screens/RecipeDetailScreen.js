@@ -123,12 +123,14 @@ class RecipeDetailScreen extends Component {
         </Card>
 
         <View>
-          <Text>Notes</Text>
+          <View style={styles.notesTitleContainer}>
+            <Text style={styles.notesTitleStyle}>Notes</Text>
+          </View>
 
           { this.state.notes.map(note => {
               return (
                 <Card key={note.id}>
-                  <Text>{note.text}</Text>
+                  <Text style={styles.noteTextStyle}>{note.text}</Text>
                   <View style={styles.buttonContainer}>
                     <Button
                       title='Edit'
@@ -191,7 +193,21 @@ const styles = StyleSheet.create({
   buttonMargins: {
     marginTop: 10,
     marginBottom: 10,
-  }
+  },
+  notesTitleStyle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#474747',
+  },
+  notesTitleContainer: {
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noteTextStyle: {
+    fontSize: 18,
+    color: '#474747'
+  },
 });
 
 export default RecipeDetailScreen;
