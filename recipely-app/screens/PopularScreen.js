@@ -10,44 +10,41 @@ import ResultList from '../components/ResultList';
 class PopularScreen extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      recipes: [],
-    };
   }
 
   componentDidMount() {
-    fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes')
-      .then(res => res.json())
-      .then(result => {
-          this.setState({recipes: result.recipes}, () => console.log('fetched popular recipes!'));
+    if (this.props.screenProps.popularRecipes === null) {
+      fetch('https://jellyfiish-recipely.herokuapp.com/api/recipes')
+        .then(res => res.json())
+        .then(result => {
+          this.props.screenProps.onPopularRecipesChange(result.recipes);
         }
       );
+    }
   }
-
-  onSearchChange = (query, recipes) => {
-    this.setState({recipes});
-  };
 
   render() {
     const {
       idToken,
-      onRecipesChange,
+      popularRecipes,
       recipes: savedRecipes,
+      onRecipesChange,
+      onPopularRecipesChange,
     } = this.props.screenProps;
     const { navigation } = this.props;
+
 
     return (
       <View style={styles.container}>
 
-        { this.state.recipes.length !== 0
+        { popularRecipes
           ? <ResultList
               navigation={navigation}
-              recipes={this.state.recipes}
+              recipes={popularRecipes}
               savedRecipes={savedRecipes}
               idToken={idToken}
               onRecipesChange={onRecipesChange}
-              onSearchChange={this.onSearchChange}
+              onSearchChange={(query, result) => onPopularRecipesChange(result)}
             />
           : <View>
               <Text>Loading recipes</Text>

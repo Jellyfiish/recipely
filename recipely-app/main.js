@@ -19,6 +19,7 @@ class App extends Component {
       searchResults: {},
       ingredients: [],
       notes: [],
+      popularRecipes: null,
     };
   }
 
@@ -106,6 +107,10 @@ class App extends Component {
     this.setState({notes});
   };
 
+  onPopularRecipesChange = (popularRecipes) => {
+    this.setState({popularRecipes});
+  };
+
   render() {
     return (
       <StartupStack
@@ -121,6 +126,7 @@ class App extends Component {
             searchResults: this.state.searchResults,
             ingredients: this.state.ingredients,
             notes: this.state.notes,
+            popularRecipes: this.state.popularRecipes,
             setIdToken: this.setIdToken,
             onRecipesChange: this.onRecipesChange,
             onImageChange: this.onImageChange,
@@ -128,7 +134,8 @@ class App extends Component {
             onSearchChange: this.onSearchChange,
             onIngredientChange: this.onIngredientChange,
             onLoginChange: this.onLoginChange,
-            onNotesChange: this.onNotesChange
+            onNotesChange: this.onNotesChange,
+            onPopularRecipesChange: this.onPopularRecipesChange,
           }
         }
       />
