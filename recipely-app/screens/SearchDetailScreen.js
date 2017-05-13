@@ -6,11 +6,11 @@ import {
   Text,
   ScrollView,
   View,
-  Button,
   Image
 } from 'react-native';
 import { Card } from 'react-native-elements';
 import IngredientList from '../components/IngredientList';
+import Button from '../components/CustomButton';
 
 class SearchDetailScreen extends Component {
   constructor(props) {

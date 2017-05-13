@@ -5,11 +5,11 @@ import {
   View,
   ScrollView,
   FlatList,
-  Button,
   TextInput,
   KeyboardAvoidingView
 } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
+import Button from '../components/CustomButton';
 
 class SearchScreen extends Component {
   constructor(props) {

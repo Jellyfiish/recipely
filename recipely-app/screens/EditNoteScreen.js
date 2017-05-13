@@ -7,7 +7,7 @@ import {
   View,
   TextInput,
 } from 'react-native';
-import { Button } from 'react-native-elements';
+import Button from '../components/CustomButton';
 
 class EditNoteScreen extends Component {
   constructor(props) {
@@ -79,9 +79,6 @@ class EditNoteScreen extends Component {
             : <Button
                 title="Update"
                 icon={{name: 'mode-edit'}}
-                backgroundColor="#397af8"
-                raised
-                fontWeight='bold'
                 onPress={this.onUpdatePress}
               />
           }
