@@ -1,5 +1,6 @@
 const moment = require('moment');
 const jwt = require('jwt-simple');
+const Promise = require('bluebird');
 
 // only require config file if env variable doesn't exist (e.g. not running on heroku)
 const secretKey = process.env.TOKEN_SECRET || require('../config/config').TOKEN_SECRET;
@@ -25,6 +26,6 @@ function decodeToken(token, callback) {
 }
 
 module.exports = {
-  encodeToken,
-  decodeToken
+  encodeToken: Promise.promisify(encodeToken),
+  decodeToken: Promise.promisify(decodeToken)
 };

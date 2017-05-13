@@ -1,14 +1,14 @@
 var jwtAuth = require('./jwtAuth');
-var db = require('./database');
+var db = require('../models/database');
 
 var isAuthenticated = (req, res, next) => {
   if(!req.header('x-access-token')) {
-    res.status(422).end('please log in!')
+    res.status(400).end('please log in!');
+    return;
   }
 
   const token = req.header('x-access-token').split(' ')[1];
-  jwtAuth.decodeToken(token, (err, payload) => {
-    if(err) res.status(400).end(err);
+  jwtAuth.decodeToken(token).then(payload => {
     if(payload) {
       db.queryAsync('SELECT * FROM users where id = $1', [payload.sub])
         .then(results => {
@@ -22,7 +22,7 @@ var isAuthenticated = (req, res, next) => {
           res.status(500).json(err);
         });
     }
-  });
+  }).catch(err => res.status(400).json(err));
 }
 
 module.exports = isAuthenticated;

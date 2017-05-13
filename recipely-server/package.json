@@ -22,18 +22,22 @@
   "dependencies": {
     "axios": "^0.16.1",
     "bcrypt": "^1.0.2",
+    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "jwt-simple": "^0.5.1",
     "moment": "^2.18.1",
     "morgan": "^1.8.1",
-    "pg": "^6.1.5"
+    "pg": "^6.1.5",
+    "pg-promise": "^5.6.8"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.19.0",
     "mocha": "^3.3.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "sinon": "^2.2.0"
   }
 }
