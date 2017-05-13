@@ -1,8 +1,8 @@
-const isAuthenticated = require('../models/auth');
+const isAuthenticated = require('../utils/auth');
 const chai = require('chai');
 const expect = chai.expect;
 const sinon = require('sinon');
-const jwtAuth = require('../models/jwtAuth');
+const jwtAuth = require('../utils/jwtAuth');
 const db = require('../models/database');
 describe('AUTH', () => {
 

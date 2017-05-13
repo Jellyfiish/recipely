@@ -1,4 +1,4 @@
-const jwtAuth = require('../models/jwtAuth');
+const jwtAuth = require('../utils/jwtAuth');
 const chai = require('chai');
 const expect = chai.expect;
 

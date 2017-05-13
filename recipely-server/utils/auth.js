@@ -1,5 +1,5 @@
 var jwtAuth = require('./jwtAuth');
-var db = require('./database');
+var db = require('../models/database');
 
 var isAuthenticated = (req, res, next) => {
   if(!req.header('x-access-token')) {

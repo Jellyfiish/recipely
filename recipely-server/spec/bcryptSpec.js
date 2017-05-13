@@ -1,4 +1,4 @@
-var bcrypt = require('../models/bcrypt');
+var bcrypt = require('../utils/bcrypt');
 var chai = require('chai');
 var expect = chai.expect
 
