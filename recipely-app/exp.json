@@ -1,8 +1,8 @@
 {
-  "name": "recipely-app",
-  "description": "An empty new project",
+  "name": "recipely",
+  "description": "Find recipes by photo or list of ingredients",
   "slug": "recipely-app",
-  "privacy": "public",
+  "privacy": "unlisted",
   "sdkVersion": "16.0.0",
   "version": "1.0.0",
   "orientation": "portrait",
