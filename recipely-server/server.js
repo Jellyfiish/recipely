@@ -147,13 +147,9 @@ app.post('/api/login', (req, res) => {
           }
 
           jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username).then(token => {
-            if(err) {
-              res.status(401).end('invalid password or username');
-            } else {
-              res.status(200)
-                .json(token);
-            }
-          }).catch(err => res.status(401).end('invalid password or username'))
+            res.status(200)
+              .json(token);
+          }).catch(err => res.status(402).end('invalid password or username'))
         }).catch(err => {
           res.status(401).end('invalid password or username');
         })
