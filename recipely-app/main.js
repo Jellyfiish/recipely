@@ -103,8 +103,8 @@ class App extends Component {
     this.setState({isLoggedIn: !this.state.isLoggedIn});
   }
 
-  onNotesChange = (notes) => {
-    this.setState({notes});
+  onNotesChange = (notes, cb = () => {}) => {
+    this.setState({notes}, cb);
   };
 
   onPopularRecipesChange = (popularRecipes) => {

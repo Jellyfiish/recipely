@@ -23,6 +23,25 @@ class EditNoteScreen extends Component {
     this.setState({isUpdating: true});
     const { note, idToken, onGoBack } = this.props.navigation.state.params;
 
+    // Update note client side
+    const newNote = { ...note, text: this.state.text };
+    const notes = this.props.screenProps.notes;
+    const i = this.props.screenProps.notes.indexOf(note);
+    // Update notes with new note
+    this.props.screenProps.onNotesChange(
+      [ ...notes.slice(0, i), newNote, ...notes.slice(i + 1) ],
+      // onNotesChange calls setState which is not synchronous. Need to wait
+      // for the notes to change before we navigate user back.
+      () => {
+        // Need to trigger a render in previous component.
+        onGoBack(this.props.screenProps.notes.filter(
+          otherNote => note.f2f_id === otherNote.f2f_id)
+        );
+      }
+    );
+    this.setState({isUpdating: false});
+
+    // Update note in database. Do this in background.
     fetch(`https://jellyfiish-recipely.herokuapp.com/api/notes/${note.id}`, {
       method: 'PUT',
       headers: {
@@ -30,25 +49,10 @@ class EditNoteScreen extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ text: this.state.text }),
-    }).then(res => res.text())
-      .then(text => {
-        const newNote = {...note, text};
-        return newNote;
-      })
-      .then(newNote => {
-        const notes = this.props.screenProps.notes;
-        const i = this.props.screenProps.notes.indexOf(note);
-        // Update notes with new note
-        this.props.screenProps.onNotesChange(
-          [ ...notes.slice(0, i), newNote, ...notes.slice(i + 1) ]
-        );
-        // Need to trigger a render in previous component.
-        onGoBack(this.props.screenProps.notes.filter(
-          otherNote => note.f2f_id === otherNote.f2f_id)
-        );
-        this.setState({isUpdating: false});
-      })
-      .then(() => this.props.navigation.goBack());
+    });
+
+    // After updating note, go back to previous screen.
+    this.props.navigation.goBack()
   };
 
   render() {
