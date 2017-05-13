@@ -8,7 +8,7 @@ import {
   TextInput,
   KeyboardAvoidingView
 } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
+import { Card, List, ListItem } from 'react-native-elements';
 import Button from '../components/CustomButton';
 
 class SearchScreen extends Component {
@@ -70,20 +70,25 @@ class SearchScreen extends Component {
               onSubmitEditing={this.addIngredients}
             />
           </View>
+        </View>
 
-          <Text style={styles.ingredientHeading}>Ingredients:</Text>
-
-          <ScrollView>
+        <ScrollView>
+          <Card title="Ingredients">
             { ingredients.map((item, i) => {
                 return (
                   <View
                     key={i}
                     style={styles.rowContainer}
                   >
-                    <Text>{item.name}</Text>
-                    { item.value &&
-                      <Text>{String(item.value)}</Text>
-                    }
+                    <View style={styles.ingredientEntry}>
+                      <Text>{item.name}</Text>
+                      { item.value &&
+                        <Text style={styles.probability}>
+                          {String(item.value)}
+                        </Text>
+                      }
+                    </View>
+
                     <Button
                       title="Remove"
                       icon={{name: 'remove-circle-outline'}}
@@ -94,8 +99,8 @@ class SearchScreen extends Component {
                 );
               })
             }
-          </ScrollView>
-        </View>
+          </Card>
+        </ScrollView>
 
         <View style={styles.findWrap}>
           <Button
@@ -137,6 +142,12 @@ const styles = StyleSheet.create({
   findWrap: {
     marginTop: 10,
     marginBottom: 15,
+  },
+  ingredientEntry: {
+    flexDirection: 'column',
+  },
+  probability: {
+    fontSize: 12,
   },
 });
 
