@@ -110,15 +110,16 @@ class RecipeDetailScreen extends Component {
                 </View>
             }
           </View>
-
-          <Button
-            title='Directions'
-            color='white'
-            fontWeight='bold'
-            backgroundColor='#397af8'
-            raised
-            onPress={this.handlePressButtonAsync}
-          />
+          <View style={styles.buttonMargins}>
+            <Button
+              title='Directions'
+              color='white'
+              fontWeight='bold'
+              backgroundColor='#397af8'
+              raised
+              onPress={this.handlePressButtonAsync}
+            />
+          </View>
         </Card>
 
         <View>
@@ -188,8 +189,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonMargins: {
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 10,
+    marginBottom: 10,
   }
 });
 
