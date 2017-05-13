@@ -42,10 +42,16 @@ class AddNoteScreen extends Component {
       })
       .then(newNote => {
         const notes = this.props.screenProps.notes;
-        this.props.screenProps.onNotesChange([ ...notes, newNote ]);
-        // // Need to trigger a render in previous component.
-        onGoBack(this.props.screenProps.notes.filter(
-          otherNote => newNote.f2f_id === otherNote.f2f_id)
+        this.props.screenProps.onNotesChange(
+          [ ...notes, newNote ],
+          // onNotesChange calls setState which is not synchronous. Need to wait
+          // for the new note to be added before we navigate user back.
+          () => {
+            // // Need to trigger a render in previous component.
+            onGoBack(this.props.screenProps.notes.filter(
+              otherNote => newNote.f2f_id === otherNote.f2f_id)
+            );
+          }
         );
         this.setState({isAdding: false});
       })
