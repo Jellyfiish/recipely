@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, ActivityIndicator, View, Text, Button } from 'react-native';
 import { NavigationActions } from 'react-navigation';
+import loadingMessages from '../lib/loadingMessages';
 
 class SplashScreen extends Component {
   constructor(props) {
     super(props);
+
+    this.state = { loadingMessage: loadingMessages.random() };
   }
 
   componentDidUpdate() {
@@ -28,7 +31,7 @@ class SplashScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Splash screen!</Text>
+        <Text>{this.state.loadingMessage}</Text>
         <ActivityIndicator size="large" />
         <Button
           title="Go to main app"
