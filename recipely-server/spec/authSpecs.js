@@ -4,6 +4,7 @@ const expect = chai.expect;
 const sinon = require('sinon');
 const jwtAuth = require('../utils/jwtAuth');
 const db = require('../models/database');
+
 describe('AUTH', () => {
 
 	it('should return true if the header has a token in it', () => {
@@ -11,6 +12,7 @@ describe('AUTH', () => {
 	  const res = new sinon.stub();
 	  const decodeToken = new sinon.stub(jwtAuth, 'decodeToken'); 
 	  const queryAsync = new sinon.stub(db, 'queryAsync');
+
 	  const testToken = 'some-token'
 	  const req = {
 		header: new sinon.stub()
