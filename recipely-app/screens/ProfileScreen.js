@@ -4,10 +4,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import { List, ListItem } from 'react-native-elements';
+import { Button, List, ListItem } from 'react-native-elements';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -43,7 +42,6 @@ class ProfileScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>You have</Text>
 
         <List containerStyle={styles.listContainer}>
           <ListItem
@@ -60,6 +58,9 @@ class ProfileScreen extends Component {
 
         <Button
           title="Logout"
+          icon={{name: 'exit-to-app'}}
+          backgroundColor="#397af8"
+          raised
           onPress={this.onLogoutPress}
         />
       </View>
