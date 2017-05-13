@@ -63,6 +63,7 @@ class SearchScreen extends Component {
           <View style={styles.inputWrap}>
             <TextInput
               style={styles.input}
+              underlineColorAndroid="transparent"
               placeholder="Add an ingredient"
               value={this.state.input}
               onChange={this.onInputChange}
@@ -81,12 +82,12 @@ class SearchScreen extends Component {
                   >
                     <Text>{item.name}</Text>
                     { item.value &&
-                      <Text>{item.value}</Text>
+                      <Text>{String(item.value)}</Text>
                     }
                     <Button
                       title="Remove"
                       icon={{name: 'remove-circle-outline'}}
-                      buttonStyle={{marginRight: 0}}
+                      buttonStyle={{marginRight: 0, height: 36, paddingHorizontal: 8}}
                       onPress={() => this.onRemovePress(i)}
                     />
                   </View>
