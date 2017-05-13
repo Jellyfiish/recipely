@@ -5,10 +5,9 @@ import {
   StyleSheet,
   Text,
   ScrollView,
-  View,
-  Button
+  View
 } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Button, Card } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // Navigation prop needs to be passed down because it does not get passed down
@@ -48,11 +47,21 @@ const RecipeList = ({ navigation, recipes, notes, idToken, onRecipesChange }) =>
               <View style={styles.buttonContainer}>
                 <Button
                   title='Details'
+                  color='white'
+                  fontWeight='bold'
+                  raised
+                  backgroundColor='#397af8'
+                  icon={{name: 'explore'}}
                   onPress={() => this.onLearnMore(recipe)}
                 />
 
                 <Button
                   title='Delete'
+                  color='white'
+                  fontWeight='bold'
+                  backgroundColor='#397af8'
+                  raised
+                  icon={{name: 'delete'}}
                   onPress={() => this.onDeletePress(recipe)}
                 />
               </View>
