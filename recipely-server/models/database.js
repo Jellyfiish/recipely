@@ -1,12 +1,13 @@
 var pg = require('pg');
 var Promise = require('bluebird');
+var path = require('path');
+
 var pgp = require('pg-promise')({
   promiseLib: Promise
 });
-var url = require('url');
 
 var dbURL = process.env.DATABASE_URL || require('../config/config').DATABASE_URL;
-var tableSql = './tables.sql';
+var tableSql = path.join(__dirname,'../tables.sql');
 
 var db = pgp(dbURL);
 
