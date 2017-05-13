@@ -54,6 +54,13 @@ class SearchScreen extends Component {
     }
   };
 
+  // Truncate number to two decimal places. Returns it as a string.
+  truncateNum(num) {
+    numStr = num.toString();
+    numStr = numStr.slice(0, numStr.indexOf('.') + 3);
+    return numStr;
+  }
+
   render() {
     const { ingredients } = this.props.screenProps;
 
@@ -84,7 +91,7 @@ class SearchScreen extends Component {
                       <Text>{item.name}</Text>
                       { item.value &&
                         <Text style={styles.probability}>
-                          {String(item.value)}
+                          {this.truncateNum(item.value)}
                         </Text>
                       }
                     </View>
