@@ -8,7 +8,7 @@ describe('bcrypt', () => {
   var hashedPassword;
   
   it('should return a string that is longer than 58 chars', (done) => {
-  	bcrypt.hashPassword(password, (err, hash) => {
+  	bcrypt.hashPassword(password).then(hash => {
   		hashedPassword = hash;
   		expect(hash.length > 58).to.be.true;
   		done();
@@ -16,14 +16,14 @@ describe('bcrypt', () => {
   });
   
   it('should return true when we compare a password with its hashed version', (done) =>{
-  	bcrypt.comparePassword(password, hashedPassword, (err, match) => {
+  	bcrypt.comparePassword(password, hashedPassword).then(match => {
   		expect(match).to.be.true;
   		done();
   	});
   });
 
   it('should return false when we compare a password with the wrong hash', (done) =>{
-  	bcrypt.comparePassword(password, wrongPassword, (err, match) => {
+  	bcrypt.comparePassword(password, wrongPassword).then(match => {
   		expect(match).to.be.false;
   		done();
   	});

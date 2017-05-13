@@ -131,11 +131,17 @@ app.delete('/api/users/recipes/:recipeId', isAuthenticated, (req, res) => {
 app.post('/api/login', (req, res) => {
   const body = req.body;
   // QUESTION: We might want to do a toLowerCase on body.username and also when whenever we store a username (put username/signup) unless we care about username being case sensitive.
+  
+  // check if the user name exists in the db
+    // yes then check if the password given equal to the one in the db
+      // yes return the token with 200
+      // no return 401 and err
+    //return 401 and err
   db.queryAsync('SELECT * from users where username = $1', [body.username])
     .then((results)=> {
       if(results.rows.length) {
-        bcrypt.comparePassword(body.password, results.rows[0].password, (err, match) => {
-          if(err || !match) {
+        bcrypt.comparePassword(body.password, results.rows[0].password).then(match => {
+          if(!match) {
             res.status(401).end('invalid password or username');
             return;
           }
@@ -148,11 +154,13 @@ app.post('/api/login', (req, res) => {
                 .json(token);
             }
           });
-        });
+        }).catch(err => {
+          res.status(401).end('invalid password or username');
+        })
       } else {
         res.status(401).end('invalid password or username');
       }
-    })
+    });
 });
 
 app.post('/api/signup', (req, res) => {
@@ -162,12 +170,7 @@ app.post('/api/signup', (req, res) => {
       if(results.rows.length) {
         res.status(401).end('the user name is already taken :(');
       } else {
-        bcrypt.hashPassword(body.password, (err, hashedPassword) => {
-          if(err) {
-          res.status(500).end('please can you try to signup again in a moment!');
-          return;
-          }
-
+        bcrypt.hashPassword(body.password).then(hashedPassword => {
           db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id, username', [body.username, hashedPassword])
             .then((results)=> {
               jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
@@ -183,7 +186,9 @@ app.post('/api/signup', (req, res) => {
             .catch(err => {
               res.status(400).json(err);
             });
-        });
+        }).catch(err => {
+          res.status(500).end('please can you try to signup again in a moment!')
+        })
       }
     })
     .catch(err => {
@@ -211,8 +216,7 @@ app.put('/api/users', isAuthenticated, (req, res) => {
   db.queryAsync('SELECT * FROM users where id = $1', [userId])
     .then((results) => {
       if(newPassword && newUsername) {
-        bcrypt.hashPassword(newPassword, (err, hashedPassword) => {
-          if(err) res.status(500).end('please can you try to signup again in a moment!');
+        bcrypt.hashPassword(newPassword).then(hashedPassword => {
           db.queryAsync('UPDATE users SET username = $1, password = $2 RETURNING id, username', [newUsername, hashedPassword])
             .then((results)=> {
               jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
@@ -223,10 +227,11 @@ app.put('/api/users', isAuthenticated, (req, res) => {
             .catch(err => {
               res.status(400).json(err);
             });
-        });
+        }).catch(err => {
+          res.status(500).end('please can you try to signup again in a moment!');
+        })
       } else if(newPassword) {
-        bcrypt.hashPassword(newPassword, (err, hashedPassword) => {
-          if(err) res.status(500).end('please can you try again in a moment!');
+        bcrypt.hashPassword(newPassword).then(hashedPassword => {
           db.queryAsync('UPDATE users SET password = $1 where id = $2 RETURNING id, username', [hashedPassword, userId])
             .then((results)=> {
               jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
@@ -238,7 +243,9 @@ app.put('/api/users', isAuthenticated, (req, res) => {
             .catch(err => {
               res.status(400).json(err);
             });
-        });
+        }).catch(err => {
+          res.status(500).end('please can you try again in a moment!');
+        })
       } else if(newUsername) {
         db.queryAsync('UPDATE users SET username = $1 where id= $2 RETURNING id, username', [newUsername, userId])
           .then((results)=> {
