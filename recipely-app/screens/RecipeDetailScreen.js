@@ -9,7 +9,7 @@ import {
   Image,
   KeyboardAvoidingView
 } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Button, Card, Icon } from 'react-native-elements';
 import IngredientList from '../components/IngredientList';
 import { MaterialIcons } from '@expo/vector-icons';
 import Button from '../components/CustomButton';
@@ -129,23 +129,22 @@ class RecipeDetailScreen extends Component {
                 <Card key={note.id}>
                   <Text style={styles.noteTextStyle}>{note.text}</Text>
                   <View style={styles.buttonContainer}>
-                    <Button
-                      title='Edit'
-                      color='white'
-                      fontWeight='bold'
-                      backgroundColor='#397af8'
+                    <Icon
+                      type='octicon'
+                      color='#397af8'
                       raised
-                      icon={{name: 'mode-edit'}}
+                      size={20}
+                      name='pencil'
+                      reverse={true}
                       onPress={() => this.onEditPress(note)}
                     />
 
-                    <Button
-                      title='Delete'
-                      color='white'
-                      fontWeight='bold'
-                      backgroundColor='#397af8'
+                    <Icon
+                      color='#397af8'
                       raised
-                      icon={{name: 'delete'}}
+                      size={20}
+                      name='delete-sweep'
+                      reverse={true}
                       onPress={() => this.onDeletePress(note)}
                     />
                   </View>
