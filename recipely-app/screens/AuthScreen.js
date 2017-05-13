@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AsyncStorage, StyleSheet, ActivityIndicator, View, Text, TextInput } from 'react-native';
-import { Button } from 'react-native-elements';
+import Button from '../components/CustomButton';
 import { NavigationActions } from 'react-navigation';
 import dismissKeyboard from 'dismissKeyboard';
 
@@ -148,9 +148,6 @@ class AuthScreen extends Component {
                   <Button
                     title="Login"
                     icon={{name: 'power-settings-new'}}
-                    backgroundColor="#397af8"
-                    raised
-                    fontWeight='bold'
                     onPress={this.onLoginPress}
                   />
                 </View>
@@ -159,9 +156,6 @@ class AuthScreen extends Component {
                   <Button
                     title="Signup"
                     icon={{name: 'account-circle'}}
-                    backgroundColor="#397af8"
-                    raised
-                    fontWeight='bold'
                     onPress={this.onSignupPress}
                   />
                 </View>
