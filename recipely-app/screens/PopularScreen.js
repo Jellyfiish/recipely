@@ -46,7 +46,7 @@ class PopularScreen extends Component {
               onRecipesChange={onRecipesChange}
               onSearchChange={(query, result) => onPopularRecipesChange(result)}
             />
-          : <View>
+          : <View style={styles.loadingContainer}>
               <Text>Loading recipes</Text>
               <ActivityIndicator size="large" />
             </View>
@@ -59,6 +59,11 @@ class PopularScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
