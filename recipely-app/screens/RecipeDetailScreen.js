@@ -9,7 +9,7 @@ import {
   Image,
   KeyboardAvoidingView
 } from 'react-native';
-import { Button, Card, Icon } from 'react-native-elements';
+import { Card, Icon } from 'react-native-elements';
 import IngredientList from '../components/IngredientList';
 import { MaterialIcons } from '@expo/vector-icons';
 import Button from '../components/CustomButton';
