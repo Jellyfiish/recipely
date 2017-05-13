@@ -59,38 +59,50 @@ class SearchScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Add an ingredient"
-          value={this.state.input}
-          onChange={this.onInputChange}
-          onSubmitEditing={this.addIngredients}
-        />
+        <View style={styles.wrapper}>
+          <View style={styles.inputWrap}>
+            <TextInput
+              style={styles.input}
+              placeholder="Add an ingredient"
+              value={this.state.input}
+              onChange={this.onInputChange}
+              onSubmitEditing={this.addIngredients}
+            />
+          </View>
 
-      <Text style={styles.ingredientHeading}>Ingredients:</Text>
+          <Text style={styles.ingredientHeading}>Ingredients:</Text>
 
-        <ScrollView>
-          { ingredients.map((item, i) => {
-              return (
-                <View key={i}>
-                  <Text>{item.name}</Text>
-                  { item.value &&
-                    <Text>{item.value}</Text>
-                  }
-                  <Button
-                    title="Remove"
-                    onPress={() => this.onRemovePress(i)}
-                  />
-                </View>
-              );
-            })
-          }
-        </ScrollView>
+          <ScrollView>
+            { ingredients.map((item, i) => {
+                return (
+                  <View
+                    key={i}
+                    style={styles.rowContainer}
+                  >
+                    <Text>{item.name}</Text>
+                    { item.value &&
+                      <Text>{item.value}</Text>
+                    }
+                    <Button
+                      title="Remove"
+                      icon={{name: 'remove-circle-outline'}}
+                      buttonStyle={{marginRight: 0}}
+                      onPress={() => this.onRemovePress(i)}
+                    />
+                  </View>
+                );
+              })
+            }
+          </ScrollView>
+        </View>
 
-        <Button
-          title="Find recipes"
-          onPress={() => this.onFindRecipesPress()}
-        />
+        <View style={styles.findWrap}>
+          <Button
+            title="Find recipes"
+            icon={{name: 'search'}}
+            onPress={() => this.onFindRecipesPress()}
+          />
+        </View>
       </View>
     );
   }
@@ -100,15 +112,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  textInput: {
-    height: 50,
-    padding: 15,
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5,
+  },
+  wrapper: {
+    paddingHorizontal: 15,
+  },
+  inputWrap: {
+    marginVertical: 10,
+    backgroundColor: 'transparent',
+  },
+  input: {
+    height: 40,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
   },
   ingredientHeading: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 10,
-  }
+  },
+  findWrap: {
+    marginTop: 10,
+    marginBottom: 15,
+  },
 });
 
 export default SearchScreen;
