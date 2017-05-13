@@ -6,7 +6,8 @@ import {
   View,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import { Button, List, ListItem } from 'react-native-elements';
+import { List, ListItem } from 'react-native-elements';
+import Button from '../components/CustomButton';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -59,9 +60,6 @@ class ProfileScreen extends Component {
         <Button
           title="Logout"
           icon={{name: 'exit-to-app'}}
-          backgroundColor="#397af8"
-          raised
-          fontWeight='bold'
           onPress={this.onLogoutPress}
         />
       </View>

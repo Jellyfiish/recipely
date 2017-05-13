@@ -9,9 +9,10 @@ import {
   Image,
   KeyboardAvoidingView
 } from 'react-native';
-import { Button, Card } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import IngredientList from '../components/IngredientList';
 import { MaterialIcons } from '@expo/vector-icons';
+import Button from '../components/CustomButton';
 
 class RecipeDetailScreen extends Component {
   constructor(props) {
@@ -113,10 +114,6 @@ class RecipeDetailScreen extends Component {
           <View style={styles.buttonMargins}>
             <Button
               title='Directions'
-              color='white'
-              fontWeight='bold'
-              backgroundColor='#397af8'
-              raised
               onPress={this.handlePressButtonAsync}
             />
           </View>
@@ -159,10 +156,6 @@ class RecipeDetailScreen extends Component {
           <View style={styles.buttonMargins}>
             <Button
               title='Add'
-              color='white'
-              fontWeight='bold'
-              backgroundColor='#397af8'
-              raised
               icon={{name: 'note-add'}}
               onPress={() => this.onAddPress()}
             />

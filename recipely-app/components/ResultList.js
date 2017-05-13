@@ -6,10 +6,10 @@ import {
   Text,
   ScrollView,
   View,
-  Button
 } from 'react-native';
 import { Card } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
+import Button from '../components/CustomButton';
 
 // Navigation prop needs to be passed down because it does not get passed down
 // child components.
@@ -77,11 +77,13 @@ const ResultList = ({
               <View style={styles.buttonContainer}>
                 <Button
                   title='Details'
+                  buttonStyle={{marginLeft: 0}}
                   onPress={() => this.onLearnMore(recipe)}
                 />
 
                 <Button
                   title='Add'
+                  buttonStyle={{marginRight: 0}}
                   onPress={() => this.handleSaveRecipeButton(recipe)}
                 />
               </View>

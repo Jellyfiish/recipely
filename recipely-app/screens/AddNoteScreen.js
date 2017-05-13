@@ -7,7 +7,7 @@ import {
   View,
   TextInput,
 } from 'react-native';
-import { Button } from 'react-native-elements';
+import Button from '../components/CustomButton';
 
 class AddNoteScreen extends Component {
   constructor(props) {
@@ -81,9 +81,6 @@ class AddNoteScreen extends Component {
               : <Button
                   title="Add"
                   icon={{name: 'note-add'}}
-                  backgroundColor="#397af8"
-                  raised
-                  fontWeight='bold'
                   onPress={this.onAddPress}
                 />
           }
