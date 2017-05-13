@@ -83,6 +83,7 @@ class AddNoteScreen extends Component {
                   icon={{name: 'note-add'}}
                   backgroundColor="#397af8"
                   raised
+                  fontWeight='bold'
                   onPress={this.onAddPress}
                 />
           }

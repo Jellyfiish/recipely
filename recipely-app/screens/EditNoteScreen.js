@@ -81,6 +81,7 @@ class EditNoteScreen extends Component {
                 icon={{name: 'mode-edit'}}
                 backgroundColor="#397af8"
                 raised
+                fontWeight='bold'
                 onPress={this.onUpdatePress}
               />
           }
