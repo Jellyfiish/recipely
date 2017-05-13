@@ -8,7 +8,7 @@ import {
   TextInput,
   KeyboardAvoidingView
 } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
+import { Card, List, ListItem } from 'react-native-elements';
 import Button from '../components/CustomButton';
 
 class SearchScreen extends Component {
@@ -54,43 +54,68 @@ class SearchScreen extends Component {
     }
   };
 
+  // Truncate number to two decimal places. Returns it as a string.
+  truncateNum(num) {
+    numStr = num.toString();
+    numStr = numStr.slice(0, numStr.indexOf('.') + 3);
+    return numStr;
+  }
+
   render() {
     const { ingredients } = this.props.screenProps;
 
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Add an ingredient"
-          value={this.state.input}
-          onChange={this.onInputChange}
-          onSubmitEditing={this.addIngredients}
-        />
-
-      <Text style={styles.ingredientHeading}>Ingredients:</Text>
+        <View style={styles.wrapper}>
+          <View style={styles.inputWrap}>
+            <TextInput
+              style={styles.input}
+              underlineColorAndroid="transparent"
+              placeholder="Add an ingredient"
+              value={this.state.input}
+              onChange={this.onInputChange}
+              onSubmitEditing={this.addIngredients}
+            />
+          </View>
+        </View>
 
         <ScrollView>
-          { ingredients.map((item, i) => {
-              return (
-                <View key={i}>
-                  <Text>{item.name}</Text>
-                  { item.value &&
-                    <Text>{item.value}</Text>
-                  }
-                  <Button
-                    title="Remove"
-                    onPress={() => this.onRemovePress(i)}
-                  />
-                </View>
-              );
-            })
-          }
+          <Card title="Ingredients">
+            { ingredients.map((item, i) => {
+                return (
+                  <View
+                    key={i}
+                    style={styles.rowContainer}
+                  >
+                    <View style={styles.ingredientEntry}>
+                      <Text>{item.name}</Text>
+                      { item.value &&
+                        <Text style={styles.probability}>
+                          {this.truncateNum(item.value)}
+                        </Text>
+                      }
+                    </View>
+
+                    <Button
+                      title="Remove"
+                      icon={{name: 'remove-circle-outline'}}
+                      buttonStyle={{marginRight: 0, height: 36, paddingHorizontal: 8}}
+                      onPress={() => this.onRemovePress(i)}
+                    />
+                  </View>
+                );
+              })
+            }
+          </Card>
         </ScrollView>
 
-        <Button
-          title="Find recipes"
-          onPress={() => this.onFindRecipesPress()}
-        />
+        <View style={styles.findWrap}>
+          <Button
+            title="Find recipes"
+            icon={{name: 'search'}}
+            onPress={() => this.onFindRecipesPress()}
+          />
+        </View>
       </View>
     );
   }
@@ -100,15 +125,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  textInput: {
-    height: 50,
-    padding: 15,
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5,
+  },
+  wrapper: {
+    paddingHorizontal: 15,
+  },
+  inputWrap: {
+    marginVertical: 10,
+    backgroundColor: 'transparent',
+  },
+  input: {
+    height: 40,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
   },
   ingredientHeading: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 10,
-  }
+  },
+  findWrap: {
+    marginTop: 10,
+    marginBottom: 15,
+  },
+  ingredientEntry: {
+    flexDirection: 'column',
+  },
+  probability: {
+    fontSize: 12,
+  },
 });
 
 export default SearchScreen;
