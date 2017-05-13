@@ -176,6 +176,7 @@ class PhotoScreen extends Component {
               name="photo-album"
               size={30}
               raised
+              color="#397af8"
               onPress={this.pickImage}
             />
             <Text>Use album</Text>
@@ -187,6 +188,7 @@ class PhotoScreen extends Component {
                 name="done"
                 size={30}
                 raised
+                color="#397af8"
                 onPress={this.getPredictions}
               />
               <Text>Done</Text>
@@ -204,6 +206,7 @@ class PhotoScreen extends Component {
               name="photo-camera"
               size={30}
               raised
+              color="#397af8"
               onPress={this.takeImage}
             />
             <Text>Use camera</Text>
