@@ -146,14 +146,14 @@ app.post('/api/login', (req, res) => {
             return;
           }
 
-          jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
+          jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username).then(token => {
             if(err) {
               res.status(401).end('invalid password or username');
             } else {
               res.status(200)
                 .json(token);
             }
-          });
+          }).catch(err => res.status(401).end('invalid password or username'))
         }).catch(err => {
           res.status(401).end('invalid password or username');
         })
@@ -173,15 +173,9 @@ app.post('/api/signup', (req, res) => {
         bcrypt.hashPassword(body.password).then(hashedPassword => {
           db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id, username', [body.username, hashedPassword])
             .then((results)=> {
-              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
-                if(err) {
-                 res.status(401).json(err);
-                 return;
-                } else if(token) {
-                  res.status(200).json(token);
-                }
-
-              })
+              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username).then(token => {
+                res.status(200).json(token);
+              }).catch(err => res.status(401).json(err));
             })
             .catch(err => {
               res.status(400).json(err);
@@ -219,10 +213,9 @@ app.put('/api/users', isAuthenticated, (req, res) => {
         bcrypt.hashPassword(newPassword).then(hashedPassword => {
           db.queryAsync('UPDATE users SET username = $1, password = $2 RETURNING id, username', [newUsername, hashedPassword])
             .then((results)=> {
-              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
-                if(err) res.status(401).json(err);
-                if(token) res.status(201).json({username: newUsername, password: newPassword});
-              })
+              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username).then(token => {
+                res.status(201).json({username: newUsername, password: newPassword});
+              }).catch(err => res.status(401).json(err));
             })
             .catch(err => {
               res.status(400).json(err);
@@ -234,11 +227,10 @@ app.put('/api/users', isAuthenticated, (req, res) => {
         bcrypt.hashPassword(newPassword).then(hashedPassword => {
           db.queryAsync('UPDATE users SET password = $1 where id = $2 RETURNING id, username', [hashedPassword, userId])
             .then((results)=> {
-              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username, (err, token) => {
-                if(err) res.status(401).json(err);
+              jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username).then(token => {
                 // for now I will simply append the token, but I would assume that we should return the new token instead of the username and password?
                 if(token) res.status(201).json({password: newPassword});
-              })
+              }).catch(err => res.status(401).json(err));
             })
             .catch(err => {
               res.status(400).json(err);
@@ -249,7 +241,11 @@ app.put('/api/users', isAuthenticated, (req, res) => {
       } else if(newUsername) {
         db.queryAsync('UPDATE users SET username = $1 where id= $2 RETURNING id, username', [newUsername, userId])
           .then((results)=> {
-            if(token) res.status(201).json({username: newUsername});
+            if(results.rows.length) {
+              res.status(201).json({username: newUsername});
+            } else {
+              res.status(404).end('resource is not found');
+            }
           })
           .catch(err => {
             res.status(400).json(err);
