@@ -3,9 +3,10 @@ import { Button } from 'react-native-elements';
 
 const CustomButton = (props) => (
   <Button
+    color='white'
     backgroundColor="#397af8"
-    raised
     fontWeight='bold'
+    raised
     {...props}
   />
 );
