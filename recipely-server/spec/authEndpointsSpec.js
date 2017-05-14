@@ -92,9 +92,56 @@ describe('Auth Handlers', () => {
   });
 
   describe('SIGNUP', () => {
-    it('should return a token and 200 status code when signing up a new user', sinon.test(function(done) => {
+    it('should return a token and 200 status code when signing up a new user', sinon.test(function(done) {
+      var validToken = 'valid-token';
+      var queryAsync = new this.stub(db, 'queryAsync');
+      var hashPassword = new this.stub(bcrypt, 'hashPassword');
+      var encodeToken = new this.stub(jwtAuth, 'encodeToken');
+      var req = {
+        body: {
+          username: 'grady',
+          password: '12345'
+        }
+      };
+      var res = {
+        status: new this.stub()
+      };
+      var json = new this.stub();
+      res.status.returns({json: json});
 
+      encodeToken.resolves(validToken);
+
+      queryAsync.onFirstCall().resolves({rows: []});
+      queryAsync.onSecondCall().resolves({rows: [{id: 1, username: 'Grady'}]});
+      hashPassword.resolves('hashedPassword');
+      handlers.postSignup(req, res).then(()=> {
+        expect(res.status.args[0][0]).to.equal(200);
+        expect(json.args[0][0]).to.equal(validToken);
+        expect(hashPassword.args[0][0]).to.equal('12345');
+        done();
+      }).catch(done)
     }));
-    it('')
+    it('should return 401 status code when the username is already taken', sinon.test(function(done) {
+      var queryAsync = new this.stub(db, 'queryAsync');
+      var req = {
+        body: {
+          username: 'grady',
+          password: '12345'
+        }
+      };
+      var res = {
+        status: new this.stub()
+      };
+      var end = new this.stub();
+      res.status.returns({end});
+
+
+      queryAsync.resolves({rows: [{username: 'Grady'}]});
+      handlers.postSignup(req, res).then(()=> {
+        expect(res.status.args[0][0]).to.equal(401);
+        expect(end.args[0][0]).to.equal('the username is already taken :(');
+        done();
+      }).catch(done)
+    }))
   })
 });
