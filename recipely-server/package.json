@@ -7,7 +7,7 @@
     "start": "node server.js",
     "start:watch": "nodemon .",
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha spec/*"
   },
   "repository": {
     "type": "git",
