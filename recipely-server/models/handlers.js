@@ -35,7 +35,7 @@ function postSignup(req, res) {
   return db.queryAsync('SELECT * FROM users where username = $1', [body.username])
     .then((results) => {
       if(results.rows.length) {
-        res.status(401).end('the user name is already taken :(');
+        res.status(401).end('the username is already taken :(');
       } else {
         return bcrypt.hashPassword(body.password).then(hashedPassword => {
           return db.queryAsync('INSERT INTO users (username, password) values ($1, $2) RETURNING id, username', [body.username, hashedPassword])
@@ -225,7 +225,7 @@ function getRecipes(req, res) {
     .then(response => {
       res.status(200).json(response.data);
     })
-    .catch(err => console.error(err));
+    .catch(err => res.status(500).json(err));
 }
 
 function getRecipe(req, res) {
@@ -233,7 +233,7 @@ function getRecipe(req, res) {
     .then(response => {
       res.status(200).json(response.data);
     })
-    .catch(err => console.error(err)); 
+    .catch(err => res.status(500).json(err)); 
 }
 
 function postUserRecipes(req, res) {
@@ -307,7 +307,6 @@ function getUsersRecipes(req, res) {
       }
     })
     .catch(err => {
-      console.log(err)
       res.status(500).json(err);
     });
 }
