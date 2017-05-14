@@ -1,69 +1,147 @@
-var axios = require('axios');
 var chai = require('chai');
 var expect = chai.expect;
-var server = require('../server');
+var handlers = require('../models/handlers');
 var sinon = require('sinon');
 var db = require('../models/database');
 var bcrypt = require('../utils/bcrypt');
 var jwtAuth = require('../utils/jwtAuth');
+var sinonTest = require('sinon-test');
+sinon.test = sinonTest.configureTest(sinon);
+sinon.testCase = sinonTest.configureTestCase(sinon)
 
-describe('Auth Endpoints', () => {
-  const options = {
-  	url: 'http://127.0.0.1:8080/api/login',
-  	method: 'POST',
-  	data: {
-  		username: 'user',
-  		password: 'secret'
-  	}
-  }
+describe('Auth Handlers', () => {
+  describe('LOGIN', function() {
+  this.timeout(2000)
+    it('should return token and 200 status code when the user and password are valid', sinon.test(function(done)  {
+      var validToken = 'valid-token';
+      var queryAsync = new this.stub(db, 'queryAsync');
+      var comparePassword = new this.stub(bcrypt, 'comparePassword');
+      var encodeToken = new this.stub(jwtAuth, 'encodeToken');
+      var req = {
+        body: {
+          username: 'grady',
+          password: '12345'
+        }
+      };
+      var res = {
+        status: new this.stub()
+      };
+      var json = new this.stub();
+      res.status.returns({json: json});
 
-  it('should return token and 200 status code when the user and password are valid', (done) => {
-    const validToken = 'valid-token';
-    const queryAsync = new sinon.stub(db, 'queryAsync');
-    const comparePassword = new sinon.stub(bcrypt, 'comparePassword');
-    const encodeToken = new sinon.stub(jwtAuth, 'encodeToken');
-    //const status = new sinon.stub();
-    //const res = new sinon.stub();
+      encodeToken.resolves(validToken);
 
-    const res = {
-      status: () => {}
-    };
-    const status = new sinon.stub(res, 'status');
-    const json = new sinon.stub();
-    status.returns({json: json});
-
-    encodeToken.returns(Promise.resolve(validToken));
-
-    queryAsync.returns(Promise.resolve({rows: [1]}));
-    comparePassword.returns(Promise.resolve(true));
-  	axios(options)
-      .then(response => {
-        console.log(status.args)
-        expect(json.args[0][0] === validToken).to.be.true;
+      queryAsync.resolves({rows: [{password: 'hashedPassword'}]});
+      comparePassword.resolves(true);
+      handlers.postLogin(req, res).then(()=> {
+        expect(res.status.args[0][0]).to.equal(200);
+        expect(json.args[0][0]).to.equal(validToken);
+        expect(comparePassword.args[0][1]).to.equal('hashedPassword');
         done();
-      }).catch(e => {console.log(e);done();})
+      }).catch(done)
+    }));
+
+    it('should return 401 status code when a user enters an invalid password', sinon.test(function(done) {
+      var queryAsync = new this.stub(db, 'queryAsync');
+      var comparePassword = new this.stub(bcrypt, 'comparePassword');
+      var req = {
+        body: {
+          username: 'grady',
+          password: '12345'
+        }
+      };
+      var res = {
+        status: new this.stub()
+      };
+      var end = new this.stub();
+      res.status.returns({end});
+
+
+      queryAsync.resolves({rows: [{password: 'hashedPassword'}]});
+      comparePassword.resolves(false);
+      handlers.postLogin(req, res).then(()=> {
+        expect(res.status.args[0][0]).to.equal(401);
+        expect(end.args[0][0]).to.equal('invalid password or username');
+        done();
+      }).catch(done)
+    }));
+
+    it('should return 401 status code when a user enters an invalid username', sinon.test(function(done) {
+      var queryAsync = new this.stub(db, 'queryAsync');
+      var req = {
+        body: {
+          username: 'grady',
+          password: '12345'
+        }
+      };
+      var res = {
+        status: new this.stub()
+      };
+      var end = new this.stub();
+      res.status.returns({end});
+
+
+      queryAsync.resolves({rows: []});
+      handlers.postLogin(req, res).then(()=> {
+        expect(res.status.args[0][0]).to.equal(401);
+        expect(end.args[0][0]).to.equal('invalid password or username');
+        done();
+      }).catch(done)
+    }))
+    
   });
+
+  describe('SIGNUP', () => {
+    it('should return a token and 200 status code when signing up a new user', sinon.test(function(done) {
+      var validToken = 'valid-token';
+      var queryAsync = new this.stub(db, 'queryAsync');
+      var hashPassword = new this.stub(bcrypt, 'hashPassword');
+      var encodeToken = new this.stub(jwtAuth, 'encodeToken');
+      var req = {
+        body: {
+          username: 'grady',
+          password: '12345'
+        }
+      };
+      var res = {
+        status: new this.stub()
+      };
+      var json = new this.stub();
+      res.status.returns({json: json});
+
+      encodeToken.resolves(validToken);
+
+      queryAsync.onFirstCall().resolves({rows: []});
+      queryAsync.onSecondCall().resolves({rows: [{id: 1, username: 'Grady'}]});
+      hashPassword.resolves('hashedPassword');
+      handlers.postSignup(req, res).then(()=> {
+        expect(res.status.args[0][0]).to.equal(200);
+        expect(json.args[0][0]).to.equal(validToken);
+        expect(hashPassword.args[0][0]).to.equal('12345');
+        done();
+      }).catch(done)
+    }));
+    it('should return 401 status code when the username is already taken', sinon.test(function(done) {
+      var queryAsync = new this.stub(db, 'queryAsync');
+      var req = {
+        body: {
+          username: 'grady',
+          password: '12345'
+        }
+      };
+      var res = {
+        status: new this.stub()
+      };
+      var end = new this.stub();
+      res.status.returns({end});
+
+
+      queryAsync.resolves({rows: [{username: 'Grady'}]});
+      handlers.postSignup(req, res).then(()=> {
+        expect(res.status.args[0][0]).to.equal(401);
+        expect(end.args[0][0]).to.equal('the username is already taken :(');
+        done();
+      }).catch(done)
+    }))
+  })
 });
-
-//
-
-// db.queryAsync('SELECT * from users where username = $1', [body.username])
-//     .then((results)=> {
-//       if(results.rows.length) {
-//         bcrypt.comparePassword(body.password, results.rows[0].password).then(match => {
-//           if(!match) {
-//             res.status(401).end('invalid password or username');
-//             return;
-//           }
-
-//           jwtAuth.encodeToken(results.rows[0].id, results.rows[0].username).then(token => {
-//             res.status(200)
-//               .json(token);
-//           }).catch(err => res.status(402).end('invalid password or username'))
-//         }).catch(err => {
-//           res.status(401).end('invalid password or username');
-//         })
-//       } else {
-//         res.status(401).end('invalid password or username');
-//       }
-//     });
