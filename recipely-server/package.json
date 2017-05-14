@@ -7,7 +7,7 @@
     "start": "node server.js",
     "start:watch": "nodemon .",
     "lint": "eslint .",
-    "test": "mocha spec/*"
+    "test": "nyc --produce-source-map=true mocha spec/*"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "eslint": "^3.19.0",
     "mocha": "^3.3.0",
     "nodemon": "^1.11.0",
+    "nyc": "^10.3.2",
     "sinon": "^2.2.0",
     "sinon-test": "^1.0.2"
   }
