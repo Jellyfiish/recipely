@@ -34,16 +34,11 @@
 ## Technologies Used
 
 * Server Side
-  * Axios - requests
-  * Bcrypt - encryption and decryption
-  * Bluebird - promises
   * Express - server framework
   * Food2Fork API - recipe database
   * JWT - validation tokens
-  * Morgan - traffic logging
   * Postgres/pg - data persistance
 * Client Side
-  * Base64 - decoding
   * Clarifai API - image analysis
   * Expo - mobile app bundling/development
   * React-native - frontend framework
