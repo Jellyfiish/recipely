@@ -35,14 +35,15 @@
 
 * Server Side
   * Express - server framework
-  * Food2Fork API - recipe database
   * JWT - validation tokens
   * Postgres/pg - data persistance
 * Client Side
-  * Clarifai API - image analysis
   * Expo - mobile app bundling/development
   * React-native - frontend framework
   * React-navigation - mobile screen navigation
+* External APIs
+  * Clarifai API - image analysis
+  * Food2Fork API - recipe database
 
 ## API Usage
 
