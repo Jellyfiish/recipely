@@ -141,9 +141,9 @@ class PhotoScreen extends Component {
     // Toggle activity indicator off
     this.setState({ isGettingPrediction: !this.state.isGettingPrediction });
     // Filter only good predictions. We will consider a prediction to be
-    // good if it has a value >= 0.75.
+    // good if it has a value >= 0.85.
     const predictions = res.outputs[0].data.concepts.filter(item => {
-      return item.value >= 0.75;
+      return item.value >= 0.85;
     });
     // Set the state of our predictions on our root component.
     onPredictionsChange(predictions);
