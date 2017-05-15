@@ -7,7 +7,8 @@
     "start": "node server.js",
     "start:watch": "nodemon .",
     "lint": "eslint .",
-    "test": "nyc --produce-source-map=true mocha spec/*"
+    "test": "nyc mocha spec/*",
+    "test:html": "nyc --reporter=html mocha spec/*"
   },
   "repository": {
     "type": "git",
