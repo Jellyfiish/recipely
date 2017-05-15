@@ -2,7 +2,19 @@ const db = require('./database');
 const bcrypt = require('../utils/bcrypt');
 const jwtAuth = require('../utils/jwtAuth');
 const axios = require('axios');
-const key = process.env.F2F_API_KEY || require('../config/config').F2F_API_KEY;
+const base64 = require('base-64');
+
+// check if running in deployment or development environment so we only require config once
+if (!process.env.F2F_API_KEY) {
+  var config = require('../config/config');
+};
+
+const key = process.env.F2F_API_KEY || config.F2F_API_KEY;
+
+// generate the Clarifai API basic authorization key
+const CLIENT_ID = process.env.CLIENT_ID || config.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET || config.CLIENT_SECRET;
+const auth = base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`);
 
 function postLogin(req, res) {
   const body = req.body;
@@ -233,7 +245,7 @@ function getRecipe(req, res) {
     .then(response => {
       res.status(200).json(response.data);
     })
-    .catch(err => res.status(500).json(err)); 
+    .catch(err => res.status(500).json(err));
 }
 
 function postUserRecipes(req, res) {
@@ -326,6 +338,10 @@ function deleteUsersRecipe(req, res) {
     .catch(err => {
       res.status(500).json(err);
     });
+}
+
+function postClarifai(req, res) {
+
 }
 
 module.exports = {
