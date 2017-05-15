@@ -312,7 +312,7 @@ Some dummy data has been provided for testing. To seed your local postgres datab
 
 ### Tests
 
-The provided tests utilize the Chai and Sinon testing suites and can be run with the `npm test` command from within the `recipely/recipely-server` directory. This command will also generate and display a coverage report, provided by the Istanbul/nyc utility.
+The provided tests utilize the Mocha, Chai, and Sinon testing libraries, and may be run with the `npm test` command from within the `recipely/recipely-server` directory. This command will also generate and display a coverage report, provided by the Istanbul/nyc utility.
 
 If you would prefer to generate an html coverage view, you may run the `npm run test:html` command. After the script has executed, navigate to the `recipely/recipely-server/coverage` directory and open the `index.html` file in your browser.
 
