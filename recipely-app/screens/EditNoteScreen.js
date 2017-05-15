@@ -16,6 +16,7 @@ class EditNoteScreen extends Component {
     this.state = {
       text: this.props.navigation.state.params.note.text,
       isUpdating: false,
+      height: 0,
     };
   }
 
@@ -63,11 +64,14 @@ class EditNoteScreen extends Component {
         <View style={styles.wrapper}>
           <View style={styles.inputWrap}>
             <TextInput
-              style={styles.input}
+              style={[styles.input, {height: Math.max(40, this.state.height + 10)}]}
               autoFocus={true}
               multiline={true}
               onChangeText={text => {
                 this.setState({text});
+              }}
+              onChange={event => {
+                this.setState({height: event.nativeEvent.contentSize.height});
               }}
             >
               <Text>{this.state.text}</Text>
@@ -96,9 +100,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   inputWrap: {
-    flexDirection: 'row',
     marginVertical: 20,
-    height: 40,
     backgroundColor: 'transparent',
   },
   input: {
