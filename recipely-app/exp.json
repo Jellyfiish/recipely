@@ -16,6 +16,10 @@
     "assetExts": ["ttf", "mp4"]
   },
   "ios": {
-    "supportsTablet": true
+    "supportsTablet": true,
+    "bundleIdentifier": "com.recipely.exp",
+  },
+  "android": {
+     "package": "com.recipely.exp",
   }
 }
