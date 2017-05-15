@@ -57,6 +57,19 @@ function postSignup(req, res) {
     });
 }
 
+function getRefreshToken(req, res) {
+  const token = req.header('x-access-token').split(' ')[1];
+  jwtAuth.decodeToken(token, (err, payload) => {
+    jwtAuth.encodeToken(payload.sub, payload.user, (err, token) => {
+      if(token) {
+        res.json(token);
+      } else {
+        res.status(500).json(err);
+      }
+    })
+  });
+}
+
 function getUsers(req, res) {
   return db.queryAsync('SELECT * FROM users')
     .then(response => {
@@ -343,5 +356,6 @@ module.exports = {
   getRecipe,
   postUserRecipes,
   getUsersRecipes,
-  deleteUsersRecipe
+  deleteUsersRecipe,
+  getRefreshToken
 }
