@@ -21,6 +21,7 @@
     1. [Installing Postgres](#installing-postgres)
     1. [Seed Database](#seed-database)
     1. [Configuring Environment Variables](#configuring-environment-variables)
+    1. [Tests](#tests)
 1. [Contributing](#contributing)
     1. [Roadmap](#roadmap)
 
@@ -308,6 +309,12 @@ Some dummy data has been provided for testing. To seed your local postgres datab
  1. Replace the `DATABASE_URL` variable with the path to your local Postgres server (e.g. `postgres://user:password@localhost:5432/mydatabasefile`).
 
  1. Replace the `TOKEN_SECRET` variable with your own secret phrase. This will be used to encode JSON web tokens.
+
+### Tests
+
+The provided tests utilize the Mocha, Chai, and Sinon testing libraries, and may be run with the `npm test` command from within the `recipely/recipely-server` directory. This command will also generate and display a coverage report, provided by the Istanbul/nyc utility.
+
+If you would prefer to generate an html coverage view, you may run the `npm run test:html` command. After the script has executed, navigate to the `recipely/recipely-server/coverage` directory and open the `index.html` file in your browser.
 
 ## Contributing
 
