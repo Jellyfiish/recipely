@@ -315,12 +315,6 @@ Some dummy data has been provided for testing. To seed your local postgres datab
 
 ### Configuring Environment Variables
 
-* Client side
-
- 1. Make a new file `config.js` in the `/recipely/recipely-app/config` directory using the existing `config.example.js` file as a template.
-
- 1. Replace the `CLIENT_ID` and `CLIENT_SECRET` variables with your own [Clarifai API](https://www.clarifai.com/api) keys.
-
 * Server side
 
  1. Make a new file `config.js` in the `/recipely/recipely-server/config` directory using the existing `config.example.js` file as a template.
@@ -330,6 +324,8 @@ Some dummy data has been provided for testing. To seed your local postgres datab
  1. Replace the `DATABASE_URL` variable with the path to your local Postgres server (e.g. `postgres://user:password@localhost:5432/mydatabasefile`).
 
  1. Replace the `TOKEN_SECRET` variable with your own secret phrase. This will be used to encode JSON web tokens.
+
+ 1. Replace the `CLIENT_ID` and `CLIENT_SECRET` variables with the id and secret associated with your own Clarifai account.
 
 ### Tests
 
