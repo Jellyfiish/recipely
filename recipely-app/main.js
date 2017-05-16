@@ -25,32 +25,50 @@ class App extends Component {
 
   componentDidMount() {
     AsyncStorage.getItem('id_token', (error, idToken) => {
-      // Check if the user is still logged in
-      if (idToken !== null) {
+      // Check if the user is still logged in and token is still valid
+      const isTokenExpired = (idToken) => {
+        const decoded = jwtDecode(idToken);
+        const timeCurr = new Date().getTime();
+        const timeExp = decoded.exp * 1000;
+        return timeExp - timeCurr < 300000;
+      };
+
+      if (idToken !== null && !isTokenExpired(idToken)) {
         this.setState({isLoggedIn: true});
         this.setIdToken(idToken);
+
+        // Make a request to our server to get a new token
+        const getRefreshToken = fetch('https://jellyfiish-recipely.herokuapp.com/api/token', {
+          headers: { 'x-access-token': `Bearer ${idToken}` }
+        }).then(res => res.json())
+          .then(refreshToken => {
+            AsyncStorage.setItem('id_token', refreshToken, () => {
+              this.setIdToken(refreshToken);
+            });
+          });
+
         // Fetch user's recipes
         const fetchRecipes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes', {
-          headers: { 'x-access-token': `Bearer ${this.state.idToken}` }
+          headers: { 'x-access-token': `Bearer ${idToken}` }
         }).then(res => {
             if (res.status === 200) {
               res.json()
                 .then(recipes => this.onRecipesChange(recipes));
             }
-        });
+          });
 
         // Fetch user's notes
         const fetchNotes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/notes', {
-          headers: { 'x-access-token': `Bearer ${this.state.idToken}` }
+          headers: { 'x-access-token': `Bearer ${idToken}` }
         }).then(res => {
             if (res.status === 200) {
               res.json()
                 .then(notes => this.onNotesChange(notes));
             }
-        });
+          });
 
         // App is ready when the user's recipes and notes have been fetched.
-        Promise.all([fetchRecipes, fetchNotes])
+        Promise.all([fetchRecipes, fetchNotes, getRefreshToken])
           .then(() => this.setState({isAppReady: true}));
       } else {
         this.setState({isAppReady: true});
