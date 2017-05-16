@@ -2,7 +2,16 @@ const db = require('./database');
 const bcrypt = require('../utils/bcrypt');
 const jwtAuth = require('../utils/jwtAuth');
 const axios = require('axios');
-const key = process.env.F2F_API_KEY || require('../config/config').F2F_API_KEY;
+
+// check if running in deployment or development environment so we only require config once
+if (!process.env.F2F_API_KEY) {
+  var config = require('../config/config');
+};
+
+// config/environment variables
+const key = process.env.F2F_API_KEY || config.F2F_API_KEY;
+const CLIENT_ID = process.env.CLIENT_ID || config.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET || config.CLIENT_SECRET;
 
 function postLogin(req, res) {
   const body = req.body;
@@ -246,7 +255,7 @@ function getRecipe(req, res) {
     .then(response => {
       res.status(200).json(response.data);
     })
-    .catch(err => res.status(500).json(err)); 
+    .catch(err => res.status(500).json(err));
 }
 
 function postUserRecipes(req, res) {
@@ -341,6 +350,19 @@ function deleteUsersRecipe(req, res) {
     });
 }
 
+function postClarifai(req, res) {
+  axios.post('https://api.clarifai.com/v2/token', null, {
+    auth: {
+      username: config.CLIENT_ID,
+      password: config.CLIENT_SECRET
+    }
+  }).then(response => {
+    res.send(response.data);
+  }).catch(e => {
+    res.status(500).json(e);
+  });
+}
+
 module.exports = {
   postLogin,
   postSignup,
@@ -357,5 +379,6 @@ module.exports = {
   postUserRecipes,
   getUsersRecipes,
   deleteUsersRecipe,
+  postClarifai,
   getRefreshToken
 }

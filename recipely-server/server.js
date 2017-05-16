@@ -48,6 +48,9 @@ app.put('/api/notes/:id_note', isAuthenticated, handlers.putNote);
 
 app.delete('/api/notes/:id_note', isAuthenticated, handlers.deleteNote);
 
+// clarifai auth token endpoint
+app.post('/api/clarifai', isAuthenticated, handlers.postClarifai);
+
 
 app.listen(port, function() {
   console.log('Server is now listening on port', port);
