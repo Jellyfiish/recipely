@@ -353,8 +353,8 @@ function deleteUsersRecipe(req, res) {
 function postClarifai(req, res) {
   axios.post('https://api.clarifai.com/v2/token', null, {
     auth: {
-      username: config.CLIENT_ID,
-      password: config.CLIENT_SECRET
+      username: CLIENT_ID,
+      password: CLIENT_SECRET
     }
   }).then(response => {
     res.send(response.data);
