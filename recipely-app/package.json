@@ -6,7 +6,6 @@
   "private": true,
   "main": "main.js",
   "dependencies": {
-    "base-64": "^0.1.0",
     "expo": "16.0.0",
     "jwt-decode": "^2.2.0",
     "react": "16.0.0-alpha.6",
