@@ -13,8 +13,6 @@ import {
   Platform
 } from 'react-native';
 import { Icon } from 'react-native-elements';
-// Used to get access token from Clarifai
-import auth from '../config/config';
 
 class PhotoScreen extends Component {
   constructor(props) {
@@ -95,13 +93,9 @@ class PhotoScreen extends Component {
     // Encode image as base64 to send to image prediction API.
     ImageStore.getBase64ForTag(uri, (encoded) => {
       // Image prediction API requires an authorization token.
-      fetch('https://api.clarifai.com/v2/token', {
+      fetch('https://jellyfiish-recipely.herokuapp.com/api/clarifai', {
         method: 'POST',
-        headers: {
-          // auth is a base64 encoded string containing our client ID and client secret.
-          // See '../config/config.example.js'.
-          'Authorization': 'Basic ' + auth
-        }
+        headers: { 'x-access-token': `Bearer ${this.props.screenProps.idToken}` }
       }).then(res => res.json())
         .then(res => this.onAuthSuccess(res.access_token, encoded))
         .then(res => res.json())
