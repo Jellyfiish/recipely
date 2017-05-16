@@ -25,10 +25,22 @@ class App extends Component {
 
   componentDidMount() {
     AsyncStorage.getItem('id_token', (error, idToken) => {
-      // Check if the user is still logged in
-      if (idToken !== null) {
+      // Check if the user is still logged in and token is still valid
+      if (idToken !== null && !isTokenExpired(idToken)) {
         this.setState({isLoggedIn: true});
         this.setIdToken(idToken);
+
+        // Make a request to our server to get a new token
+        const getRefreshToken = fetch('https://jellyfiish-recipely.herokuapp.com/api/token', {
+          headers: {
+            Authorization: `Bearer ${idToken}`
+          }
+        })
+        .then(refreshToken => {
+          AsyncStorage.setItem('id_token', refreshToken)
+          this.setIdToken(refreshToken);
+        });
+
         // Fetch user's recipes
         const fetchRecipes = fetch('https://jellyfiish-recipely.herokuapp.com/api/users/recipes', {
           headers: { 'x-access-token': `Bearer ${this.state.idToken}` }
@@ -50,7 +62,7 @@ class App extends Component {
         });
 
         // App is ready when the user's recipes and notes have been fetched.
-        Promise.all([fetchRecipes, fetchNotes])
+        Promise.all([fetchRecipes, fetchNotes, getRefreshToken])
           .then(() => this.setState({isAppReady: true}));
       } else {
         this.setState({isAppReady: true});
@@ -76,6 +88,11 @@ class App extends Component {
       });
     }
   };
+
+  isTokenExpired = (idToken) => {
+    // if time between current date and token creation date is > 7 days
+      // token expired, return true
+  }
 
   onRecipesChange = (recipes) => {
     this.setState({recipes});
