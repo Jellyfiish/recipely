@@ -22,7 +22,8 @@ var isAuthenticated = (req, res, next) => {
           res.status(500).json(err);
         });
     }
-  }).catch(err => res.status(400).json(err));
+  }).catch(err => {
+    res.status(400).end('Please login/signup')});
 }
 
 module.exports = isAuthenticated;

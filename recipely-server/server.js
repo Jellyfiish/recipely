@@ -28,6 +28,8 @@ app.post('/api/login', handlers.postLogin);
 
 app.post('/api/signup', handlers.postSignup);
 
+app.get('/api/token', isAuthenticated, handlers.getRefreshToken)
+
 // users endpoints
 app.get('/api/users', isAuthenticated, handlers.getUsers);
 
