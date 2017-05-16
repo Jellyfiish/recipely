@@ -1,5 +1,7 @@
 # Recipely
 
+Find recipes based on a list of ingredients or photo. Think Shazam for food!
+
 ## Team
 
   - __Product Owner__: [Ilke Akcay](https://github.com/akcays)
