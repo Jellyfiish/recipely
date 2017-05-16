@@ -12,6 +12,7 @@
 1. [Technologies Used](#technologies-used)
 1. [API Usage](#api-usage)
     1. [Login & Signup](#login-signup)
+    1. [Clarifai Authentication](#clarifai-authentication)
     1. [Recipes From The Web](#recipes-from-the-web)
     1. [Saved Recipes](#saved-recipes)
     1. [Notes](#notes)
@@ -70,6 +71,26 @@
 * ### `POST /api/login`
 
  Login an existing user. Pass the username and password in the body of the request, exactly as above. Will return a fresh token string if successful.
+
+
+### Clarifai Authentication
+This is a protected endpoint requiring a valid JSON web token. See the [Signup & Login](#login-signup) section above for how to obtain and pass tokens.
+
+* ### `POST /api/clarifai`
+
+ Request a Clarifai access token from the server for use in making requests directly to the Clarifai API. Returns the response object directly from the Clarifai API:
+
+ ```JSON
+ {
+    "status": {
+      "code": 10000,
+      "description": "Ok"
+    },
+    "access_token": "clarifai_token_string",
+    "expires_in": some_time,
+    "scope": "api_access_write api_access api_access_read"
+ }
+ ```
 
 
 ### Recipes From The Web
