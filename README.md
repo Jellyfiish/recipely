@@ -2,6 +2,8 @@
 
 Find recipes based on a list of ingredients or photo. Think Shazam for food!
 
+Download the app here [https://exp.host/@gzeegz/recipely-app](https://exp.host/@gzeegz/recipely-app)
+
 ## Team
 
   - __Product Owner__: [Ilke Akcay](https://github.com/akcays)
